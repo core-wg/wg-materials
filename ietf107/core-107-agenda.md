@@ -75,7 +75,7 @@ Please note:
   * Christian's comments
 
 
-## SenML (Ari Keränen) (35)
+## SenML (Ari Keränen, Carsten Bormann) (35)
 
 * draft-ietf-core-senml-data-ct-01 (10)
 
