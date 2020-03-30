@@ -1,4 +1,4 @@
-0.0.1 Core@IETF107 agenda
+0.0.2 Core@IETF107 replacement meeting agenda
 
 # Constrained RESTful Environments (CoRE) WG
 
@@ -7,15 +7,22 @@ Chairs (core-chairs@ietf.org):
 * Jaime Jiménez
 * Marco Tiloca
 
-Numbers in parentheses are minutes of time allocated.
-
 Please note:
-- Wednesday, April 8, 2020 13:00-15:00 UTC
-- Thursday, April 16, 13:00-14:30 UTC
+
+[Meeting 1]
+Date and time: 8th of April 2020, 13:00-15:00 UTC
+Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/12f03cd44d7d4079b925586135df03ee
+
+[Meeting 2]
+Date and time: 16th of April 2020, 13:00-14:30 UTC
+Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/1ccf8929f40d4ff2a6ff4a6b46521a12
+
 
 # WEDNESDAY, April 08, 2020
+
 13:00-15:00 UTC
 
+Numbers in parentheses are minutes of time allocated.
 
 ## Intro (10)
 
@@ -35,6 +42,8 @@ Please note:
     * In Post-WGLC processing:
       * draft-ietf-core-echo-request-tag-09
 
+    * WGLC to be issued:
+      * draft-ietf-core-dev-urn-04
 
 ## CoRECONF cluster (15)
 
@@ -43,69 +52,132 @@ Please note:
   * draft-ietf-core-comi-09
   * draft-ietf-core-sid-11
 
+Objectives:
+
+  - Outcome of WGLC, possible discussion on relevant issues
+
+## Groupcomm (Marco, Christian, Esko) (60)
+
+* draft-ietf-core-groupcomm-bis-00 (10)
+
     Objectives:
-
-    - Outcome of WGLC, possible discussion on relevant issues
-
-## Groupcomm (Marco Tiloca, Christian Amsüss, Esko Dijk) (60)
-
-* draft-dijk-core-groupcomm-bis-02 (10)
-
-  * Discuss updates (addressed reviews and closed TBDs)
-  * TBD
+    
+    - Discuss updates (addressed reviews and closed TBDs)
+    - Discuss open points (handling different group types, reusage of tokens for observation, explicit signaling of multicast messages)
+    - Ask for reviews
 
 * draft-ietf-core-oscore-groupcomm-07 (15)
 
-  * Discuss updates (addressed review, pairwise mode, TBD)
-  * TBD
+    Objectives:
+    
+    - Discuss updates (addressed review, sec con, optimized and pairwise mode)
+    - Discuss open points (support for pairwise mode, Sender ID for silent servers)
+    - Ask for reviews
 
-* draft-tiloca-core-oscore-discovery-04 (10)
+* draft-tiloca-core-oscore-discovery-05 (10)
 
-  * Discuss updates (TBD)
-  * solicit reviews
+    Objectives:
+    
+    - Discuss updates (addressed review, registration of link to AS, examples in CoRAL)
+    - Discuss open points (no re-introduction of group member registration --- BACnet example)
+    - Solicit reviews
 
-* draft-tiloca-core-observe-multicast-notifications-01 (15)
+* draft-tiloca-core-observe-multicast-notifications-02 (15)
 
-  * Discuss updates (TBD)
-  * ask for reviews
+    Objectives:
+    
+    - Discuss updates (congestion control, error response encoding, observation cancellation, alternative retrieval of phantom request)
+    - Discuss open points (rough client counting, alternative encoding)
+    - Ask for reviews
 
 * draft-tiloca-core-groupcomm-proxy-00 (10)
 
-  * Present new work
-  * Christian's comments
+    Objectives:
+    
+    - Present new work
+    - Christian's comments on the list
+    - Ask for reviews
 
-
-## SenML (Ari Keränen, Carsten Bormann) (35)
+## SenML (Ari, Carsten) (35)
 
 * draft-ietf-core-senml-data-ct-01 (10)
 
+    Objectives:
+    
+    - TBD
+
 * draft-bormann-core-senml-versions-01 (15)
 
-* draft-keranen-core-senml-base-prefix-00 (10)
+    Objectives:
+    
+    - TBD
+
+* draft-keranen-core-senml-base-prefix-00 (10) -> 0???
+
+    Objectives:
+    
+    - TBD
+
+## If we have time:
+ * draft-bormann-t2trg-rel-impl-01
+
+    Objectives:
+      * Relation-only vs. add a media-type or two as well?
+      * Ready for WGA?
+    
 
 Σ 120
 
 
 # Thursday, April 16, 2020
+
 13:00-14:30 UTC
+
+Numbers in parentheses are minutes of time allocated.
 
 ## Intro (5)
 
-## CoRE Applications (Klaus Hartke) (45)
+## CoRE Applications (Klaus, Thomas, Ari, Jaime, Jim) (75)
 
 * draft-ietf-core-coral, draft-ietf-core-href  (10)
+
+    Objectives:
+    
+    - TBD
+
 * draft-fossati-core-coap-problem-02 (10)
 
     * Is this ready for WG adoption?
 
+    Objectives:
+    
+    - TBD
+
 * Pubsub approaches: draft-ietf-core-coap-pubsub-NN (15)
     * https://hackmd.io/2eqcQ0tWRsGle090mQaJLw?view
 
-* parameter registration (KH) (10)
+    Objectives:
+    
+    - TBD
 
-* draft-schaad-core-reef: Ways of representing RD in CoRAL: Christian vs. Jim vs. Klaus (25)
+* Parameter registration (Klaus) (10)
 
+    Objectives:
+    
+    - Check status and plan on document about parameter registration.
 
-## Flextime (15)
+* draft-amsuess-core-resource-directory-extensions-03 (5)
+
+    Objectives:
+    
+    - TBD
+
+* draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
+
+    Objectives:
+    
+    - Discuss ways of representing RD in CoRAL; Christian vs. Jim vs. Klaus
+
+## Flextime (10)
 
 Σ 90
