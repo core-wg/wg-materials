@@ -11,11 +11,13 @@ Please note:
 
 [Meeting 1]
 Date and time: 8th of April 2020, 13:00-15:00 UTC
-Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/12f03cd44d7d4079b925586135df03ee
+Webex link:
+https://ietf.webex.com/webappng/sites/ietf/meeting/info/12f03cd44d7d4079b925586135df03ee
 
 [Meeting 2]
 Date and time: 16th of April 2020, 13:00-14:30 UTC
-Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/1ccf8929f40d4ff2a6ff4a6b46521a12
+Webex link:
+https://ietf.webex.com/webappng/sites/ietf/meeting/info/1ccf8929f40d4ff2a6ff4a6b46521a12
 
 Jabber: xmpp:core@jabber.ietf.org?join
 
