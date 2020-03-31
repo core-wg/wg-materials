@@ -9,21 +9,42 @@ Chairs (core-chairs@ietf.org):
 
 Please note:
 
+Jabber: xmpp:core@jabber.ietf.org?join
+  * For the virtual microphone queue, you may want to say "help q"
+
+Etherpad: https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
+
 [Meeting 1]
 Date and time: 8th of April 2020, 13:00-15:00 UTC.
-Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/12f03cd44d7d4079b925586135df03ee
+Webex link: https://ietf.webex.com/ietf/j.php?MTID=m355f196a763aa1549467110e081b5b76
+Meeting number (access code): 616 017 942
+Meeting password: constrained
+
+Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
+Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
+Access code: 616 017 942
+Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
+
 
 [Meeting 2]
 Date and time: 16th of April 2020, 13:00-14:30 UTC.
-Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/1ccf8929f40d4ff2a6ff4a6b46521a12
+Webex link: https://ietf.webex.com/ietf/j.php?MTID=m5191b3eadadd36af2b5cbc2599bb3175
+Meeting number (access code): 613 591 591
+Meeting password: constrained
 
-Jabber: xmpp:core@jabber.ietf.org?join
+Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
+Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
+Access code: 613 591 591
+Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
 
-Etherpad: https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
 
 # WEDNESDAY, April 08, 2020
 
 13:00-15:00 UTC
+
+Meeting entry: https://datatracker.ietf.org/meeting/interim-2020-core-01/session/core
+
+Agenda: https://datatracker.ietf.org/doc/agenda-interim-2020-core-01-core-01/
 
 Numbers in parentheses are minutes of time allocated.
 
@@ -135,6 +156,10 @@ Objectives:
 # Thursday, April 16, 2020
 
 13:00-14:30 UTC
+
+Meeting entry: https://datatracker.ietf.org/meeting/interim-2020-core-02/session/core
+
+Agenda: https://datatracker.ietf.org/doc/agenda-interim-2020-core-02-core-01/
 
 Numbers in parentheses are minutes of time allocated.
 
