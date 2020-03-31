@@ -4,8 +4,8 @@
 
 Chairs (core-chairs@ietf.org):
 
-* Jaime Jiménez
-* Marco Tiloca
+* Jaime Jiménez (jaime at iki dot fi)
+* Marco Tiloca (marco dot tiloca at ri dot se)
 
 Please note:
 
