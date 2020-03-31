@@ -14,28 +14,26 @@ Jabber: xmpp:core@jabber.ietf.org?join
 
 Etherpad: https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
 
-[Meeting 1]
-Date and time: 8th of April 2020, 13:00-15:00 UTC.
-Webex link: https://ietf.webex.com/ietf/j.php?MTID=m355f196a763aa1549467110e081b5b76
-Meeting number (access code): 616 017 942
-Meeting password: constrained
+[Meeting 1] Date and time: 8th of April 2020, 13:00-15:00 UTC.
+  * Webex link: https://ietf.webex.com/ietf/j.php?MTID=m355f196a763aa1549467110e081b5b76
+  * Meeting number (access code): 616 017 942
+  * Meeting password: constrained
 
-Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
-Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
-Access code: 616 017 942
-Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
+  * Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
+  * Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
+  * Access code: 616 017 942
+  * Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
 
 
-[Meeting 2]
-Date and time: 16th of April 2020, 13:00-14:30 UTC.
-Webex link: https://ietf.webex.com/ietf/j.php?MTID=m5191b3eadadd36af2b5cbc2599bb3175
-Meeting number (access code): 613 591 591
-Meeting password: constrained
+[Meeting 2] Date and time: 16th of April 2020, 13:00-14:30 UTC.
+  * Webex link: https://ietf.webex.com/ietf/j.php?MTID=m5191b3eadadd36af2b5cbc2599bb3175
+  * Meeting number (access code): 613 591 591
+  * Meeting password: constrained
 
-Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
-Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
-Access code: 613 591 591
-Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
+  * Join by Phone: 1-650-479-3208 Call-in number (US/Canada)
+  * Join by Phone: 1-877-668-4493 Call-in toll free number (US/Canada)
+  * Access code: 613 591 591
+  * Toll-free calling restrictions: https://www.webex.com/pdf/tollfree_restrictions.pdf
 
 
 # WEDNESDAY, April 08, 2020
