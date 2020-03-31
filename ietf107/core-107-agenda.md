@@ -17,6 +17,8 @@ Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/12f03cd44d7d
 Date and time: 16th of April 2020, 13:00-14:30 UTC
 Webex link: https://ietf.webex.com/webappng/sites/ietf/meeting/info/1ccf8929f40d4ff2a6ff4a6b46521a12
 
+Jabber: xmpp:core@jabber.ietf.org?join
+Etherpad: https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
 
 # WEDNESDAY, April 08, 2020
 
