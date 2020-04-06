@@ -1,4 +1,4 @@
-0.0.4 Core@IETF107 replacement meeting agenda
+0.0.2 Core@IETF107 replacement meeting agenda
 
 # Constrained RESTful Environments (CoRE) WG
 
@@ -178,7 +178,7 @@ Numbers in parentheses are minutes of time allocated.
     
     - TBD
 
-* (-) Parameter registration (10) --- Klaus
+* IANA registries clarification + link attribute registry (5) --- Klaus
 
     Objectives:
     
@@ -190,7 +190,7 @@ Numbers in parentheses are minutes of time allocated.
     
     - TBD
 
-* draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
+* draft-xxx-app and draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
 
     Objectives:
     
