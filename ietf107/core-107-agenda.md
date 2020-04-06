@@ -67,12 +67,12 @@ Numbers in parentheses are minutes of time allocated.
     * WGLC to be issued:
       * draft-ietf-core-dev-urn-04
 
-## CoRECONF cluster (15)
+## CoRECONF cluster (Ivaylo) (15)
 
-  * draft-ietf-core-yang-cbor-12
-  * draft-ietf-core-yang-library-01
-  * draft-ietf-core-comi-09
-  * draft-ietf-core-sid-11
+  * draft-ietf-core-yang-cbor-12 --- Ivaylo
+  * draft-ietf-core-yang-library-01 --- Ivaylo
+  * draft-ietf-core-comi-09 --- Ivaylo
+  * draft-ietf-core-sid-11 --- Ivaylo
 
 Objectives:
 
@@ -80,7 +80,7 @@ Objectives:
 
 ## Groupcomm (Marco, Christian, Esko) (60)
 
-* draft-ietf-core-groupcomm-bis-00 (10)
+* draft-ietf-core-groupcomm-bis-00 (10) --- Esko
 
     Objectives:
     
@@ -88,7 +88,7 @@ Objectives:
     - Discuss open points (handling different group types, reusage of tokens for observation, explicit signaling of multicast messages)
     - Ask for reviews
 
-* draft-ietf-core-oscore-groupcomm-07 (15)
+* draft-ietf-core-oscore-groupcomm-07 (15) --- Marco
 
     Objectives:
     
@@ -96,7 +96,7 @@ Objectives:
     - Discuss open points (support for pairwise mode, Sender ID for silent servers)
     - Ask for reviews
 
-* draft-tiloca-core-oscore-discovery-05 (10)
+* draft-tiloca-core-oscore-discovery-05 (10) --- Christian
 
     Objectives:
     
@@ -104,7 +104,7 @@ Objectives:
     - Discuss open points (no re-introduction of group member registration --- BACnet example)
     - Solicit reviews
 
-* draft-tiloca-core-observe-multicast-notifications-02 (15)
+* draft-tiloca-core-observe-multicast-notifications-02 (15) --- Christian
 
     Objectives:
     
@@ -112,7 +112,7 @@ Objectives:
     - Discuss open points (rough client counting, alternative encoding)
     - Ask for reviews
 
-* draft-tiloca-core-groupcomm-proxy-00 (10)
+* draft-tiloca-core-groupcomm-proxy-00 (10) --- Esko
 
     Objectives:
     
@@ -122,26 +122,26 @@ Objectives:
 
 ## SenML (Ari, Carsten) (35)
 
-* draft-ietf-core-senml-data-ct-01 (10)
+* draft-ietf-core-senml-data-ct-01 (10) --- Ari
 
     Objectives:
     
     - TBD
 
-* draft-bormann-core-senml-versions-01 (15)
+* draft-bormann-core-senml-versions-01 (15) --- Carsten
 
     Objectives:
     
     - TBD
 
-* draft-keranen-core-senml-base-prefix-00 (10) -> 0???
+* draft-keranen-core-senml-base-prefix-00 (10) -> 0??? --- Ari
 
     Objectives:
     
     - TBD
 
 ## If we have time:
- * draft-bormann-t2trg-rel-impl-01
+ * draft-bormann-t2trg-rel-impl-01 --- Carsten
 
     Objectives:
       * Relation-only vs. add a media-type or two as well?
