@@ -1,4 +1,4 @@
-0.0.2 Core@IETF107 replacement meeting agenda
+0.0.4 Core@IETF107 replacement meeting agenda
 
 # Constrained RESTful Environments (CoRE) WG
 
@@ -39,10 +39,6 @@ Etherpad: https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
 # WEDNESDAY, April 08, 2020
 
 13:00-15:00 UTC
-
-Meeting entry: https://datatracker.ietf.org/meeting/interim-2020-core-01/session/core
-
-Agenda: https://datatracker.ietf.org/doc/agenda-interim-2020-core-01-core-01/
 
 Numbers in parentheses are minutes of time allocated.
 
@@ -88,7 +84,7 @@ Objectives:
     - Discuss open points (handling different group types, reusage of tokens for observation, explicit signaling of multicast messages)
     - Ask for reviews
 
-* draft-ietf-core-oscore-groupcomm-08 (15) --- Marco
+* draft-ietf-core-oscore-groupcomm-07 (15) --- Marco
 
     Objectives:
     
@@ -155,23 +151,19 @@ Objectives:
 
 13:00-14:30 UTC
 
-Meeting entry: https://datatracker.ietf.org/meeting/interim-2020-core-02/session/core
-
-Agenda: https://datatracker.ietf.org/doc/agenda-interim-2020-core-02-core-01/
-
 Numbers in parentheses are minutes of time allocated.
 
 ## Intro (5)
 
 ## CoRE Applications (Klaus, Thomas, Ari, Jaime, Jim) (75)
 
-* draft-ietf-core-coral, draft-ietf-core-href  (10)
+* draft-ietf-core-coral, draft-ietf-core-href  (10) --- Klaus
 
     Objectives:
     
     - TBD
 
-* draft-fossati-core-coap-problem-02 (10)
+* draft-fossati-core-coap-problem-02 (10) --- Thomas
 
     * Is this ready for WG adoption?
 
@@ -179,20 +171,20 @@ Numbers in parentheses are minutes of time allocated.
     
     - TBD
 
-* Pubsub approaches: draft-ietf-core-coap-pubsub-NN (15)
+* Pubsub approaches: draft-ietf-core-coap-pubsub-NN (15) --- Jaime
     * https://hackmd.io/2eqcQ0tWRsGle090mQaJLw?view
 
     Objectives:
     
     - TBD
 
-* Parameter registration (Klaus) (10)
+* (-) Parameter registration (10) --- Klaus
 
     Objectives:
     
     - Check status and plan on document about parameter registration.
 
-* draft-amsuess-core-resource-directory-extensions-03 (5)
+* draft-amsuess-core-resource-directory-extensions-03 (5)  --- Christian
 
     Objectives:
     
