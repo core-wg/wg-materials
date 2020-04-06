@@ -157,22 +157,13 @@ Numbers in parentheses are minutes of time allocated.
 
 ## CoRE Applications (Klaus, Thomas, Ari, Jaime, Jim) (75)
 
-* draft-ietf-core-coral, draft-ietf-core-href  (10) --- Klaus
+* draft-ietf-core-resource-directory-24 (10) -- Christian
 
-    Objectives:
+     Objectives:
     
-    - TBD
+     - Discuss RD GENART comments. 
 
-* draft-fossati-core-coap-problem-02 (10) --- Thomas
-
-    * Is this ready for WG adoption?
-
-    Objectives:
-    
-    - TBD
-
-* Pubsub approaches: draft-ietf-core-coap-pubsub-NN (15) --- Jaime
-    * https://hackmd.io/2eqcQ0tWRsGle090mQaJLw?view
+* draft-amsuess-core-resource-directory-extensions-03 (5)  --- Christian
 
     Objectives:
     
@@ -184,17 +175,26 @@ Numbers in parentheses are minutes of time allocated.
     
     - Check status and plan on document about parameter registration.
 
-* draft-amsuess-core-resource-directory-extensions-03 (5)  --- Christian
+* draft-ietf-core-coral, draft-ietf-core-href  (20) --- Klaus
+
+    Objectives:
+    
+    - Updates on coral and href latest versions.
+
+* draft-fossati-core-coap-problem-02 (10) --- Thomas
+
+    * Is this ready for WG adoption?
 
     Objectives:
     
     - TBD
 
-* draft-xxx-app and draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
+* draft-xxx-app , draft-hartke-core-apps-08 and draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
 
     Objectives:
     
     - Discuss ways of representing RD in CoRAL; Christian vs. Jim vs. Klaus
+
 
 ## Flextime (10)
 
