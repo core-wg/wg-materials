@@ -88,7 +88,7 @@ Objectives:
     - Discuss open points (handling different group types, reusage of tokens for observation, explicit signaling of multicast messages)
     - Ask for reviews
 
-* draft-ietf-core-oscore-groupcomm-07 (15) --- Marco
+* draft-ietf-core-oscore-groupcomm-08 (15) --- Marco
 
     Objectives:
     
