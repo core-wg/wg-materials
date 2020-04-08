@@ -116,28 +116,22 @@ Objectives:
     - Christian's comments on the list
     - Ask for reviews
 
-## SenML (Ari, Carsten) (35)
+## SenML (Ari, Carsten) (25)
 
-* draft-ietf-core-senml-data-ct-01 (10) --- Ari
+* draft-ietf-core-senml-data-ct-01 (10) --- Carsten
 
     Objectives:
     
-    - TBD
+    - Solutions for the challenges with mixing mandatory-to-understand safe-to-ignore SenML fields.
 
 * draft-bormann-core-senml-versions-01 (15) --- Carsten
 
     Objectives:
     
-    - TBD
+    - Checkpoint and way forward
 
-* draft-keranen-core-senml-base-prefix-00 (10) -> 0??? --- Ari
-
-    Objectives:
-    
-    - TBD
-
-## If we have time:
- * draft-bormann-t2trg-rel-impl-01 --- Carsten
+## Other (10):
+ * draft-bormann-t2trg-rel-impl-01 (10) --- Carsten
 
     Objectives:
       * Relation-only vs. add a media-type or two as well?
