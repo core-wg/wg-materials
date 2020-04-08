@@ -116,7 +116,7 @@ Objectives:
     - Christian's comments on the list
     - Ask for reviews
 
-## SenML (Ari, Carsten) (25)
+## SenML (Carsten) (25)
 
 * draft-ietf-core-senml-data-ct-01 (10) --- Carsten
 
@@ -130,7 +130,7 @@ Objectives:
     
     - Checkpoint and way forward
 
-## Other (10):
+## Other (Carsten) (10):
  * draft-bormann-t2trg-rel-impl-01 (10) --- Carsten
 
     Objectives:
