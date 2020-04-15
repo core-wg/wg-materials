@@ -149,9 +149,23 @@ Numbers in parentheses are minutes of time allocated.
 
 ## Intro (5)
 
-## CoRE Applications (Klaus, Thomas, Ari, Jaime, Jim) (75)
+## Other (Carsten, Christian) (15):
 
-* draft-ietf-core-resource-directory-24 (10) -- Christian
+* draft-bormann-t2trg-rel-impl-01 (10) --- Carsten
+
+   Objectives:
+     * Relation-only vs. add a media-type or two as well?
+     * Ready for WGA?
+
+* draft-bormann-core-responses-00 (5) --- Christian
+
+    Objectives:
+    
+    * Warm-up the draft again, in the light of the latest discussions on the list about blockwise transfer with unsolicited responses.
+      
+## Resource Directory Discussion (Christian) (10)
+
+* draft-ietf-core-resource-directory-24 (5) -- Christian
 
      Objectives:
     
@@ -163,33 +177,49 @@ Numbers in parentheses are minutes of time allocated.
     
     - TBD
 
+## CoRE Applications (Christian, Klaus, Thomas, Jim) (45)
+
 * IANA registries clarification + link attribute registry (5) --- Klaus
 
     Objectives:
     
     - Check status and plan on document about parameter registration.
 
-* draft-ietf-core-coral, draft-ietf-core-href  (20) --- Klaus
+* draft-ietf-core-coral, draft-ietf-core-href  (10) --- Klaus
 
     Objectives:
     
     - Updates on coral and href latest versions.
 
-* draft-fossati-core-coap-problem-02 (10) --- Thomas
-
-    * Is this ready for WG adoption?
-
-    Objectives:
-    
-    - TBD
-
-* draft-xxx-app , draft-hartke-core-apps-08 and draft-schaad-core-reef: (Jim, Klaus, Christian) (25)
+* draft-xxx-app , draft-hartke-core-apps-08 and draft-schaad-core-reef: (Jim, Klaus, Christian) (20)
 
     Objectives:
     
     - Discuss ways of representing RD in CoRAL; Christian vs. Jim vs. Klaus
 
+* draft-fossati-core-coap-problem-02 (10) --- Thomas
 
-## Flextime (10)
+    - Is this ready for WG adoption?
+
+    Objectives:
+    
+    - TBD
+
+## SenML (Carsten) (15)
+
+* draft-bormann-core-senml-versions-01 (7.5) --- Carsten
+
+    Objectives:
+    
+    - Checkpoint and way forward
+ 
+* draft-ietf-core-senml-data-ct-01 (7.5) --- Carsten
+
+    Objectives:
+    
+    - Solutions for the challenges with mixing mandatory-to-understand safe-to-ignore SenML fields.
+
+
+## Flextime (0)
 
 Σ 90
