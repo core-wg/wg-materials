@@ -36,8 +36,6 @@ Notes: <https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true>
 
 Please contact the [chairs][] for any changes required. The detailed agenda can be found at <https://github.com/core-wg/wg-materials/blob/master/ietf107/core-107-agenda.md>.
 
-**Wednesday**
-
 
 ## Wednesday
 
@@ -66,7 +64,7 @@ Please contact the [chairs][] for any changes required. The detailed agenda can 
 [groupcomm-proxy]: https://tools.ietf.org/html/draft-tiloca-core-groupcomm-proxy-00
 
 
-**Thursday**
+## Thursday
 
 | Time  | Who              | Subject                          | Docs                             |
 | ----- | ---------------- |:-------------------------------- |:-------------------------------- |
