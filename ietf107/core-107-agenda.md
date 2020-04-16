@@ -175,7 +175,7 @@ Numbers in parentheses are minutes of time allocated.
 
     Objectives:
     
-    - TBD
+    - Ask which parts WG is interested in.
 
 ## CoRE Applications (Christian, Klaus, Thomas, Jim) (45)
 
