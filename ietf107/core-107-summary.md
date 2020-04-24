@@ -8,7 +8,7 @@ We have uploaded draft minutes for the two CoRE virtual meetings acting as repla
 [Wednesday, April 08, 2020]
 https://datatracker.ietf.org/meeting/interim-2020-core-01/materials/minutes-interim-2020-core-01-202004081500
 
-[Thursday, April 15, 2020]
+[Thursday, April 16, 2020]
 https://datatracker.ietf.org/meeting/interim-2020-core-02/materials/minutes-interim-2020-core-02-202004161500
 
 As usual, this starts with a summary of what happened (with fewer technical details), followed by more detailed minutes as collected in Etherpad.
@@ -29,7 +29,7 @@ Videos:
 
 Slides:
 : Wednesday (2020-04-08): https://datatracker.ietf.org/meeting/interim-2020-core-01/materials/slides-interim-2020-core-01-sessa-ietf107-core-consolidated-slides
-: Thursday (2020-04-15): https://datatracker.ietf.org/meeting/interim-2020-core-02/materials/slides-interim-2020-core-02-sessa-core-consolidated-slides-v00
+: Thursday (2020-04-16): https://datatracker.ietf.org/meeting/interim-2020-core-02/materials/slides-interim-2020-core-02-sessa-core-consolidated-slides-v00
 
 Raw minutes:
 https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true
