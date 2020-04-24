@@ -24,8 +24,8 @@ For easier viewing and commenting, the summary part is replicated below.
 The core WG held two virtual meetings as replacement of IETF 107 in Vancouver, both of which are summarized in these minutes.
 
 Videos:
-: Wednesday (2020-04-08, 2 h): https://ietf.webex.com/recordingservice/sites/ietf/recording/playback/a9451b0acbba4e55b077165599c3a206
-: Thursday (2020-04-15, 1.5 h): https://ietf.webex.com/recordingservice/sites/ietf/recording/playback/28f3df710e074dc69b4653618ad46465
+: Wednesday (2020-04-08, 2 h): https://www.youtube.com/watch?v=Rdwl_l9Tqog
+: Thursday (2020-04-16, 1.5 h): https://www.youtube.com/watch?v=tMgxTFGC4PI
 
 Slides:
 : Wednesday (2020-04-08): https://datatracker.ietf.org/meeting/interim-2020-core-01/materials/slides-interim-2020-core-01-sessa-ietf107-core-consolidated-slides
