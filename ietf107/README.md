@@ -2,7 +2,7 @@
 
 CoRE virtual meetings
 
-**Times:** 
+**Times:**
 * Wednesday, April 8th, [13:00-15:00 UTC](https://www.timeanddate.com/worldclock/fixedtime.html?msg=CoRE+Meeting&iso=20200408T13)
 * Thursday, April 16th, [13:00-14:30 UTC](https://www.timeanddate.com/worldclock/fixedtime.html?msg=CoRE+Meeting&iso=20200416T13&p1=%3A&ah=2)
 
@@ -32,10 +32,9 @@ Slides: <https://github.com/core-wg/wg-materials/tree/master/ietf107/slides>
 
 Notes: <https://etherpad.ietf.org/p/notes-ietf-107-core?useMonospaceFont=true>
 
-## Draft agenda
+# Draft agenda
 
 Please contact the [chairs][] for any changes required. The detailed agenda can be found at <https://github.com/core-wg/wg-materials/blob/master/ietf107/core-107-agenda.md>.
-
 
 ## Wednesday
 
@@ -63,8 +62,7 @@ Please contact the [chairs][] for any changes required. The detailed agenda can 
 [multicast-notifications]: https://tools.ietf.org/html/draft-tiloca-core-observe-multicast-notifications-02
 [groupcomm-proxy]: https://tools.ietf.org/html/draft-tiloca-core-groupcomm-proxy-00
 
-
-## Thursday
+## Thursday
 
 | Time  | Who              | Subject                          | Docs                             |
 | ----- | ---------------- |:-------------------------------- |:-------------------------------- |
