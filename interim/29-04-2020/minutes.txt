@@ -1,0 +1,196 @@
+CoRE Virtual interim - 29-04-2020 - 16:00 UTC
+
+Chairs:
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+Materials: https://datatracker.ietf.org/meeting/interim-2020-core-03/session/core
+Webex: https://ietf.webex.com/ietf/j.php?MTID=maf73502a66b35ef0f7478a46ea5bff73
+
+Minute takers: Christian Amsüss, Jaime and Marco (helping)
+Jabber Scribes: Jaime
+
+Participants:
+Marco Tiloca, RISE
+Jaime Jiménez, Ericsson
+Klaus Hartke, Ericsson
+Francesca Palombini, Ericsson
+Jim Schaad, August Cellars
+Christian Amsüss
+Rikard Höglund, RISE
+Barry Leiba, FutureWei
+Peter Yee, AKAYLA
+Ari Keränen, Ericsson
+Michael Koster, SmartThings
+Thomas Fossati, ARM
+Carsten Bormann, TZI
+Niklas Widell, Ericsson
+Michael Richardson, Sandelman Software Works
+Henk Birkholz
+
+
+Marco doing introductions.
+
+
+*** draft-bormann-core-senml-versions-01 ***
+
+https://datatracker.ietf.org/meeting/interim-2020-core-03/materials/slides-interim-2020-core-03-sessa-senml-features-and-versions
+
+CB presenting (1603 CEST)
+
+SenML had a long evolution up to RFC8428, called version 10 then without much thought for extension.
+Base field can be used to set higher version number, but does not give meaning to that, deferring to new RFCs.
+
+New fields are an extension points; versions declare from the sender to the receiver to indicate need to implement something more. Expectation that higher versions imply lower versions is there somehow, but not realistic (due to deprecations).
+
+Version numbers work (only) for single-source emissions that develop linearly; for protocols they create problems. Other mechanisms are used there, and versions rarely change (cf. HTTP 1.0 from ~2000, extensions done using new headers).
+
+Features as extension points are present in the form of "Must understand"-fields (indicated by trailing underscores). This could get big over time (~10 byte per feature).
+
+Idea from Ari: Interpret version number as a bitfield. Current version is 10, so four LSBs are "gone". Still gives 49 reasonably usable bits. One could be used for "secondary units" (open point from IESG approval). 53 comes from JSON. Wouldn't suffice for HTTP evolution, but would last for decates at expected speeds.
+
+All in the draft, which updates 8428 to set that versioning mechanism.
+
+Comments? Anything that needs fixing?
+
+Thomas: What's the relation between -versions and -more-units? Does -more-units need -versions?
+CB: more units was approved with an informative ref to this document, not necessarily as *the* way to solve the issue, but -more-units has a big hole while something like -versions is not there.
+Thomas: exactly so, if someone else comes with another way to indicate this, how would it work at then end? Is the informative reference sufficient.
+CB: Completely different? Then, somebody should decide.
+Thomas: Who is authoritative?
+CB: Change control is with the IETF. I'd expect CoRE to make these decisions. Is this completely hypothetical, or is something on the horizon we don't know?
+Thomas: It is hypothetical. Seems like a risk we have. Apart from that, am OK with that. Small doubts about small code point space and pressure on registry. [...]
+
+JJ: Should the reference to -versions in -more-units be manadatory to implement (normative) right away? 
+Thomas: Yes. 
+CB: With 7252 we thought to do the right thing and put in RPK as mandatory-to-implement scheme. Created normative reference to a not-done-yet document. Some squabble in security area created one year delay. My perspective is that incurring a normative reference where it's not necessary is a mistake we should not make. We are not doing that any more, it's malpractice. For me, that's way more important than the other considerations. It's kind of weird to have an informative way to the only way to do it, but we can finish it now and have other SDOs use it in their documents. -more-units is leaving RFC editor stage and to be published end of May, any throwbacks would be unfortunate.
+
+Ari: on only-way-is-WIP: There's already a use case where they're only using units of SenML and not the serialization, so they don't have that problem at all. Later on they may use SenML serialization. So for that case it's less weird. On Thomas' point on coexistence: Used to have mandatory-to-implement as main extension point, and version that was never planned to be used. It's not that tricky here, those ways can coexist, eg. a set of features could be grouped inside a single version bit. Different indication ways can coexist.
+Thomas: I understand Carsten's point of using non-normative references to avoid blocking -more-units on -version, still with that we would have a scar in -more-units that could leave space in the future for potential interop problems. 
+
+
+
+*** draft-ietf-core-senml-data-ct-01 ***
+
+https://datatracker.ietf.org/meeting/interim-2020-core-03/materials/slides-interim-2020-core-03-sessa-senml-data-value-content-format-indication
+
+CB presenting (1624 CEST)
+
+A more conventional extension to SenML, but ran into detail with probably workable solution.
+
+Problem recap: data fields can be binary or other types. What does binary mean? content types ("media types") are common to indicate that, in the Content-Format header in CoAP (for coding), shown in second example on p2 (e.g., "ct":"60" vs "ct":"text/csv@gzip")
+
+How is this handled as a new thing that's not understood by all implementations? "ct" as field is ignorable, "ct_" is must-understand per SenML mechanism. What if there are base fields for any? Ugly interactions have been shown.
+
+SenML defines "must understand", but does not define interaction of not-must-understand items with them ("foo" and "foo_" are unrelated from its PoV). The resolution process for base values is defined, and only per-field.
+
+Proposed solution #1: per-record overrides any base. (But not backed by SenML)
+
+Proposed solution #2: [...] must-understand overrides optional-to-understand
+but "bct_" renders "bct" and "ct" unusable.
+
+Current document proposes #2. We think we are done with this.
+
+JJ: Can you have simultaneously bct_ and bct?
+CB: Yes, and #2 means that bct is ignored then.
+AK: Clarification: *from that point on* where you use that it's overridden. Generally, we have not found a case where this would be an actual problem in a single pack. Would become a problem when merging packs from multiple sources.
+KH: Since Carsten has been asking for additional solutions: My favourite solution is always to not solve the problem. The original problem was that, without `ct`, we know that there is a bytestring but don't know the semantics (the content format) of that bytestring. With `ct`, we know the semantics if we understand `ct`. But, with `ct`, if we don't understand `ct`, then we're not worse off than we were at the beginning. We still know that there is a bytestring. Is it actually important that we understand `ct` to make use of a record?
+CB: Bit of ambiguity that SenML has. It does not say what "must understand" means, does it mean "must understand field in principle" or "the specific value"? That's not clearly defined.
+KH: I simply assumed what we have for critical CoAP options: you cannot understand the CoAP message if you do not understand all the critical options. 
+CB: That's an important distinction – "can not understand that record" (but may understand that pack). A must-understand field may influence the rest of the pack.
+KH: Maybe next step is to clarify what an underscore means?
+CB: Not sure if this is the document to do that.
+KH: Have draft that clarifies RFC that clarifies RFC... ;-)
+
+CA: Can bct_ be unset ("bct_": null), when unsetting, wouldn't that make the base thing go away again? Can the composition rule be defined per field?
+CB: The resolution process is defined independently of the specific field. We can't have application-specific resolution.
+
+JLS: Arguments about criticality bother me, X.509 have been discussing that for ages.
+CB: Yes.
+
+CB: That's something to take home, clarifying the semantics of "must understand".
+
+AK: Good material for SenML-bis. Original proposal was to have "ct" only, but "maybe we need it" came up and opened the discussion. For ct, I'd argue that underscore version is not critical to have (sometimes maybe useful). That part of the draft could even live without.
+
+CB: To be taken to the list, option of just "ct" might be simpler.
+
+
+*** Media types and data definition languages ***
+
+https://datatracker.ietf.org/meeting/interim-2020-core-03/materials/slides-interim-2020-core-03-sessa-media-types-and-data-definition-languages
+
+CB starting discussion (1642 CEST)
+
+Not about specific document, but touches a number of documents.
+
+(Unrelated WebEx bashing, and philosophical comments on the benefits of slowdown.)
+
+One component of REST: Media types as pre-cooked definitions of data to be found in a response, and data defined in a more dynamic way.
+
+Back to 1977 (RFC733). If something is text based and has no pre-existing structure (JSON) and no other data definition, we[1] use ABNF. [1] with some voices against it but a rough consensus.
+
+Now we have CDDL (RFC8610), and hopefully will arrive at agreement that we use this for structured data.
+Machine readable definition enable CI, code generation, validation of examples etc.
+Net benefit: fewer doubtful cases in interops, more clarity.
+Downside: learning problem for contributors / threshold effect. So only have a small number to have to learn few. Also, ease to communicate complexity incites complexity. "ASN.1 effect" that led to GSM map[?] etc. Format can't help here, discipline can. (Two-line CDDLs can be done).
+
+Result of data definition: shape (up to ranges and validity, and even, identification of extension points); augmenting instance with semantics (implicitly by the name to be referenced in documentation, or explicitly with RDF rooting).
+
+So far, probably widely agreed on. Now for speculation.
+
+Example: RFC6690. Some structural aspects in structure using ABNF for structure mapping (crossing levels: mapping web links to ASCII and the higher level). RFC6690 inherited that. Example implementation of links-json shows implementation impact. (RFC8... fixes that).
+
+CDDL can describe "plain old CBOR" [sic!], but CoRAL is also there. Is "It's CoRAL" (which is true) sufficient for a media type? There is a higher level of structure too, solving a specific application problem, and some minimum expected components etc are necessary. Not try to apply CDDL to CoRAL (that would be mixed-level error again).
+
+Look at core-coap-problem. As plain old CBOR this can be described by CDDL. What to use when using CoRAL? We want validation, minimum properties, probably not need augmentation (but maybe that's lack of imagination). Do we need "CoDDL" for class information?
+
+Can we embed definitions of this kind in CoRAL? link to description? Express expectations on what to be sent? Everywhere where media type goes, there could go a CDDL or "CoDDL"?
+
+MK: How is this different from a system of shape constraints? Or *is* that a system for shape constraints, like SHACL
+CB: We could use SHACL. Suggested literature to take home. 
+MK: I have also encounter would have found useful a lightweight mechanism to carry the shape informaiton over the wire. 
+CA [prep]: CoRAL Fetch to validate? The same format could be used to validate and describe to the server what the client wants. 
+CB: One aspect of augmentation is adding flags to say I want this, I don't want that.
+MK: Ties in to discussion of selectors, to semantically identify nodes inside a document.
+
+HB: To augment something like from CBOR to CDDL, sounds awesome but [...] how to sign? As a steering information for the consumer, having a wrong array could be problematic.
+CB: There are some security considerations, good point.
+
+MK: Might want to hurry because they're talking about JSON path again.
+CB: That's one point I didn't make: It spans tons of working groups. YANG (with large solutions for large problems), L Carrien[?] who does little JSON schema because he doesn't like big schema. JSON WG which is having messages back an forth on how JSON should look like CBOR group working on CDDL.
+Michael has this nice matrix of ecosystems, containing a line on what they use for data definition
+MK: Will publish that link.
+
+CB: JSON-path to me is a very simple subset, but maybe I'm lacking imagination on how this is likely to become complex (like XPath got). Interesting about JSON path is "are you doing this for a single instance" (eg. from inside the instance, like JSON pointers do) vs. designed to handle a class of data items, so that you can say "out of this array, give me those that have field type set to green" (like XPath can do), ending up in a Turing complete language. Is there a useful subset that's a 80% solution?
+Who does JSON-path now?
+MK: Has come up in WoT group in discovery / directory. In Thing Directory, they use JSON-Path syntax as query language. Follow-up is standardization of JSON-Path and -schema. Point is, this is a general issue.
+
+KH: Nobody responded to "Do we need CoDDL". I think yes. Sounds a very good idea to have a machine readable format to describe the shape of coral documents, both for documenting and to have simple instance validation. Maybe fetching is not so distant from this instance validation (e.g., give me all documents that validate against this shape). Maybe we do not "need" it as we can use english, but it is good to have something machine readable in our drafts.
+
+CB: JSON-Path is a simple matching language. CoDDL would be a powerful matching language. As usual, "how much complexity do we actually need", "… can we expect people to imlement"? YANG have used complex XPath stuff, which I can only imagine being usable in rack hardware.
+KH: FETCH part should be implentable in constrained devices. SHACL and ShEx (https://shex.io/) looked at, latter looks usable, shouild try to implement.
+MK: Dan B. told me he prefers ShEx too.
+CB: Some of this is getting too researchy for the WG, maybe we can partition this into "now" and "after research". Looking into ShEx would help in CoRE.
+
+CA: media types? we already have issues in CoRAL expressing dictionaries as media types. Restricting them further would make 64k run out fast.
+KH: Media types use to say what bytes mean. Now you can the CoAP Accept option, for instance, to choose among different dictionaries. Then you can say that this document conforms for some shape. It feels more like a resource type, in the light of the shape of the document exprssed in the document.
+But maybe this is less about declaration of shapes but more about just having the shape (and then it's working).
+MK: You're distinguishing between shape and vocabulary. So the shape includes also the application vocabulary.
+KH: Yes, e.g. in coap-problems must have an error code, and may have a text, and may have zero or more other things.
+
+CB: Seems that problem-details will be guinnea pig here. Sorry, Thomas.
+TF: I'm fine with that.
+KH: We also have some more CoRAL based applications now, like Marco's group manager draft, pubsub proposal etc. Most of them define the shape already, but in English. Could try to come up with something for all of them.
+MK: Currently have an issue (kind of related) where people have trouble understanding how they're supposed to construct URIs or requests. With talk about constraint languages, this might apply here too. Better way of describing things than quasi-URI template. But more about interactions and not data descriptions.
+
+CB: Next steps? Extracting requirements / objectives out of CoRAL drafts we have, in an informal way?
+JJ: Could it be possible to have some example of a draft using this? So the other drafts can start working on it as well. For me, it's easier with examples.
+CB: Love jumping into examples, but need design first. What are the properties of the thing we're trying to build?
+KH: Would start by creating instance examples for the different drafts, and when we see the instances we can try to see what we expect of classes.
+
+CB: ..
+MK: Is this "Validators vs constructors"?
+CB: Can build both for both, but how do you express things? Historically, it's schematron vs. relax-ng. Inclined to take generative approach.
+
+
+(Meeting ended 1730 CEST). 
