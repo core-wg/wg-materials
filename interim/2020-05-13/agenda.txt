@@ -1,0 +1,29 @@
+CoRE Virtual interim - 13-05-2020 - 14:00 UTC
+
+* New blockwise and asynchronous non-traditional responses
+
+   - Follow-up of CoRE/DOTS discussions
+       - https://mailarchive.ietf.org/arch/msg/core/H4NM0doO_ZzaHdkm5Op9UukP3-4/
+
+   - Related documents:
+       - https://tools.ietf.org/html/draft-bosh-core-new-block-00
+       - https://tools.ietf.org/html/draft-bormann-core-responses-00
+
+
+=== Meeting Information ===
+
+Webex link: https://ietf.webex.com/ietf/j.php?MTID=m94be8bc01b7b3c034a5bf3106d4376ae
+Meeting number: 615 945 610
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 615945610@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+1-877-668-4493 Call-in toll free number (US/Canada)
+Access code: 615 945 610 
