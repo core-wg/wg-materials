@@ -1,0 +1,7 @@
+CoRE Virtual interim - 29-04-2020 - 16:00 UTC
+
+1) draft-bormann-core-senml-versions-01
+
+2) draft-ietf-core-senml-data-ct-01
+
+3) Media types and data definition languages 
