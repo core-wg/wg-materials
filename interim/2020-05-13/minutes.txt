@@ -1,0 +1,183 @@
+CoRE Virtual interim - 13-05-2020 - 14:00 UTC
+
+Chairs:
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+Material: https://datatracker.ietf.org/meeting/interim-2020-core-04/session/core
+Webex: https://ietf.webex.com/ietf/j.php?MTID=m94be8bc01b7b3c034a5bf3106d4376ae
+
+Minute takers: Christian, Marco and Jaime (helping)
+Jabber scribes: Jaime
+
+Participants:
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Barry Leiba, FutureWei
+4. Jim Schaad, August Cellars
+5. Jon Shallow
+6. Carsten Bormann, TZI
+7. Mohamed Boucadair, Orange
+8. Christian Amsüss, –
+9. Rikard Höglund, RISE
+10. Peter Yee, AKAYLA
+11. Klaus Hartke, Ericsson
+12. 
+13. 
+14. 
+15. 
+16. 
+17. 
+18. 
+19. 
+20. 
+
+
+* New blockwise and asynchronous non-traditional responses
+
+   - Follow-up of CoRE/DOTS discussions
+       - https://mailarchive.ietf.org/arch/msg/core/H4NM0doO_ZzaHdkm5Op9UukP3-4/
+
+Jon and Mohamed presenting
+
+Jon Presenting draft-bosch-core-new-block
+
+Challenges in DOTS. Network lossy due to DDOS attack. (p2) showing a use case. Server provides mitigation service, client is in a network under attack. Client's "I need help" is NON mitigation request, server updates client with NONs due to full pipe where data may be lost.
+pipe might be overloaded due to DDOS attack. 
+Mitigation then kicks in and gets traffic to a usable level.
+general operation for DOTS is to use CON for configuration during "peace"time, mitigations and responses need to be NON. A mitigation request can be in a single packet, works fine with packet losses. To make the protocol robuist there are application heartbeats. The serve component is capable to identify that the client is alive even with some loss and during the attack (?). 
+Client can carry on blind.
+
+Extending telemtry (p4): Telemetry (eg. for when client figures out something about the attack to help the server do better mitigation; also back from server about how it is mitating). Block[12] works fine when no package loss is present. With loss, there is no easy recovery and things stall, which is unacceptable under attack.
+
+Looking into how to handle oversized packets (p5):
+    * IP fragemtnation
+    * Application data break up into chuncks. Requires chunks to be full JSON.
+    * Use Blockwise transfer, which has limitations on the performance. 
+ Performance limited due to turnaround times, and falling apart under loss.
+
+Introducing Block[3,4] (p6). Analogous to Block[1,2] with addtitions:
+    * Can send all Block3 simultaneously, also Block4 (without incrementing NSTART by doing NON; NSTART is unexplored territory)
+    * Block ID. ETag not sure usable because "resource-level identifier" (?).
+
+Block3 vs Block1 changes: 1 is limited to probing rate, 3 subjects the whole body to probing rate.
+Both can use 4.08 responses, but the response needs to be extended with data body including an array of missing blocks or using repeat option with block 3. 
+
+Likewise with Block 2 vs 4, the server has to wait for next block. With Block 4 the entire set of blocks can be sent without waiting, thus better performance. It made sense to them for caches to keep the data. 
+
+There is a challenge with tokens; token matches are not possible as there is no longer the same request going upstream, thus how are they supposed to use the token? Question on RFC7252, 7641, 7959. There are also OSCORE implications. 
+
+-- Discussion --
+
+CA: Smaller items first. Etag, the etag should not impede this particular use case as it does not apply. 
+Jon Shallow: Under server control; ETag may be the same for different sets of body blocks.
+CA: The etag should not work like that, I wonder how the blockid would be any better anyway. 
+JS: for each block set back we wil have a new blockid that would be incremeting. 
+CA: Also etag could do that.
+JS: Agree.
+CA: On a general level, did you have the chance to check email?
+JS: Saw previous one. 
+CA: [reads email] Ok, does not apply, wrong email. 
+CA: My impression is that it can be done without changing the block system, by finding concrete extensions or using other things in the pipeline. For the Block3 (and 1) it should be straightforward if there was a response from the server indicating which blocks are missing. 
+JS: From your email earlier this week. (choppy audio?)
+CA: For block 2 is not different than 4, the main point ios to get the server to send the blocks in mass at the beginning. Non traditional responses can solve that. 
+JS: Concern was about possibly changing the semantics of Block2, more out in one go somehow. This is a modifications that brought up a new option.
+CA: I think it's an extension to the blockwise token mechanism.
+JS: The server needs to know that rather than sending Block2 individually, it has to do that in blocks, this has to be negotiated. If the client iniates the transfer using Block4, the server understands to take that way.
+CA: Agrees. Two mechanisms, one is a small extension that could be enough and that it would be usable for other purposes as well. The only thing that remains is that we would not have a mechanism to specify specific missing blocks. Is this something that would happen frequently?
+JS: We may randomly miss a block and have to request that block, we are likely to miss more in a flooded situation.
+CB: (Unrelated WebEx comment)
+CB: Restructure into items:
+    * Congestion control -- what are we doing here, are we doing something DOTS specific? Do other applications have similar requirements? (Applying congestion control to a DDOS situation won't work well, we *need* to cut through excessive congestion).
+    * What is the proper way to extend the CoAP model, which was not designed to be optimized for performance. Of course CoAP over TCP would improve the situation, but it does not apply here. We are designing something somewhat specific to DOTS.
+"If you need performance for large objects, use CoAP over TCP" is the traditional response. This indicates what we need here is DOTS specific.
+Progress on non-traditional responses would be great when generally applicable, maybe with some congestion control added.
+JS: Agrees that it is DOTS specific. Other people might use UDP over lossy networks too. Having the ability to send the data quickly might be a general case than just DOTS. TCP is just a no-no, cause it can potentially give up, we can't afford the client to be chocked by a tcp connection.
+CB: We have to make sure that we don't sell this to IESG as: "if you want to ignore congesiton control, coap is what you want to use".
+JS: From DOTS pov, we want to get chunks fast but the body will be subject to congestion control. Otherwise we will be using DOTS to create a DDOS attack.
+CA: That's confusing me, if DOTS can send large amount of packages, how is this better than having no PROBING RATE?
+JS: You have a set of blocks, that entity is allowed to be sent, when the enxt entity of the same size is coming that is subject of congestion control.
+CA: Yes, but can't you just increase the probing rate, if you want a buch of packets/bytes to go forward and then respect that rate on average? probing rate is meant to followed on average not byte by byte.
+JS: Yes, then that could be something to be used here cause we do not want the DOTS protocol to be creating DDOS attacks.
+CB: we need to consider the two directions separately. The one for DDoS, you need licence to cut through, not in the TCP way. You don't want to send your packets faster than your links. The other direction does not have DDoS to worry about, so there are incentives to do it using congestion control even being alone on a traditional path. How do we get feedback if the packets are lost in the other direction?
+JS: it's a way for the client to detect there's a loss of traffic, again that's not in the general CoAP, it's application specific. It could be a coap option in its own right.
+CA: could be part of the telemetry that you are sending no need to have a coap option. 
+JS: Absolutely, it could also be done that way. We are able to configure the different pipe sizes, and we can pass that informaiton btw client and server, which helps mitigation processes. We do have the application layer capable of handling that. If we had the concept of blockid for the client would be able to know if it is missing blocks and is able to feed that back up to the server. That would be something useful for coap too, having congestion control information in coap. 
+CB: that can be one component of the solution, a way for CoAP to run with external congestion control information (e.g. from the application). Instead we can focus on the protocol issues.
+CA: I like the separation of flow control (DOTS specific) to free up from the particular situation.
+KH: different perspective: Now we have CoAP over UDP/DTLS, over TCP/TLS. We tried to keep CoAP as simple as possible and to get away without even CONs and ACKs or congestion control over UDP; reluctantly we took them in (at cost of additional messenging layer). For congestion control we followed RFC on UDP usage guidelines ("if you have roundtrip times available"), and modelled things around "low volume applications" case. For some applications, this doesn't work (large payloads), CoAP-over-TCP has that. Idea was "if you need more than simple retransmissions, use over-TCP". 10 years later, it's not that much about 802.15.4, constrained devices have grown. Great to see a protocol adapt to use cases not originally envisioned. In some cases, use cases get far away from initial use cases to the extent of hurting a bit due to initially designed limitations. Dilemma: Just add this one tiny thing to support the use case, but many one-more-tiny-things get away from initial design goal of simple protocol. Web browsers "really need this blinky text". WG is called *constrained* restful environments, don't have that luxury. Desparately want to make CoAP useful for more use cases, but am conflicted about each "one more tiny thing". On this draft: Initial reaction was that if over-UDP is too weak and over-TCP is a no-no, wouldn't it make sense to bolt something inbetween? Selective ACKs, receive windows, DOTS-specific congestion control etc ... ask transports area about somethign inbetween, CoAP-over-"DOTSTP"?
+
+JS: Part of challenge is that standard DOTS is almost at hitting final RFC stage. It's not that easy to go back that far. We stumbled into this on questions on telemetry for sending larger data.
+
+CB: What Klaus said is true but this is also about adding features to CoAP that become part of the standard protocol we recommend outside DOTS. Have some flexibility to add options that are really specific for a use case with suitable applicability warning ("not use in general Internet unless DOTS-like situation"). Still interested in optimizing this to have as much to take home from this for more global CoAP community. Should not design another transport, keeping it simple is important as well. In the end, needs to be useful for DOTS; if that can not be transferred 1:1 to other applications that's fine too.
+
+MT: Have you explored in a good anough way for you the alternative usage of non-traditional responses as they are now or as they may develop?
+CA: I think the proposals are on the mail, discussing them through is not in the agenda for today anyway. 
+Jaime: Considering that blockwise seems to be limited and we need Block 3 and Block 4, would be worth the while to go back to the drawing board and update blockwise-transfer rfc?
+Med: on probing rate, but not related to JJ's 'question
+CB: We have two things that hurt here: block is entirely lock-step, and doing something related to observe (eliciting new blocks) is probably useful to have. The other is the need for some form of selective acknowledgement. Can't work with one ACK per data packet (inverse of the bitmap which blocks made it).
+CA: in one direction we have selective acknowledgment
+CB: how does that work?
+CA: NON a few blocks No-Response:2.xx, then CON to see whether anything is missing.
+
+CA: it will need some payload saying "I don't have all I need to process this".
+CB: Need fleshed-out example.
+CA: Can provide.
+
+CB: Something like a selective acknowledgement will be needed, and we'll need a data structure for that -- but also know how the protocol flow will make use of this, and who sends this when and why.
+
+KH: CoAP request-response layer is not the place to do selective acknowledgements.
+CB: Agree with that from a theoretical protocol-purity PoV, but think we should explore whether it can be done, and whether the shape of what we get has actual problems beside being ugly. Much of the Internet is built out of hacks like this.
+
+CB: Seems to make sense to write up some of those flows in a litle more detail. Couldn't quite make out of new-block what the protocol machinery behind this would be. With more detail, we can find out whether we can solve it that way.
+Med: Which details?
+CB: How do the two ends of the communication know what they are supposed to do? Do we have all the protocol progress information available so you can actually write code that does this? (And that's preferably compatible with the rest of CoAP)
+JS: no coding of Block3 and Block4 yet, but not expecting issues
+CB: There were a few opaque statements about tokens I could not quite understand.
+JS: One needs to provide a token, had discussions about empty token ... The token provided in Block4, should it be privded by the client? That's why in the draft it's all on the same token. Follows how existing CoAP-type stuff does things, client initiates request and received back to be assimilated into a single response.
+CB: Extended lifetime of the token would be a lot like Observe tokens. But when is that token finally retired?
+JS: If GET does observe at same time, it is remembered for a period of time. Client may cycle through lots of request with potential of clash, same situation even with single-packet observe.
+CB: when do you really "retire" a request?
+JS: All 10 results have the same token. 9 come back. Can re-request 10th or not, but after that can reuse the token. We know we're in a Block4 situation and expect more blocks to come back.
+CB: the request sent out to get the rest of the blocks...
+JS: needs to use a different token
+CB: OK. Think this can be made to work, may not be beautiful but yeah. Problem is more with the current text that doesn't explain all the things we seem to have in mind.
+JS: we'll revise the draft based on today's discussion covering points missing now
+CB: we need applicability statement, congestion control info from out of CoAP, definitions of Block3/4 options, and data structure for SACK and re-requests
+Med: somethilg already in the draft, we'll make it clearer
+CA: I still think this may be solved using a more generic phrasing of non-traditional responses. If that's more complicated to do for the good of this use case, then this can be instead considered.
+CB: this can be a narrowed solution for now but with a broader scope of applicability. How much time is fine to use for this, from a DOTS pov?
+JS: some weeks for the options, need to think about for the SACKs. It does not cover sending multiple blocks of data now, need to look back at non-traditional responses too.
+CA: if the client can indicate something more to the server on what blocks it wants, that's needed. Can this be done in a way that the proxy does not necessarily understand it?
+JS: sure, we'll come back on this.
+CA: I would need feedback on my comments on non-traditional responses sent to the list.
+CB: do you want to be a co-author?
+CA: happily so.
+CB: On time: Will DOTS universe explode if we don't come with something by date X? Do we have a year? Everyone wants everything ASAP, but what is a realistic timeline?
+Med: Depends on whether you want to have it in base telemetry spec. Current version targets WGLC for July. We know this is a problem we need to solve, so far there is no normative reference to blocks we defined. Don't want to add a dependency on telemetry spec on something I'm not sure I'll get soon. Maybe can have update to DOTS telemetry if we're [...] continue both tracks and know whether we go with blocks or unsolicited responses. Ideally, I want something to integrate into DOTS telemetry. Blocks is more focused and can be progressed into publication process faster than unsolicited. Don't have more precise milestones. That's the current situation. We have pending issue about large unsolicited notifications. Ideally, we'd have blocks specified. Understand WG can take more time to take various proposals. Won't be the end of the world, but if by July no progress declare it in as open issue in current telemetry spec.
+CB: Thanks, that's very detailled, think I understand. Have about 6 week to play Lego with various solution elements. Then should be starting to make decisions.
+
+MT: Ob probing rate, you had a comment
+Med: When setting up, we're also negotiating a probing rate. Increasing the default over the CoAP default, because lots overhead. [...] Not being aggressive about that. Only in attack situation; apart from that we follow probing rate and not bombing the network.
+Also one comment on CB's comment for feedback: As mentioned by JS we have heartbeat on application level [...]. In congestion case heartbeat will go through in a single direction, and receiver is aware about loss due to telemetry. This is not sufficient for all situations, but that's what we have now.
+CB: Probing rate negotiation is part of what already went through IESG. So we don't have to negotiate that part. Having heartbeats for add'l congestion control, we'd need to check whether that's enough of a measurement to use here. For under-attack situation, will want a little bit of information about flow in non-attacked direction. A bit like a receive report in RTP.
+CB: At CoAP protocl level, we don't have to do much, just say that there's external input that allows us to do this in a proper way, and just make sure we stay within those limits from the external input, just needs to be written up, probably in DOTS.
+Med: For next version of draft.
+
+CB: In current implementations, how do you pace sending those NONs? If you do Block3/4, how do you know how fast you should send them?
+JS: Currently like IP fragmented packets. [..]
+CB: That's probably needed if you want reasonable delivery rate.
+CB: Should also be addressed. Probing rate gives you pace for that. [...]
+JS: [...] average [...]
+CB: How big are these?
+JS: Up to 5 packages in my tests. Some active data reduction done with prenegotiated mapping tables. Not likely to go above 10.
+CB: Argument can be made that you can send 10 packets without paces, due to the initial-window-10 discussion. If we have a way to ensure we stay within the ballpark, won't need much mechanism. If you occasionally go beyond that, will still need some pacing.
+JS: Can do queries in telemetry to do data reduction.
+
+CB: When next? Was useful.
+CB: Target interim in 4 weeks?
+
+
+   - Related documents:
+       - https://tools.ietf.org/html/draft-bosh-core-new-block-00
+       - https://tools.ietf.org/html/draft-bormann-core-responses-00
