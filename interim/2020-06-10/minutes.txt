@@ -1,0 +1,134 @@
+CoRE Virtual interim - 10-06-2020 - 14:00 UTC
+
+Chairs:
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+Material: https://datatracker.ietf.org/meeting/interim-2020-core-06/session/core
+Webex: https://ietf.webex.com/ietf/j.php?MTID=ma4757116bab457defce5b14a9654c4e5
+
+Minute takers: Thomas, Ivaylo, Marco and Jaime (helping)
+Jabber scribes: Jaime
+
+
+Participants:
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Jim Schaad, August Cellars
+4. Jonathan Beri, startup
+5. Thomas Fossati, arm
+6. Klaus Hartke, Ericsson
+7. Francesca Palombini, Ericsson
+8. Ivaylo Petrov, Acklio
+9. Rikard Höglund, RISE
+10. Tim Costello, BT
+11. Christian Amsüss
+12. Peter Yee, AKAYLA
+13. Mohamed Boucadair, Orange
+14. David Navarro, IoTerop
+15. Carsten Bormann, Uni Bremen TZI
+16. Jon Shallow, ???
+17. 
+18. 
+19. 
+20. 
+
+
+Note well presented. 
+
+* New blockwise and asynchronous non-traditional responses
+
+   https://tools.ietf.org/html/draft-bosh-core-new-block-02
+
+   - Relevant discussions on the list CoRE/DOTS discussions
+       - https://mailarchive.ietf.org/arch/msg/core/H4NM0doO_ZzaHdkm5Op9UukP3-4/
+       - https://mailarchive.ietf.org/arch/browse/core/?q=Review%20of%20draft-bosh-core-new-block-00
+
+Jonathan presenting slides. Updates since -00.
+
+
+Med: asking whether the text in 02 about congestion control is sufficient or not
+Carsten: I haven't done any thorough analysis yet. But MAX_PAYLOADS == 10 is a good way to start. We are doing congestion control in an environment that is already congested (DDOS attack).
+
+JonS: Block3 specific updates (slide 4-6)
+Carsten: reviewed (on email) can we use the request tag option instead Block ID?
+JonS: One of the things we thought about is having a block id on a separate option. We would be changing the semantics on how block1 is used, superseding it. At that point we decided to continue with Block3.
+CB: I was talking about not changing the format of the option, rather than the option.
+JB: No issue with that. Request Tag would work fine in principle.
+CB: Offline/email discussion to happen with request tag. Moving into 64b space is something we have tried to avoid it, it would be good to continue that.
+JonS: Agreed.
+CB: there is no such thing as an "empty" token, not sure I can interpret the last bullet on slide 4
+JonS: token must have length.
+CB: 0 is a number, thus has length (?)
+Med: we are assigning specific semantics to that
+Med: Carsten, to go back a bit, we are registering option that is critical one and Request Tag is defined as non-critical one, wouldn't that be an issue?
+CA: you can say that if you implement Block3/4, then request tag has to be there, therefore making it virtually critical
+CB: any reason why 4.18 as new response code? It used to be a April's fools one. Bikeshed.
+JonS: understood.
+CA: is there any possibility for the client to ask for an intermediate status request? things like "is this good so far?"
+JonS: not an explicit signal
+CA: probably need an explcit one, especially if going through proxies
+JonS: Block4 updates (slide 7-)
+CA: On the ETag problem. Two situations: client sends etag to know if the representation is fresh or wait for response that contains etag. Having bid (?) would be useful when looking for historical representations.
+JonS: (TF -- sorry got distracted couldn't grok this)
+CA: so, this is  about observation. If your application needs to have every observation as a whole (historic data?) then observation is not the tool.
+CB: if you do GET/FETCH and do the same you can get back 2.03 and it's ok.  for methods which triggers results is a different thing, and that's where you'd want the request tag to do the split.
+JonS: happy with block 4 option split in two. We struggle with ETag, but did not consider the representaiton of the observe.
+CB: We might want to have a loko at whether the 24b sequence number is enough.
+JonS: 24b should be enough
+CA: Still -reminding- it would not give you access to prev representations.
+JonS, MB: OK not to use B4 tag as it is and make chances to use request tag instead.
+JonS: WG Document, Adopt?
+CB: Adoption means that us a group have interest in working on it, which seems the case. The other question, is whether we believe that this is the approach we want here. During the development we see that there are some bends and corners, still WIP but slowly converging. Still trying to understand the implications on the ecosystem.
+JJ: is the adoption you need urgently or can this wait a bit more?  I would like a full presentation of the draft in one of the meetings, have some more discussion and further iteration.  We have the WG pipeline already full at the moment.
+Med: We have a "DOTS telemetry" document that depends on something like this (the dependency on this would be normative).  Having adoption of the new block draft in the CoRE WG would be a good signal in this direction. If we don't make progerss we won't add dependency to teh blcok darft. We are open to integrate any the comments from the CoRE WG.
+JJ: Even if it's immediately adopted we cannot guarantee how much it'll take to finish the work.
+JJ: Proposal: present in July and after that open the adoption call.  What other people think?
+CB: I don't see problems adopting this work: the communication channel is in good shape and used in the right way.  There is no risk to create damage in the CoAP ecosystem.
+Marco: Med, you said previously that it could be possible to have an update later on the telemetry work when things in CoRE are more stable. Is this still a vialbe option?
+Med: Yes, although I would prefer to see this work advance quickly and be able to use it in the DOTS telemetry spec.
+CA: What is its scope?  Is this the successor of blockwise, a blockwise-bis? Or is it an extension for a specific use case?  (In particular, with regards to the streaming mechanism that was in -01.)
+Med: Agree and thank you for raising the comment. We wanted something really focused that is why we removed teh streaming text.  
+JJ: blockwise-bis seems a bit ambitious given energy and WG items currently in processing.  Trying to gauge the WG on this.
+JJ: present in July, scope it as an extension (as opposed to blockwise-bis) and after that open the adoption call.
+Med: we can use the mailing list to do the discussion before the meeting, but really it's your call, whatever you suggest.
+JJ: I am worried that most people have not read it for now and if we give people a bit more time, people will be able to read it and have more feedback.
+Med: we will update the draft to incorporate the feedback received today and notify the WG when we are ready.
+
+---
+
+coap.technology
+
+Francesca: related to CoAP, not necessarily to the CoRE WG.  Carsten is maintaining the site (https://coap.technology).  Added a "security" tab to the web site.  PR is out (https://github.com/coap-technology/coap-technology.github.io/pull/33).  I just wanted to point this out.
+CB: want to put this up next week.  Need some cleanup, rather hybrid situtation which I should fix.  For new PRs it's easier to provide markdown.
+
+---
+
+OSCORE Groupcomm
+
+Francesca: group OSCORE document update: new version due soon.  We did the change to use the COSE "capabilities" column instead of our own registry.
+Jim: I believe there is one hash alg already there, but I suppose you would never use it.
+Jim: Oh, I guess I put that only in the key type.
+Francesca: Maybe in the future there will be algorithms that register capabilities independent of the key type.
+Jim: for the signature algorithm paratemer, just concatenate the capabilities of the algorithm and the capabilities of the key type; do not remove duplicate parameters
+
+---
+
+stateless status
+
+Klaus: some points raised by Ben and Roman that I haven't yet addressed. All other IESG comments seem resolved form his PoV. 
+
+---
+
+Coreconf status
+
+Ivaylo: Pushed new version of the SID document. Discussions ongoing in the list.
+Carsten: Worth checking again about the SID vs. YSID naming.
+Ivaylo: Also updated the COMI draft on Github. In no more comments come, this can be the next version to publish.
+
+---
+
+Carsten: when is the next interim?
+Marco: in 2 weeks, it's the last one before IETF 108
+Christian: there I would like to present updates I am working on for the Resource Directory
+ 
