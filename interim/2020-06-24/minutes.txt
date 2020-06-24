@@ -1,0 +1,252 @@
+# CoRE Virtual interim - 24-06-2020 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-07/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m08cd303bf882c3eeebacf6d60d7b202e
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/z_MRgsGdTeechGxvL56MQw
+
+Minute takers: Francesca, Marco and Jaime (helping)
+Jabber scribes: Jaime
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Jim Schaad, August Cellars
+4. Jonathan Beri, [Golioth](https://golioth.io) (startup)
+5. Francesca Palombini, Ericsson
+6. Peter Yee, AKAYLA
+7. Rikard Höglund, RISE
+8. Thomas Fossati, arm
+9. Klaus Hartke, Ericsson
+10. Carsten Bormann, TZI
+11. Christian Amsüss
+12. David Navarro
+
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[JS]: Jim Schaad
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### CoRE Updates
+
+- draft-ietf-core-senml-etch-07 --> [RFC-to-be 8790](https://www.rfc-editor.org/auth48/rfc8790)
+    - AUTH48 done
+- draft-ietf-core-senml-more-units-06 --> [RFC-to-be 8798](https://www.rfc-editor.org/auth48/rfc8798)
+    - AD
+- draft-ietf-core-oscore-groupcomm-09 --> WGLC coming soon.
+    - no urgency but good to have WGLC comments by IETF108
+- https://arkko.com/ietf/core/draft-ietf-core-dev-urn-from--04.diff.html --> Update from WGLC
+
+### Updates to the Resource Directory document addressing latest comments
+
+https://core-wg.github.io/resource-directory/draft-ietf-core-resource-directory.html#name-changelog
+
+CA: AD review and other feedback -> update in github (see [changelog](https://core-wg.github.io/resource-directory/draft-ietf-core-resource-directory.html#name-changelog) )
+
+https://core-wg.github.io/resource-directory/less-security/draft-ietf-core-resource-directory.html#name-security-policies
+
+CA: Sec cons: we didn't have much initially, then with feedback we added a lot. We should rather have a more general approach. Drafted it in the PR.
+
+CA: 2-3 more issues pending:
+
+* https://github.com/core-wg/resource-directory/issues/234
+CB: the discussion comes about twice a year. Yes, we want to have simple registration
+CA: would like to have feedback on if this (see issue) is the direction the WG want to go to.
+
+CA: finish the PR, send a mail to the mailing list, submit new version, claims it adresses review comments
+
+
+* Related documents
+   - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+
+---
+
+### Resource Directory and Authorization
+
+* Related documents
+   - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+   - https://tools.ietf.org/html/draft-bormann-core-ace-aif
+   - https://tools.ietf.org/html/draft-ietf-ace-oauth-authz
+   - https://tools.ietf.org/html/draft-amsuess-core-resource-directory-extensions
+   
+KH: no updates since february meeting.
+
+JJ: Please short summary and link (anyone).
+
+KH: RD said "if you need authorization please use Ace". How to do that in practice?
+
+JJ: Minutes?
+
+CA: Can help a bit. Registrant and look up client are Ace clients, RD is RS. There is 2 ways the registration can happen: either the registrant already knows what token to get in order to register, but most likely the registrant will try to do the registration and get an error message that redirects it to the AS that will give it credentials.
+
+JS: authorization only for registration or also for lookup?
+
+CA: In Lookup it can work in the same way. First time it would get a 4.01, and then it can go to the auth server. 
+
+CB: RD is agnostic to the onboarding process. Onboarding has to come from  somewhere else. RD is just an application that is useful in that process. 
+
+CA: what does onboarding mean in particular in this situation?
+
+CB: That's the interesting question. We are trying to provide one component that can be use for a specific process. 
+
+MT: Do you think AIF would help in the registration case?
+
+CB: not sure we need another case. This should be described by AIF. Who can actually give that authorization in a way that RD listens to it? But outside of scope of the RD doc.
+
+CA: might need to include query parameters in the AIF. Agree that AIF should cover it.
+
+JS: need to think about dynamic points.
+
+CA: registration resources. The ability to use scope /register?ep=foo implies that one can also do the registration on /register/ep/foo.
+
+JJ: LWM2M there is no ...
+
+JS: what sort of detail? I can set up an AS and a RD that could do this. Is this what you are looking for?
+
+JJ: LWM2M - when an endpoint registers on a LWM2M server, there is no registration needed, because it's a trusted component. There is no lookup function from the IoT side.
+
+CA: The RD would be preconfigured with the set of keys/name matches and it can use the key to decide which registrations are allowed.
+
+TF: yes.
+
+DN: LWM2M server is preprovisioned with the credentials of the endpoint it communicates with.
+
+CA: wouldn't put concrete text about Ace in the doc. Details depend on the application
+
+CB: RD is agnostic. If you want to have something like SNMPv3 you need to have security.
+
+JJ: scope of this interim was not to make more changes to RD draft. This interim was about how to simplify Ace for RD (continue February discussion)
+
+CB: How to handle dynamic resources? (not discussed in Ace)
+
+CA: Every statement of a resource is transitive over location links from there.
+
+CB: Yes, still applications can do it different but it is a great way to do it as a default authorization for RD.
+
+JS: Other issue to be discussed is what the RD is to do when authorization expires.  Implies that tokens for authoriation might not be short term
+
+CA: No further updates can come up after the end of the lifetime and the resource goes away.
+
+CB: Lifetime of a dyn created resource cannot be longer than the lifetime of the authorization credential.
+
+CA: If the client were to request a longer lifetime it would be 4.01 rejected and be redirected. 
+
+MT: No margin btw token expiration and the deletion of the resource. 
+
+CB: Everything that the client is doing based on the authorization would have to inherit the time limit. 
+
+CA: ... and not to include larger lifetimes cause it'd be rejected.
+
+CB: ...
+
+CA: CoAP Problem could help on this. 
+
+MT: To be added to the draft?
+
+CB: Wouldn't like to limit it to ACE
+
+JJ/MT: Sure, no intention to be prescriptive.
+
+JS: in LWM2M we are saying that the lifetime of the key is infinite, right?
+
+JJ: lifetime is a parameter of the registration.
+
+DN: what key are we talking about?
+
+JS: whatever key you use for authentication. Let's say the TLS key.
+
+CB: How do keys expire?
+
+DN: there is no specific mechanism on handling key expiration on the endpoint
+
+CB: do participants know when the key is going to expire?
+
+DN: The endpoint does not know what the lifetime is.  It will attempt to contact the server and the server will return an auth error when the key expires.  The end point then contacts the bootstrap server to get a new key.
+
+CB: is there going to be a draft about this?
+
+JJ: if we need to, somebody could try. Now not so sure.
+
+CA: text that describes an example how a RD with AS etc could play together. I could fit it for now in RD extensions.
+
+CB: another option would be to write something in the AIF doc.
+
+KH: In the February meeting we discussed how to combine IETF components to identify potential gaps. Now it seems we have a way forward also considering possible additions to AIF.
+
+JS: Should we spend 1 hour or so anytime soon?
+
+KH: It would help a workflow example, including discovery and then authorization request and enforcement, etc., putting all components together.
+
+JS: I could never convince anyone it was important. If one gets an error from the RS, this points at the right AS to go to, but not the scope to ask for, as the client should just be totally agnostic of "what" exactly ask for.
+
+KH: I guess things might not be entirely clear when we consider Commissioning Tools, rather than devices registering themselves. E.g., how does the CT get the authorization to act on behalf of the device?
+
+CA: From the Authorization Server as well. Depending on the level of details it is aware about, it can ask for more or less fine-grained scopes.
+
+KH: So in theory all components are here, but it would be nice to have an example showing that the components can actually be combined in practice as envisioned.
+
+CA: Anyone having both an RD and ACE stuffs implemented?
+
+JS: You can use your RD and my ACE.
+
+CA: I can use your AS but I would have to adapt my RD to be RS.
+
+JS: Yes.
+
+JJ: In LwM2M we have implementations but this exercise is only for registration so not so useful. Wondering if others can be interested.
+
+CA: a 4.01 error can tell to go to the Bootstrap Server as a redirection to get new/updated keys.
+
+JJ: How does OCF do?
+
+TF: No idea.
+
+CA: Can one device have in LwM2M something like, if you have problems accepting me, check with this Bootstrap Server?
+
+DN: The interaction between Bootstrap Server and LwM2M server is not defined in the specification. What we call LwM2M Server is actually both RD and CoAP client. So the BS configures a device upon bootstrapping, making it able to continue talking to the LwM2M server, which performs CoAP operations on the devices.
+
+CA: So when the device reaches the LwM2M server, the BS has everything needed about the device to possibly share.
+
+MT: It's still good to have informational guidance somewhere. The RD extension document?
+
+CA: Or actually the AIF document (appendix) explaining how that can work for this.
+
+JS: And at some point we may want to have that as an informational document from ACE anyway.
+
+CA: What about LwM2M Proxying?
+
+JJ: As far as we know, there is no proxying in LwM2M. All endpoints are both client and server.
+
+CA: Not thinking of direct communication. It seems there is no current way for a non-IoT side to communicate with an IoT side. If that becomes interesting to do, entities like proxy would also become interesting.
+
+DN: we are finishing LwM2M 1.2, then we start a requirement phase in September. It has not come up yet a possible work/interest on a device accessing resources at another devices, given authorization/guidance from the LwM2M server.
+
+CA: You will need to have a base address.
+
+DN: The RD may be a main provider.
+
+JJ: Yesterday we had a discussion about proxies and the Dynlink document also thinking of LwM2M. This discussion will continue with more follow-up.
+

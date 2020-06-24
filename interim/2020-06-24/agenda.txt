@@ -1,0 +1,34 @@
+CoRE Virtual interim - 24-06-2020 - 14:00 UTC
+
+* Updates to the Resource Directory document addressing latest comments
+
+* Resource Directory and authorization
+
+* Related documents
+   - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+   - https://tools.ietf.org/html/draft-bormann-core-ace-aif
+   - https://tools.ietf.org/html/draft-ietf-ace-oauth-authz
+   - https://tools.ietf.org/html/draft-amsuess-core-resource-directory-extensions
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/z_MRgsGdTeechGxvL56MQw
+
+Webex link: https://ietf.webex.com/ietf/j.php?MTID=m08cd303bf882c3eeebacf6d60d7b202e
+Meeting number: 619 180 877
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 619180877@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+1-877-668-4493 Call-in toll free number (US/Canada)
+Access code: 619 180 877
