@@ -7,14 +7,7 @@ The core WG held two virtual sessions during IETF 108 held virtually.
 ---
 
 The minutes for the two CoRE sessions are available at:
-
-[Tuesday, July 28, 2020]
-https://www.ietf.org/proceedings/108/minutes/minutes-108-core-202007281410-00
-
-[Friday, July 31, 2020]
-https://www.ietf.org/proceedings/108/minutes/minutes-108-core-202007311410-00
-
-Raw minutes for both sessions:
+https://datatracker.ietf.org/meeting/108/session/core
 https://codimd.ietf.org/notes-ietf-108-core
 
 Thanks to the note takers Niklas, Ivaylo, Francesca and Michael!
