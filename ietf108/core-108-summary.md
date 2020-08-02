@@ -173,13 +173,13 @@ This last versions addresses all open point raised at the April virtual meeting.
 
 More open points were discussed (mostly coming from the WGLC), requiring more thinking:
 
-    - For the pairwise mode, it should be possible to signal the curve used for the secret derivation, e.g. Montgomery or Weierstrass. It should work to have it as additional information in the security context. Then the same MTI as today can be kept.
+- For the pairwise mode, it should be possible to signal the curve used for the secret derivation, e.g. Montgomery or Weierstrass. It should work to have it as additional information in the security context. Then the same MTI as today can be kept.
 
-    - It's convenient to reset the SSN after group rekeying, which becomes easier to detect.
+- It's convenient to reset the SSN after group rekeying, which becomes easier to detect.
     
-    - For observations, useful to store the Context ID of the original request. This would prevent notification misbinding across group rekeying if the SSN is reset. There may be further ways to look into.
+- For observations, useful to store the Context ID of the original request. This would prevent notification misbinding across group rekeying if the SSN is reset. There may be further ways to look into.
     
-    - New proposal for separated PIV spaces, for the group mode and the pairwise mode. Early discussion of pros/cons to be continued. Impact on communication overhead, space synchronization with the Echo option, and privacy implications. Some people expressed concerns.
+- New proposal for separated PIV spaces, for the group mode and the pairwise mode. Early discussion of pros/cons to be continued. Impact on communication overhead, space synchronization with the Echo option, and privacy implications. Some people expressed concerns.
     
 People who have read: Jim, Christian
 
