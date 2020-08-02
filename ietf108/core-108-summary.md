@@ -8,6 +8,7 @@ The core WG held two virtual sessions during IETF 108 held virtually.
 
 The minutes for the two CoRE sessions are available at:
 https://datatracker.ietf.org/meeting/108/session/core
+
 https://codimd.ietf.org/notes-ietf-108-core
 
 Thanks to the note takers Niklas, Ivaylo, Francesca and Michael!
