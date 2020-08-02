@@ -1,0 +1,21 @@
+# CoRE Virtual interim - 24-06-2020 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Jim Schaad, August Cellars
+4. Jonathan Beri, [Golioth](https://golioth.io) (startup)
+5. Francesca Palombini, Ericsson
+6. Peter Yee, AKAYLA
+7. Rikard Höglund, RISE
+8. Thomas Fossati, arm
+9. Klaus Hartke, Ericsson
+10. Carsten Bormann, TZI
+11. Christian Amsüss
+12. David Navarro
