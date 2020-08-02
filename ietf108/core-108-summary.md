@@ -143,10 +143,13 @@ Based on a discussion started at IETF 106, this new work proposes different appr
 
 Approach 1. EDHOC in OSCORE
     - Define new CoAP option indicating that message is both EDHOC and OSCORE
+    
 Approach 2. EDHOC in OSCORE
     - Use the OSCORE option and a new flag bit to tell that the payload contains both   
+
 Approach 3. OSCORE in EDHOC
     - Define new CoAP option indicating that the message is both EDHOC and OSCORE
+
 Approach 4. OSCORE in EDHOC
     - Signal with new content format. 
 
