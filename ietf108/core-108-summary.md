@@ -193,7 +193,7 @@ The next version will address some open points, and align with other GM administ
 
 A future document collecting all target attributes can include also the ones defined in this document.
 
-Possible interest can be discussed with Fairhair/BACnet and others. T2TRG can a good venue, with CoRE invited.
+Possible interest can be discussed with Fairhair/BACnet and others. T2TRG can be a good venue, with CoRE invited.
 
 * draft-tiloca-core-observe-multicast-notifications-03
 
@@ -224,6 +224,8 @@ Another type is a "Deterministic Request", that all clients have to be able to g
 Next version will give clarifications and more details.
 
 Positive feedback on CoRE being the right venue and the importance of the problem
+
+People who will review an updated version: Francesca, Jaime
 
 ---
 
