@@ -153,7 +153,7 @@ Approach 3. OSCORE in EDHOC
 Approach 4. OSCORE in EDHOC
     - Signal with new content format. 
 
-Approaches 1 and 2 seem preferred, with most preferences for Approach 2. If defining a new option, a short-enough EDHOC message can go in the option. Carsten and Klaus can provide feedback on this point.
+Approaches 1 and 2 seem preferred, with most preferences for Approach 2. A short-enough EDHOC message can go in the option. Carsten and Klaus can provide feedback on this point.
             
 People who will review: Christian, Carsten, Jim.
             
