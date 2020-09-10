@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2020-09-10  14:00 UTC
+
+* CoRE Resource Directory and received IESG comments
+    - Addressed comments
+    - Open points and plan to address them
+
+* Related documents
+   - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2020-core-08-core
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=mb93d5310059df95f1f25734c1b973f5d
+Meeting number: 171 360 2755
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1713602755@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 171 360 2755
+

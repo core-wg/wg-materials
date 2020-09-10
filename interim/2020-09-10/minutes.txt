@@ -1,0 +1,234 @@
+# CoRE Virtual interim - 2020-09-10 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-08/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=mb93d5310059df95f1f25734c1b973f5d
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2020-core-08-core
+
+Minute takers: Jim, Marco and Jaime (helping)
+Jabber scribes: Jaime
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Jim Schaad, August Cellars
+4. Rikard Höglund, RISE
+5. Francesca Palombini, Ericsson
+6. Carsten Bormann, TZI
+7. Göran Selander, Ericsson
+8. Christian Amsüss
+9. Peter Yee, AKAYLA
+10. Thomas Fossati, arm
+11. Michael Richardson, Sandelman Software Works
+
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[JS]: Jim Schaad
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### CoRE Resource Directory and received IESG comments - [CA]
+
+   - Addressed comments
+   - Comments with concrete action plans
+   - Open points and plan to address them
+       - Oddities in examples
+       - "Default" model
+           - first-come-first-served
+           - configured EP names
+   - ... but not going by items by that structure, but by importance of working group feedback
+       - Priorities are assigned from WGF-9 to WGF-0 in
+           - https://github.com/core-wg/resource-directory/issues?q=
+           - https://github.com/core-wg/resource-directory/blob/master/point-to-point-responses.md
+   - Possibly actionable outside document
+       - DTLS retransmission
+   - Related documents
+       - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+
+  - **Issue # 254 - Propose one fallback / default security module**
+   [CA] Describe the set of possible answers where you match the "identifier" on the registration to information extracted from the security context.
+   [JS] If especially using the OSCORE profile, one can go for the subject claim, or the PSK, or an AS-assigned identifier of the CWT.
+   [CA] Being asked to provide a minimal default behavior that people could be using
+   [CB] Not sure that I understand the list. Establishing some defaults to ensure that the identity hasn't changed?
+   [CA] Yes - doing some actions like changing self-signed certificates would cause a different naming.
+   [CB] Host name or subject identifier is a natural candidate -  otherwise tie to the key if that does not exist.
+   [CA] Tied to the key means the most general key in that context? In case of LAKE use the authentication public key not the derived session key.
+   [JJ] Wondering about keeping application level stuff such as observations
+   [CA] No that would be separate
+   
+ - **Issue WGF-9 Are we aligned on "don't just blindly POST empty stuff with your permission unless you're sure the server is what you think it is?" otherwise respond "depends too much on the non-RD application's policies that we could make any more precise statement"**
+
+   [CA] How much should there be a dependency on untrusted RD, and thus the application needs to do verification, vs the RD is trustworthy.
+   [CA] Dealing with target attributes, such as content format.  These are hints, so cannot every be completely wrong.
+   Resource types are different in that they describe operations that can be done. Example of starting a port scan from a different device has been on list.
+   Re-verification could be done by asking the referred to decide for it's well-known/core to double check the answer that was received from the RD.
+   [JJ] Are we over defining this behavior?
+   [CA] Maybe yes.
+   [CB] Things come to mind - Aspect of trust for RD is that it does not suppress registrations. Whether you trust it or not may be of importance.  What type of liability is implied here by trust. Does the RD know that what it is told is truth?
+   [CA] RD only accepting statements about links that client is authorized to be authorative on.
+   [CB] For all security models or just this one?
+   [CA] Only for this one. Describing to implementers when this policy is relevant.
+   Used in cases where RD is expected to have only authorative information.
+   [JJ] Is this only public key cases - for certificates?
+   [CA] This would require some form of authentication using certificates.
+   For instance if the entity doing the registration is acting on behalf of the server, so the certificate becomes part of the link setup.
+   [JJ] Implies that client can only register things about itself.
+   [CA] Yes, you can go for that model. But how much should we go into details in a useful way for implementers?
+   
+ - **Issue WGF-9 - Any deployment of simple? Otherwise, /.well-known/rd would be fine with me**
+    [CA] Ben is not happy with assigning a new behavior to a registered well-known resource.
+    Are we aware of any implementations in the wild that support this?
+    [JJ] Not in LwM2M.
+    [CA] Leaning to use of a new different resource.
+    [CA] This is about the issue of posting to /.well-known/core
+    [CB] Yeah, that is weird.  Add a note to the document that previous version of the document used this old resource
+    
+ - **Issue WGF-8 - What, that's optional and CoAPS does not pull it in?**
+   [CA] Who would expect a DTLS implementations for CoAP to do replay protection?
+   [JS] Of what?
+   [CA] Previously sent messages.
+   [JS] Definitely.
+   [CA] Optional in DTLS. We can say it has to be enabled, or do a quick update to CoAP about turning on the replay protection.
+   [JJ] Really need to make replay protection mandatory.
+   [CB] Anything in RFC 7925?
+   [TF] No mandatory replay protection in RFC 7925.
+   [JJ] It should really be mandatory.
+   [CA] So we add it to the RD and hope it gets picked up.
+   [JJ] May also be a feedback to be sent to other drafts/groups.
+   [TF] Sure, will do.
+   
+ - **Issue WGF-8 - Who's keeping the exmple in here?  also GENERIC-ODDEXAMPLES**
+   [CA] This is about examples, thinking of what LwM2M is doing, some terms (irrelevant?) are not really explained.
+   [JJ] Yeah, some are not relevant, I can look for specs and send it to you.
+   [CA] What of this is needed for the RD spec, not what is coming from outside specs (OMA)
+   [JJ] Then something can be removed.
+   [CA] Probably the whole table. Why are we having this actually?
+   Why don't we just say - LW OMA is using this and be done with it.  Don't do the registration examples.
+   [JJ] Makes sense, to avoid confusion and replication.
+   [CB] Little point in enumerating registration parameters without explaining what they mean. Delete the table and change colon into period.
+   Always in dangerous territory when re-phasing data from a different normative document.
+   [JJ] It seems to include things not really needed to understand what matters here. Can we just state at the beginning that this is just an example relevant to LwM2M?
+   [CB] It might even not be entirely correct, if they updated their object.
+   [JJ] It looks correct to me, sure it may change in the future.
+   Can we just point to the new OMA document for the example?
+   [CA] Would remove much of it - about 3 screens - little seems to be required.
+   [CB] I would delete 10.2, and add at the beginning of 10 a pointer to the OMA specs.
+  
+  - **Issue WGF-8 - just-do-it (on which ND messages can carry an RDAO)**
+    [CA] Would it be OK to just say that RDA0 always do this
+    [CB] Let's check where they'd go in DNS server.
+    [CA] OK I think I can act on this.
+
+  - **Issue WGF-8 - Could use some help here - Status config in DHCP**
+    [CA] Need someone who understands this to come up with some text.
+    [CB] Point is in bullet list on page 16 - Can provide additional information from option - can supply same option if using SLAAC.
+    [CA] We don't have to, right?
+    [CB] Right but if DHCP is running anyway, no more configuration is needed.  Can be done even if not doing address configuration.
+    [CA] So just adding more text on when DHCP is used.
+    [CB] Yes.
+
+  - **Issue WGF-8 - because no sleepy nodes document was even alive when I got active here**
+    [CA] No up-to-date document to reference, but we are talking about it in the introduction.
+    Has the topic died enough that we should remove the reference, or should we give more information?
+    [CB] Reason for no document - all current approaches have patent-thickets around them.
+    Safest approach is to use a proxy. Node alerts proxy and proxy can then forward requests to it.
+    [JJ] Comment seems to be how does this get implemented/work.
+    [CB] All documents written were trying to get patent method adopted.  Nobody documented less dangerous versions.
+    
+    ***ACTION ITEM - Carsten will provide a pull request to deal with this***
+    
+    [JJ] Can we just talk about proxy doing this - comment is about how to talk to a sleeping endpoint.
+    [CA] Proxy has representations but if not then fails.
+    
+  - **Issue WGF-8 - section 3.6 - home building automatation**
+    [JJ] Don't know how much of this is current anymore - topic is very big talking about both home and office automation.
+    [CA] If I find examples to sprikle in then do that, otherwise just add some sprinkling of words talking about where and RD can be used.
+    
+  - **ISSUE WGF-8 - How does an RD know the policies that a client has for security policies**
+    [CA] I don't think this is needed. RD will accept what it knows.
+    [CB] Classical authorization process. Source of authorization is not defined here. The fact that an RD can be authenticated does not say what it is useful for. Need trusted 3rd party to announce what it is usedful for - would be something like an ACE token.
+    [CA] I think I can factor that in.
+    
+  - **Issue WGF-7 - Primary to notify everyone that core-interfaces example will go away**
+    [CA] Have done some point squatting here. if=core.a as example. Better ideas than just use example.core.a ?
+    Can advertise anything desired - so the Kelvin is not an issue
+    [CA] Can do more realistic examples w/o squatting.
+    [CB] Would like unit names to be SenML compatible.
+    
+ - **Issue WFG-7 - More broad document on URIs for bearer tokens**
+    [JJ] Is there something relevant in that document we need to check.
+    
+ - **Issue WGF-7 - What does not support multicast well mean**
+   [CA] Not big expert here. Will not justify ranking.
+   
+ - **Issue WGF-7 - Exposing URIs in endpoint lookup**
+   [CA] Exposing them in lookup - do we have information that would help in justifying this model? 
+   [JJ] What does this mean that the RD does not make them accessible?
+   [CA] It was the best structure format that we had when we started working on RD.
+   We are describing the resources, but not expecting the client to be able to make use of that resource. It is just a name and not de-referencable.
+   Any changes here are going to be hard - so just describing why it makes sense is best.
+   If did this in CoRAL, might choose not to give the name of the resource, just a statement that it exists. This is not a link-format option.
+   Might have an information disclosure security problem if the names are not derived from the endpoint name or completely randomly. Should document that this is a possible issue.
+   [JJ] Use case of link catalogs - should we put a comment in here.
+   [CA] That is more about registered links isn't it - 
+   [JJ] Not exactly the same thing - yes
+   
+ - **Issue WGF-7 - Odd examples - luminary part**
+   [CA] Looking up groups and deciding by that group if they should join the group. Need to do some additional checking on the links and is not how I would recommend it to be done.
+   Should we remove this part as well? Given that a document is coming that does a better job of how to do group discovery - Example 10.1
+   [MT] Not finding out existing membership, but looking for what membership should be. Hence not implying/needing any earlier membership registration (which is in fact not defined here).
+   [CA] Designed around the idea that based on link data - you think that you should join group. Requires idea that the link data is something that is useful.
+   Preference would be to remove that part of the example.
+   [CA] Part about automatically joining group and using multicast address configuration are confusing examples about best.
+   
+  - **Issue WGF-7 - "disperse networks"**
+   [CA] Unsure what this means - inclination is to just remove it.
+   
+  - **Issue WGF-7 - talked with 6MAN?**
+   [CA] Not sure what the procedures are here - if somebody has experience with them would like some help (or just pass off the issue)
+   [CB] Been to meetings - question is about getting a code point from them.  Might want to present to them - either slot in meeting or send a mail to the mailing list.
+   [CA] Will do this - see if they have comments.
+
+  - **WAY FORWARD**
+   [CA] Everything below 4 is for people to skip over things and see if they want to comment.
+   
+   [MT] What is the timeframe for an update? End of month / early October?
+   [CA] That should be possible.
+   [MT] Tentatively, let's check again at the next interim.
+   
+### AOB
+
+* [CA] plugging https://coap.amsuess.com/
+    Running some applications - one of which is an RD
+    Root is a description of the services that are provided.
+    
+    ***ACTION ITEM - Christian will mention this to the CoRE mailing list***
+    
+    ***ACTION ITEM - Carsten will mention this in the CoAP Technology website***
+    
+* Advertise upcoming doodle for cachable-oscore run-through
+
+* Looking for suggestions for the next interim. It can be a wrap-up session on the RD, followed by a discussion on Dynlink.
