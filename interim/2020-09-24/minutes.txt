@@ -1,0 +1,199 @@
+# CoRE Virtual interim - 2020-09-24 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-09/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m77b4ee5ef9869f87a24a3aa57f2c30f5
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2020-core-09-core
+
+Minute takers: Rikard Höglund, Marco (helping)
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Francesca Palombini, Ericsson
+3. Peter Yee, AKAYLA
+4. Alan Soloway, Qualcomm
+5. Carsten Bormann, Universität Bremen TZI
+6. Rikard Höglund, RISE
+7. Göran Selander, Ericsson
+9. Bill Silverajan, Tampere University
+9. Christian Amsüss
+10. Michael Richardson, Sandelman Software Works Inc
+
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[JS]: Jim Schaad
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### CoRE Resource Directory
+
+  - Wrap-up on processing of IESG comments
+  - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+
+MT: Is it correct that we do not have any updates to check?
+CA: I have a lot of action items but no progress for today.
+MT: Okay, we can take it to the next interim; that means more time for the Dynlink document today.
+
+
+### Dynlink [Bill, Alan]
+
+  - Discuss status, open points and way forward
+  - https://tools.ietf.org/html/draft-ietf-core-dynlink
+
+  Presented slides at:
+  https://www.ietf.org/proceedings/interim-2020-core-09/slides/slides-interim-2020-core-09-sessa-dynlink-status-update-00.pdf
+  
+  Recent pull request from Alan (discussed below):
+  https://github.com/core-wg/dynlink/pull/20
+  
+BS: I have to confess we have not progressed that much either but we want to take benefit of the interim since it was scheduled.
+
+BS: Not that many updates from IETF 108 but I will give summary of next steps. We are currently in draft -11 which was submitted just before the 108 meeting. What we had then was a roadmap where we started changing the language to talk about state transfers. We will also take time to address issues discovered with pmax (particularly when the CoAP server and client are separated by a proxy), and updates for epmin and epmax.
+
+BS: The idea was to convene small research groups before IETF 109. Please let us know if you want an invitation to join. I have not gotten any new participants from IETF 108 so we are that same group.
+
+BS: Ongoing discussions are notifications from setting observe attributes. The current language is not very RESTful but sounds like a new protocol. There are substantial editorial changes to do to update this language. Bringing it more to how it's done in the observe RFC.
+
+BS: For the last slide we want to support epmin and epmax which is a proposal from OMA LWM2M. Alan has augmented this with example use cases. Basically epmin and epmax differ in a significant way from pmin and pmax. The discussion about this can be found on the core-wg dynlink github repo issue #18 at  https://github.com/core-wg/dynlink/issues/18  . It started on the CoRE mailing list and Alan raised this in the Gihub and some have contributed with opinions. The latest status is some text to consider from Alan.
+
+AS: It needs to be clear to the reader of the document what these new attributes are and how to use them. So I started creating a PR to put the changes to the draft I felt applicable. I wrote example text but wasn't sure how we wanted to create the content so I put it in the issue instead of a PR.
+
+AS: In the latest LWM2M spec attributes are translated. We created some we felt important for LWM2M which are epmin, epmax and some others. I want to talk about how I propose to modify Dynlink.
+Epmin & epmax are supposed to control when a device takes a measurement. Edge indicates if the change was on the rising or falling edge. A control parameter for confirmable notifications was also added (can be used for important notifications). We also have a historical queue depth to indicate the depth of history saved on the server.
+The ones I started to put in into Dynlink were epmin and epmax, but we should consider the other ones too.
+  
+CB: How do you get at this historical queue? Ok, so essentially send a piece of SenML with particular values.
+
+AS: Hopefully this will evolve or change based upon deployments.
+After all the discussions we decided I should put in a PR. The new parameters are really control parameters/attributes, controlling when measurements occurr. The PR is now at: https://github.com/core-wg/dynlink/pull/20
+
+AS: Example, going through the Github issue #18 at https://github.com/core-wg/dynlink/issues/18  : Let's say we have a temperature sensor. We want it to report no more than every 5 sec, meaning setting pmin at 5, and at least every 60 sec meaning setting pmax at 60. This means the device can sleep for at least 5 seconds and maximum 60 seconds (since those are the limits for reporting). But I don't think this is the wanted behaviour from the client's point of view but nothing guides the device. To control how frequently this measured there are 2 new parameters (epmin & epmax).
+
+MR: Why did it set pmax to 60 if it wants to hear every 10 seconds?
+AS: You still have to abide by the reporting criteria. I will not report if the temperature has not changed but I will report it even if it has not changed after 60 seconds.
+MR: It sounds like pmax is misnamed.
+AS: I'm using it as currently defined. Even though my evaluation criteria may not change I will still report, that is what pmax is for.
+MR: It sounds like you are introducing a similar sounds attribute where the original one was poorly named. That is why the need for the new parameters is not obvious. Some renaming may be helpful.
+AS: I'm open for any changes. Just because pmax is 60 does not mean I am fine with the client going to sleep 60 seconds at a time.
+
+AS: (Continuing example.) epmin says you can do a measurement at the end of this, and epmax says you must do a measurement at the end of this. The device can decide based on epmin and epmax how it sleeps and wakes up.
+
+BS: Do you have a guidance if epmin and epmax are not set?
+AS: Then it's the same situation as now.
+BS: In other words without epmin and epmax, what's logical is using pmin as sleep interval?
+AS: Not neccessarily since there's nothing that says that. Now it just says I must report at pmax. There is no guidance for the device's sleep interval. We could say that pmin may be used to guide the device. But I don't think we can enforce that.
+BS: In the current draft there's some code there on what to do.
+
+AS: Let's go to the PR. I will show the proposed changes. The first concept is that they are not notification but control attributes. They have nothing to do with generating the notification but rather when a notification should be generated. They divide the cadence of measurement on what triggers notifications. It allows controlling how often a server performs a measurement. They configure the internal server-driven sampling process.
+
+BS: Does pmax fit into the conditional control attributes? If so we should change the wording. I wonder if the current language is accurate if we bring pmax as a conditional control attribute.
+AS: True and pmin is also a conditional control attribute. I agree.
+
+AS: epmin controls the minimum period between measurements. It must wait this long but does not have to perform a measurement when it expires.
+Similarly epmax is the server time a server may wait between two consecutive measurements. You must wait for epmin and _could_ do a measurement, but after epmax the server _must_ perform a measurement. epmin must be greater than epmax. I have not included the example text, but it may be valuable.
+AS: So this is my PR, where do we want to go?
+
+BS: Most of the text seems ok. It looks sensible. But if epmin is not set, there was something we should consider. If pmin is set but epmin is not set we could write that the server can use pmin.
+AS: I can edit the PR, should I?
+BS: Yeah, sure.
+AS: (Adding to the PR). The server may use pmin if defined as a guidance on the desired measurement cadence.
+BS: Is there anything in the implementation considerations section? There was discussion there on the internal sample period. That part needs to be considered as well. We should rephrase things here like "internal sample period".
+AS: (Changing the text)
+BS: Seems okay now. We just need to make sure things do not clash.
+AS: I considered making a PR for edge and historical queue parameters. But I wanted to start with epmin & epmax and then make separate future PRs.
+BS: That's reasonable.
+
+CA: I'm happy with the attributes related to the sampling and not the resource state, good they are separate. Some changes may be needed in the language on how the parameter are transported. The control attributes can be used for operations with side effects.
+AS: In reality in an observe request all control and notification attributes can be included.
+CA: Parameters may affect other observations on a resource.
+AS: If you have an existing observation and set a new one. Is it separate or same?
+CA: Separate
+AS: Correct, so the parameters are only applied to that observation.
+CA: But the history attribute affects the whole resource. It affects how a later observation would see the state of the resource.
+AS: You are talking about epmin and epmax?
+CA: Epmin, epmax and history.
+AS: I'm trying to separate conditional notification and conditional control attributes. Their scope is only on a particular observation, it's an atomic thing. The device must take all notifications and all epmin & epmax values to decide its wakeup cadence. But it must abide by epmin & epmax for individual observations. Even if I measure one temperature every second, I have to obey the limits for other observations which can be different.
+CA: What about conflicts? Two observations on the same attribute.
+AS: It can never violate the parameters. Regardless of other observations. We're talking about cadence of measurement. One client says measure every 1 second, another every 10 second. Can I report on observation 1 at same time as 2? We have nothing specified, it's implementation dependent.
+CA: I'm thinking about intermediaries that understand the protocol. I may take some time to process the implications further.
+AS: Do we want to provide guidance that the values are recommendations to enable the server to maximize its power savings/wakeup cadence?
+AS: Does it work to separate the attributes into 2 separate tables (notification versus control)?
+CB: I was thinking of 2 clients. One has epmin and epmax at 7, and another epmin and epmax at 13. How powerful are these values to be obeyed?
+AS: Is the server invalidated from providing a notification to both at 7 seconds? I think the client should be able to see that it's up either way so why not generate a notification. If the device is able to do a measurement, then it should evaluate the notification criteria.
+CB: What language do we need to allow this?
+AS: Perhaps put it in the evaluation criteria?
+CA: Do we need to phrase it as a minimum and maximum? Having a minimum assumes the device is actively polling.
+AS: The way it started for me was having guidance on when to wakeup (all there was, was waking up at least pmax). But that is not good, some guidance was needed. I created my own scheduler.
+CA: How does epmin play into the scheduler?
+AS: I use it as one element of an optional wakeup. I create list of mandatory wakeup and add the optional too. Then the device can consider when to wake up (if it gets enough power saving). Remember the observations are not aligned, the T0s differ.
+CA: If epmin was always 0 would it make things a lot worse?
+AS: Not for the implementation but for the client to receive a notification. Or rather the utility is for the server to have a better scheduler. With epmin 5 and epmax 10 the server has 5 seconds to decide within for its scheduler.
+AS: Shall I change the text for the implementation considerations now?
+CB: The implementation considerations have to consider the semantics, so let's define the semantics first.
+CB: If you want to define the implementation considerations first do that and make sure the other parts of the text actually allow that.
+AS: (Changing the text). Changes may be needed for the MUST in the epmin text. Changing to SHOULD may be better. Then I can violate it when I decide to.
+CB: For SHOULD we must spell out the exceptions. So I prefer "is encouraged" if it's a weak request.
+BS: We should have correlation to epmax since it's a must there.
+AS: For epmax it is a MUST.
+CA: I have trouble coming up with how a client would use this. The client has nothing to put as epmin. Is not this value something the server can decide on its own? Since it's more for its own scheduling.
+AS: It is but the server does not know the preference of the client. If I know there is flexibility on the server I can say wake up at least every 5 minutes but you may wake up every minute. I know my server device and its capabilites.
+CA: It sounds like a general configuration parameter, not exactly specific to an observation.
+AS: I may want to say you must send it every minute but the server may wake up every 10 seconds if it wants to.
+CB: It's more like advice from the client that it does not need information more often than a certain interval. "The client indicates that it has no use for this being evaluated more often."
+AS: (Changing the text live)
+BS: Text now is good but we can shorten it.
+BS: Regarding epmin & epmax, and Carsten's example. If both epmin and epmax are defined epmax must be greater than epmin. But is it > or >= ?
+AS: I always though it to be >. We can consider how things are done for pmin and pmax. 
+BS: Don't split things into sections for now. I have editorial changes.
+CA: If my understanding of epmin and epmax is correct, the mental exercise to do is: if 2 observations on the same resource are coming in via a proxy aware of these attributes. Can it come up with values to create just a single observation? I'd like to think offline.
+CB: The intermediary is typically not aware of the server's internal considerations.
+CA: But it could be a proxy set up explicitly for this server so it would be aware.
+CB: This point from Christian on proxies needs more consideration.
+AS: Okay, I am changing the PR.
+CB: I did a PR to fix the tables.
+BS: I will try to merge these new PR(s).
+
+MT: You are planning PRs for 3 additional parameters?
+AS: I am not sure. I may create separate issues for each. But I don't know if people would agree with adding them.
+BS: It would be useful since they are 3 different attributes.
+AS: Okay, I will do so.
+
+MT: There is an outstanding open issue #17 on Github about proxy and caching considerations.
+BS: Yes I will look at it. I think we resolved it. It was about pmax?
+MT: Yes, I think so from discussions at side meetings.
+AS: Please consider if we should include my example in the draft.
+MT: I think it would help a lot, also with ASCII art figures.
+
+MT: We have 3 more interims to go, so we can come back to this topic if need be. Otherwise at IETF 109 for sure.
+
+### AOB
+
+CB: The Coreconf shepherd stuff is moving forward.
+MT: Thanks, now you should also have all responses from the IPR call, right?
+CB: Yes.
+ 
