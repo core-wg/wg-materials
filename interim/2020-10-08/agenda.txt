@@ -1,0 +1,35 @@
+CoRE Virtual interim - 2020-10-08  14:00 UTC
+
+* CoRE Resource Directory
+    - Processing of IESG comments
+    - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+    - https://github.com/core-wg/resource-directory/issues
+
+* Stateless
+   - Processing of IESG comments
+   - https://tools.ietf.org/html/draft-ietf-core-stateless
+   - https://github.com/core-wg/stateless/issues
+
+* AOB
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2020-core-10-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=mb3ef6f63cca8d4c20803296e5f07702f
+Meeting number: 171 836 3130
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1718363130@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 171 836 3130

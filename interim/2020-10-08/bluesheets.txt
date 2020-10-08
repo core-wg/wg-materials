@@ -1,0 +1,14 @@
+# CoRE Virtual interim - 2020-10-08 - 14:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Rikard Höglund, RISE
+4. Michael Richardson, Sandelman Software Works
+5. Carsten Bormann, TZI
+6. Peter Yee, AKAYLA
+7. Francesca Palombini, Ericsson
+8. Göran Selander, Ericsson
+9. Christian Amsüss
+10. Alan Soloway, Qualcomm

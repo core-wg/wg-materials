@@ -1,0 +1,208 @@
+# CoRE Virtual interim - 2020-10-08 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-10/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=mb3ef6f63cca8d4c20803296e5f07702f
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2020-core-10-core?both
+
+Minute takers: Marco
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Rikard Höglund, RISE
+4. Michael Richardson, Sandelman Software Works
+5. Carsten Bormann, TZI
+6. Peter Yee, AKAYLA
+7. Francesca Palombini, Ericsson
+8. Göran Selander, Ericsson
+9. Christian Amsüss
+10. Alan Soloway, Qualcomm
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Stateless (Michael Richardson)
+
+   - Processing of IESG comments
+   - https://tools.ietf.org/html/draft-ietf-core-stateless
+   - https://github.com/core-wg/stateless/issues
+
+   Presented slides: https://www.ietf.org/proceedings/interim-2020-core-10/slides/slides-interim-2020-core-10-sessa-core-stateless-open-issues-00.pdf
+
+[MR] This was holding back a 6tisch document. Now we have issues on Github for the open points to address.
+
+[MR] Relaxing words about key management to non-normative. Also handling a sleeping node, has to either store the nonce use to integrity-protect, or generate a new key.
+
+[CA] If the device remembers the key, it's committed to persistent memory.
+
+[CB] If you use sequence numbers you can just move to the next large set of sequence numbers to be safe. It should have been written in an RFC before.
+
+[CA] That should be OSCORE (RFC 8613), Appendix B1.1.
+
+[MR] On issue #10, about 60 minutes as waiting time in case of address change, needs some refinement. Needed context on why 60 minutes.
+
+[CB] This can be an explicit parameter, building on the parameters from CoAP, like ACK_TIMEOUT.
+
+[MR] Actually added both a min (don't bother before then) and a max (has to check again).
+
+[MT] The suggested values can be reasonable default values to recommend, considering possible new defined parameters to cover this.
+
+[MR] I might need help to phrase this using the original CoAP parameters.
+
+[MR] Issue #5 on spoofed response should be just fine now.
+
+[CB] I like it. Someone may require explanations on the change done.
+
+[MR] The reasons is it's a local decision.
+
+[MR] Issues 3/4/6/7/9 are labeled as "wont fix". People should review to confirm this is fine.
+
+[CB] We need text justifying why we don't fix it. Seems to be the last thing actually missing.
+
+### CoRE Resource Directory (Christian Amsüss)
+
+  - Processing of IESG comments
+  - https://tools.ietf.org/html/draft-ietf-core-resource-directory
+  - https://github.com/core-wg/resource-directory/issues
+
+[CA] Text in Section 3.5 seems to have many buzzwords that can make understanding difficult. Some rewording with more focus on the functionality can help.
+
+[CB] Start by deleting the sentence? Not sure what it intends to say.
+
+[MR] If the sentence has real value, it might fit better in the introduction.
+
+[CA] Going through the comment on possible DHCP usage with SLAAC.
+
+[MR] There's only three cases.
+
+[CA] Clear how to progress.
+
+[CA] Going through the comment on replay protection, now to be explicitly required for RDs using DTLS.
+
+[CB] Not a problem in OSCORE, right? A response is bound to a request.
+
+[CA] It concerns OSCORE as well in principle, until a timeout triggers a new request to be sent with a new Sender Sequence Number. So it's conceptually the same.
+
+[CB] You can use the Echo option.
+
+[CA] That's a possibility, but it implies knowledge for the server about freshness requirements.
+
+[CB] Can we recommend it? It solves the problem.
+
+[CA] Not quite, the client has to forget the Echo value to not misuse it as if it was a Cookie.
+
+[CB] A fresh Echo option then?
+
+[CA] That means that the sequence of updates is ordered by the Echo option. It should work.
+
+[CB] So the server can define freshness, and an update is fine if issued under the latest hour or so. Then the update request has to come under the same session and a fresh Echo option.
+
+[CA] Might be not necessary to strictly bind to a time interval. For the RD, it's not as critical as for other types of applications anyway. I can sketch some text.
+
+[CB] The attacker would have to evaluate the value of performing the attack.
+
+[MR] The attacker would aim to restore an RD entry supposed to be gone?
+
+[CA] More keeping a registration alive for some time, or delete a registration.
+
+[JJ] Can it bring back existing observations? I guess no.
+
+[CA] Not if the RD is used as intended. Still the attacker cannot steal identities. It can inject and delete again.
+
+[MR] An attacker that can replay can put back in an entry that was deleted by a device that has just gone to sleep.
+
+[CA] An attacker can still have opportunities even if replay protection is enforced, it just becomes harder to exploit them.
+
+[MR] This is worth making it clearer.
+
+[CB] The Echo option is a mitigation, it can be added here, though creating one more normative reference.
+
+[CA] That shouldn't be too much of a problem.
+
+[MT] It's in AD review. Authors addressed Barry's comments and replied to him.
+
+[CA] Going through the comment on Commissioning Tools (CT).
+
+[MR] As far as I know, it typically arrives with the installer of some kind and then it leaves and is returned.
+
+[CA] That would be bad.
+
+[MR] Because this talks about a keepalive instead.
+
+[JJ] This is about registration update, right?
+
+[CA] Yes.
+
+[MR] Open an issue assigned to me, Peter van der Stok and Esko. We can help on this.
+
+[CA] Going through the comment on authorization bound to resources. The endpoint verifies that the RD's credential are good to believe it as a RD.
+
+[CB] Authorization should be for the resource, not for the host.
+
+[CA] In a way or another (e.g. certificate) there is a binding with the host's identity.
+
+[CB] Perhaps we need to write the example in more detail. Host-based only authorization is no good.
+
+[MR] In OAuth, just make up more names.
+
+[CA] That shifts a bit the point of view in the CoAP examples. We may need also to maintain many more OSCORE contexts than we thought necessary.
+
+[JJ] Anything that can be fixed with attributes?
+
+[CA] If a client relies on any property of a resource (hard to phrase), that can help for a refined lookup building on well-known.
+
+[MR] So, if you create more host names, you end up establishing more OSCORE contexts.
+
+[CA] It would help expressing the authorization to a resource representing the RD service.
+
+[CB] The authorization information should say that the host is trustable to publish.
+
+[CA] I'll start something along these lines.
+
+[CA] Going through the comment on First-Come-First-Remembered security model, now giving a default policy. Needs to be reviewed.
+
+[JJ] I will have a look.
+
+[CB] I will also review.
+
+[CA] Anything else is minor. I continue processing towards a pull request. Plan to: merge in the next few days; checking with the group on candidate new version to submit and point-to-point replies to IESG comments; submission of new version.
+
+### AOB
+
+[CB] Proposed to have Christian moved as first in the author list of the RD document.
+
+[JJ] Agree.
+
+[MT] Yes, +1.
+
+[CB] Nice to check with authors, while chairs can just do that.
+
+[JJ] Will be also circulated on the mailing list.
