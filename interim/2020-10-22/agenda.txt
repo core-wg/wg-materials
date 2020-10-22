@@ -1,0 +1,36 @@
+CoRE Virtual interim - 2020-10-22  14:00 UTC
+
+* New Block
+   - Updates from latest version
+      - https://tools.ietf.org/html/draft-ietf-core-new-block-01
+   - Implementation considerations
+      - https://mailarchive.ietf.org/arch/msg/core/rqp5tEPnBLY14tW4i__bHqgJ2T4/
+
+* Resource Directory
+
+   - Redundancy of the 'anchor' attribute
+     - Thread on the list: https://mailarchive.ietf.org/arch/msg/core/0pvBokzw6RZm7MeShy-No-kzfCc/
+      
+* AOB
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2020-core-11-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m500e0dee578ce618c4ffcf26ca3aedd9
+Meeting number: 171 330 2933
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1713302933@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 171 330 2933

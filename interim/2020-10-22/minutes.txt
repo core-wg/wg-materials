@@ -1,0 +1,256 @@
+# CoRE Virtual interim - 2020-10-22 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-11/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m500e0dee578ce618c4ffcf26ca3aedd9
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2020-core-11-core?both
+
+Minute takers: Jaime
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Rikard Höglund, RISE
+4. Mohamed Boucadair, Orange
+5. Francesca Palombini, Ericsson
+6. Carsten Bormann, TZI
+7. Michael Richardson, Sandelman Software Works Inc
+8. David Navarro
+9. Christian Amsüss
+10. Jon Shallow
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[MB]: Mohamed Boucadair
+*[JS]: Jon Shallow
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Stateless (Michael Richardson)
+
+Automatic key management pull would need some more reviews.
+https://github.com/core-wg/stateless/pulls
+
+There are also 5 issues raised on various "won't fix" state, would need comments on that. Issue 8 is related to the previous PR.
+https://github.com/core-wg/stateless/issues
+
+Plan is to close the issues, then post a new version of the draft. 
+
+**Issue #11**
+
+CB: I reviewed early version of queue management. I believe the replay window is wrong. Need to reread.
+
+MR: Looking for feedback. 
+
+MT: MR to be second author.
+
+
+### New Block (Mohamed Boucadair, Jon Shallow)
+
+   - Updates from latest version
+      - https://tools.ietf.org/html/draft-ietf-core-new-block-01
+   - Implementation considerations
+      - https://mailarchive.ietf.org/arch/msg/core/rqp5tEPnBLY14tW4i__bHqgJ2T4/
+
+Presented slides: https://www.ietf.org/proceedings/interim-2020-core-11/slides/slides-interim-2020-core-11-sessa-coap-block-wise-transfer-options-for-faster-transmission-draft-ietf-core-new-block-01-00.pdf
+
+Jon presenting the draft.
+
+- objective is to send data faster (subject to congestion).
+- lossy environment, blocks might get lost.
+- unidirectional NON Blocks needed.
+    - needed due traffic might not be able to return
+- New block is an addition to Block1 and Block2.
+
+Presenting updates on -01.
+
+JS: PR [#554](https://github.com/obgm/libcoap/pull/554) on libcoap
+
+**slide 4**
+
+CB: "Quick-Block" is a bad name. The distinguishing property might not be speed but robustness. So I'd suggest a word that expresses that robustness.
+
+JS: Robust, Fast... 
+
+MR: Agrees Quick is not a good name. Why not doing blockwise-transfers-bis is a good question.
+
+CB: tough
+
+JS: resilient
+
+... bike shed
+
+CA: This could be a solid base to do a blockwise bis.
+
+JS: Agrees.
+
+**slide 6**
+
+JS: Suggestion: Recommend that either both Quick-Block1/2 supported or neither
+
+CA: is the expectation that an endpoint has to support both?
+
+JS: which session
+
+CA: what is session?
+
+JS: DTLS...
+
+CA: If client discovers support for Quick-Block1 and Quick-Block2, is it expected to remember that? when it is the client decision to make?
+
+JS: We don't mandate quick-block for dots environment, dots server might not have it. 1st negotiation and if supported then used. 
+
+CA: If negotiation fails then go back to traditional blockwise.
+
+JS: agreed. Spec says either, maybe it should say both or neither.
+
+**slide 7**
+
+JS: : NON: Signal something in the MAX_PAYLOAD packet to indicate immediate acknowledge response required – if response fails to get through there still will be ACK_TIMEOUT wait which is OK. What to add? – Update the Quick-Block option format to “NUM R M SZX” where R bit set means:
+
+CA: IDK of best default to non response answer, but it could carry the non-response option.
+
+CA: ... (comment have to look at video later on)...
+
+JS: Will work with that.
+
+**slide 8**
+
+JS: Suggestion to limit the number of missing QuickBlock2 options to MAX_PAYLOADS. This also then ties in nicely with what a server can send at once. All will fit in a 4.08 diagnostic packet.
+
+CA: Why does it need to be calculated. As long as there is no req that missing blocks need to be there?
+
+JS: In libcoap you build PDU and then chockes if it is too large. 
+
+CA: Implementation specific. 
+
+JS: CDDL is defining an array in cbor and array size is defined as a count, need to know a priori the array size.
+
+CB: are you using a cbor sequence? You can use indefinite length encoding.
+
+JS: Will look into it.
+
+CA: 23 should be the magic limit, need to verify it is less than that.
+
+JS: Might leave this as a suggesiton.
+
+**slide 10**
+
+JS: There are lot of Tokens to track. MAX_PAYLOAD packet may not arrive. It is too complex. A way to get arond it would be to have an associated response (like observe). Could we have an "associated request" for Quick-Block1 where all the Tokens are the same?
+
+CA: It would need more thought for potential associated responses. I have a suggestion. 
+
+CB: Did you consider computer tokens? Where the token is a function of something constant + something that varies in a well-defined way. 
+
+JS: Use bottom 32 bits as token and top 32 bits as block number. 
+
+CB: The server never needs to keep track of tokens as it responds inmediatley. The client may track them by building them in a specific way.
+
+**Misc**
+
+MT: Section 3.4 uses "repeat request", apparently for a request with Quick-Block2 to ask for only the block 0 of a body. Perhaps clarify explicitly? Otherwise it remains a best guess, as examples don't cature it.
+
+**Next Steps**
+
+JS: Prepare -02 for IETF 109. If no major issue, target a WGLC.
+
+### Resource Directory (Christian Amsüss)
+
+slides: https://downloads.endor.at/rd20201022/ (yet to be converted for upload to the datatracker)
+   - Redundancy of the 'anchor' attribute
+     - Thread on the list: https://mailarchive.ietf.org/arch/msg/core/0pvBokzw6RZm7MeShy-No-kzfCc/
+                        
+                        (off-topic: takes note of http://regebro.github.com/hovercraft in replacement for marked.js)
+
+CA: Is it too late to modify `anchor`?
+
+JJ: Suggestion from Esko to base use on the presence of `rel`.
+
+CA: ... would like to keep it simple ...
+
+CB: Put in 'anchor' unless you don't need it. Can we state when we do not need it? only looking at option b and c of 281. internally inside the RD implementation the anchor needs to be expanded in the DB. It will be 
+
+CA: Full anchor storage is unpractical as anchor may change. Anchor is either necessary or not.
+
+CB: The important part is for RD to behave as if the anchor had been stored.  The RD can generate a relative URI or leave out the anchor if the result of applying Section 2.1 of RFC 6690 is the same as including the anchor.
+
+JJ: Stupid question, when performing lookup do we get same representation as stored when registration/different?
+
+CA: implicit anchor, thus no need to include anchor 
+
+CB: ... and would allow the RD to provide a response dependendent on the endpoint doing the query.
+
+MT: So, fixing this will not break anything while avoiding unnecessary overhead we've had so far.
+
+CA: It will require some explanation in the appendix, update on my code, and good answers to reviewers.
+
+MT: And it requires a big disclaimer in the write-up. It overall pays off and there are no objections. We'll do these changes.
+
+**Server Authorizaton** https://mailarchive.ietf.org/arch/msg/core/JyW0XAkXre1wvKoNxMwegOUCywc/
+
+MR: No reference for the OAuth comment, just observed, need to go to the group/document for reference.
+
+CA: Two way forward in parallel: implementations need to be carefull, follow up with something for better control (mailing list thread)
+
+CB: Need to distinguish between oauth implementation body of knowledge and the properties of oauth, which is on the way out and we need to make sure we can work with whatever is going to replace it.
+
+CA: My understanding is that ACE takes OAuth semantics... is ACE on the way out too? Do we have chance to do something?
+
+MR: reference to GNAP WG, for OAUTH2+ (but not necessarily OAUTH3)
+
+CB: There is a whole area not addressed by OAuth, now we have GNAP and other proposals. I'd expect ACE to recharter at some later point to be aligned with some of that. We need to make sure RD is not married to OAuth. 
+
+MR: The goal here was to learn from OAuth not to cite it. 
+
+CA: --- Explaining issue from email thread ---
+
+CA: One way forward is to ask the client to verify that the information being sent is coming from an entity that is trusted...
+
+MR: we have no way to map URI (rd.com) to and identity. 
+
+CA: Link format would not allow for association of identity. If the RD is not part of the trust chain (and it should not be) this might give us individually signed links... it makes things a lot more complicated. The client could go to the registrar authority during the RD discovery process. But this does not say anything about what we should tell the RD users. 
+
+*Group needs to comment on this issue*
+
+**Echo, ETag**
+
+PR 291
+
+CB: If we use ETag, we are essentially saving the normative ref to Echo by inventing something.
+
+CA: Why inventing? ETag is largely for that
+
+CB: ETag is there to verify that a cashed representation is still useful. Giving more application semantics to if-match is questionable. That does not mean that we cannot do this but we should be certain and the consequences, I have not thought about this very much yet. Certainly, sending ETag on a precondition fail/response (or something alternative but similar) is interesting. Will have to read.
+
+**258 could need a pair of eyes**
+
+MT: Christian to be first author/editor, with label "Editor" at his discretion.
+
+### AOB
+
+CB: Trying to reach Ivaylo to get final input for the shepherd write-ups of the CORECONF documents.
