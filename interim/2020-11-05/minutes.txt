@@ -1,0 +1,153 @@
+# CoRE Virtual interim - 2020-11-05 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2020-core-12/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m42a6113960b3434a699fc514e176a5a5
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2020-core-12-core?both
+
+Minute takers: Jaime
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Rikard Höglund, RISE
+4. Christian Amsüss
+5. Carsten Bormann, TZI
+6. Göran Selander, Ericsson
+7. Alan Soloway, Qualcomm
+8. Michael Richardson, Sandelman Software Works Inc
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[MB]: Mohamed Boucadair
+*[JS]: Jon Shallow
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+
+### Cachable OSCORE (Christian Amsüss)
+
+https://tools.ietf.org/html/draft-amsuess-core-cachable-oscore-00
+
+Presented slides: https://www.ietf.org/proceedings/interim-2020-core-12/slides/slides-interim-2020-core-12-sessa-cachable-oscore-00.pdf
+
+Open points, security considerations and way forward.
+
+Presenting
+
+Discussing next steps to make OSCORE cacheable.
+
+Deterministic Requests (as main focus, possibly keeping aside "ticket requests")
+
+   - Many clients in a same group using Group OSCORE produce identical OSCORE-protected requests byte by byte, if starting from the same inner request. The outer code will be FETCH, so that it can be cached (RFC 8613 does not say it has to be only for Observe requests).
+   - For all clients, the 'kid' would be the one of a fixed "deterministic client"; the PIV would be 0; a new field 'kid detail' for the OSCORE option would be considered, with value the hash of original plaintext and AAD.
+   - 'kid detail' also takes part in the derivation of the "deterministic key" practically used to compute the OSCORE message as deterministic request.
+
+GS: why is that cacheable now?
+
+CA: because it's using FETCH; it's fine as long as the server does not use a low max-age, then the proxy will cache the response. As long as the group is the same, everythying is the same in the request for every client in the group. Same cache key for the different alike requests.
+
+GS: Assuming shared key in the group. You can't cache if you are not in the group.
+
+CA: Correct. But no client can fake server responses, since there is a signature at the end of them expected from the server with its Sender ID involved.
+
+CB: The proxy does the caching and it is not in the group. You cannot be part of a succesful caching transaction unless you are in the group.
+
+GS: If I am not part of the group, could I realize that I should be in the group somehow?
+
+CA: If you don't already know, then you'll try to send a regular request. Then, we might apply the concept used in the error responses for multicast notifications to redirect the client and do it in a deterministic way. Either way, the response will go to the client. 
+
+CA presenting example on firmware updates when lots of clients access the same resource. They will all hit the same cache at the border router (NICE!)
+
+
+GS: Difference between 2nd group member calculating message using group key and another rmember copying the request?
+
+CA: they are identical.
+
+GS: The proxy receives same message then.
+
+CA: Yes.
+
+CA: Presenting other prerequisites.
+
+- We might not need source authentication in the deterministic request, so it could avoid the signature but just keep the MAC for group-level authentication.
+
+- The server has to skip replay checks here, but it can be done for safe requests, which is always the case here.
+
+- We may think of considering the presence of 'kid detail' in the OSCORE as a possible way to make the OSCORE option part of the cache key, as possible further optimization to speed up the proxy in recognizing a deterministic request and serve the client from the cache.
+
+CA: Why was OSCON removed from OSCORE?
+
+GS: It was something intended also for Pubsub, and was taken out due to slow progress of the pubsub draft. It might be revived. Someone may need to run EDHOC and to use the result for something different than OSCORE.
+
+MR: So, for idempotent actions, the request is blinded so that the cache  can't see the request/response, but can still cache it.
+
+CA: Yes.
+
+### Stateless (Michael Richardson)
+
+https://tools.ietf.org/html/draft-ietf-core-stateless-07
+
+Remaining open points:
+
+   - Recommended size for the replay window
+       - https://github.com/core-wg/stateless/pull/14/files
+
+   - Interaction of freshness window of client/intermediate
+       - https://github.com/core-wg/stateless/issues/4
+
+   - Updating CoAP on distinguishing unrecognized vs invalid extension
+       - https://github.com/core-wg/stateless/issues/3
+
+What advice do we give for the size of the replay window?
+
+CB: Fixed in the latest push.
+
+Checking PR 15.
+
+MR: Where does MAX_TRANSMIT_WAIT of 93s comes from?
+
+CB: RFC 7252, when computed it arrives to 93s.
+
+MR: 1req/10s looks OK. 10 req outstanding at a time. 
+
+MT: Proposed editorial change:
+
+> For instance, given a CoAP MAX_TRANSMIT_WAIT of 93 s, any request that is not answered within 93 s will be considered to have failed. Then, considering a request rate of 1 request / 10 seconds, at most 10 requests can be outstanding at a time.
+
+MT: Remaining two issues to be closed on Github. One is "won't fix", one seems actually addressed in -07. Just to be closed?
+
+MR: Agree. Resubmit when reopening. Replying to reviewers. 
+
+### CORECONF
+
+MT: Where are we with shepherd writeup for CORECONF?
+
+CB: Going forward slowly, other docs on OAUTH48. Before IETF 109.
+
+### AOB

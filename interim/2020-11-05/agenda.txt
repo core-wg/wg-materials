@@ -1,0 +1,38 @@
+CoRE Virtual interim - 2020-11-05  15:00 UTC
+
+* Stateless
+
+https://tools.ietf.org/html/draft-ietf-core-stateless-07
+
+Discuss remaining open points.
+
+* Cachable OSCORE
+
+https://tools.ietf.org/html/draft-amsuess-core-cachable-oscore-00
+
+Discuss open points, security considerations and way forward.
+
+* AOB
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2020-core-12-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m42a6113960b3434a699fc514e176a5a5
+Meeting number: 171 140 9229
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1711409229@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 171 140 9229
+

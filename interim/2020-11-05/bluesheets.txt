@@ -1,0 +1,13 @@
+# CoRE Virtual interim - 2020-11-05 - 15:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Jaime Jiménez, Ericsson
+3. Rikard Höglund, RISE
+4. Christian Amsüss
+5. Carsten Bormann, TZI
+6. Göran Selander, Ericsson
+7. Alan Soloway, Qualcomm
+8. Michael Richardson, Sandelman Software Works Inc
+
