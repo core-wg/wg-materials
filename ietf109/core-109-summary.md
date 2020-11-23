@@ -107,7 +107,7 @@ Latest updates include encoding of informative response (transport-dependent and
 
 Next steps will focus on improving the examples with proxies, the negotiation for client supporting this mechanisms or not, making some content optional, and specifying a possible server acting as its own OSCORE Group Manager.
 
-The documents has its core approach stable for a while now, and there has been interest for adoption from 12 people.
+The document has its core approach stable for a while now, and there has been interest for adoption from 12 people.
 
 People to review: Göran and Carsten (since IETF 108), Jaime, Esko and Thomas.
 
