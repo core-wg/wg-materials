@@ -93,7 +93,7 @@ Method to use the Resource Directory to find links for joining OSCORE groups at 
 
 Latest updates include an alignment with draft-ietf-ace-oscore-gm-admin as to the names of the application groups, and considerations on an application group using multiple security groups.
 
-It was noted that the link relation between a security group and an ACE Authorization Server is a general thing that may be better better handled in ACE, possibly as a dedicated document.
+It was noted that the link relation between a security group and an ACE Authorization Server is a general thing that may be better handled in ACE, possibly as a dedicated document.
 
 Next steps include adding parameters about the pairwise mode of Group OSCORE, alignment with upcoming updates to the Resource Directory document, more security considerations, and early tests among implementations.
 
@@ -139,7 +139,7 @@ Need for reviews; promised at IETF 108 are from Christian and Carsten.
 
 This version includes only minor updates; it needs reviews before WGLC. There is a working implementation from Ari.
 
-Alexey reviewed previews versions. Need for more reviews before WGLC.
+Alexey reviewed preview versions. Need for more reviews before WGLC.
 
 Will review this version: Jaime and Bill.
 
@@ -175,7 +175,7 @@ There will be more discussion at the next series of CoRE interim meetings.
 
 * draft-ietf-core-fasor-01
 
-Presented status and planned next steps; authors see the document as stable and needing for review, also from tsvarea. After addressing review comments, WGLC would be a target. characteristics of the approach have been emulated but there are no plans for further evaluation.
+Presented status and planned next steps; authors see the document as stable and needing for review, also from tsvarea. After addressing review comments, WGLC would be a target. Characteristics of the approach have been emulated but there are no plans for further evaluation.
 
 Will review: Carles Gomez
 
@@ -185,9 +185,9 @@ CoRE chairs will approach tsvarea chairs for more reviews.
 
 * draft-amsuess-core-coap-over-gatt-01
 
-Presented updates on the exchange of CoAP messages of GATT, a mode of Bluetooth Low Energy, targeting applications with limited APIs. The goal is to gather implementation experience and have this as Experimental "This is how a few people do it" document.
+Presented updates on the exchange of CoAP messages on GATT, a mode of Bluetooth Low Energy, targeting applications with limited APIs. The goal is to gather implementation experience and have this as Experimental "This is how a few people do it" document.
 
-There was consensus that it is good extend support for CoAP on more environments/platforms, and that Experimental is the right type of target at the moment. It was noted that GATT specific new COAP URI scheme might need detailed examination.
+There was consensus that it is good to extend support for CoAP on more environments/platforms, and that Experimental is the right type of target at the moment. It was noted that GATT specific new COAP URI scheme might need detailed examination.
 
 ## Rekeying for OSCORE and AEAD limits
 
