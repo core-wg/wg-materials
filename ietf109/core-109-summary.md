@@ -133,7 +133,7 @@ Following feedback from IETF 108, this update reduces the candidate approaches t
 
 Need for reviews; promised at IETF 108 are from Christian and Carsten.
 
-## SenML Versions (Carsten) (5)
+## SenML Versions
 
 * draft-ietf-core-senml-versions-01
 
@@ -189,7 +189,7 @@ Presented updates on the exchange of CoAP messages of GATT, a mode of Bluetooth 
 
 There was consensus that it is good extend support for CoAP on more environments/platfors, and that Experimental is the right type of target at the moment. It was noted that GATT specific new COAP URI scheme might need detailed examination.
 
-## Rekeying for OSCORE and AEAD limits (John) (20)
+## Rekeying for OSCORE and AEAD limits
 
 * https://mailarchive.ietf.org/arch/msg/core/bbzZCt6ZZn4ysR7yLujPNscBF3g/
 
