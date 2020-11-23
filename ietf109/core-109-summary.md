@@ -63,7 +63,7 @@ Reviews from the IESG were processed and answered. Three open points will be add
 
 * draft-ietf-core-stateless-08
 
-The latest version addressed allo comments left since May from IESG review. The remaining DISCUSS ballot was cleared up.
+The latest version addressed all comments left since May from IESG review. The remaining DISCUSS ballot was cleared up.
 
 During the IETF week, the document was approved for publication as Proposed Standard and entered the RFC Queue.
 
@@ -103,11 +103,11 @@ Next steps include adding parameters about the pairwise mode of Group OSCORE, al
 
 Method to send observe notifications to a set of clients observing a same resource at the server, by using multicast responses. These are responses to a phantom observation request that the server creates.
 
-Latest updates include encoding of informative response (transport-dependent and transport-specific information, flexible for non-UDP tranport); improved rough counting of clients; added support for proxies.
+Latest updates include encoding of informative response (transport-dependent and transport-specific information, flexible for non-UDP transport); improved rough counting of clients; added support for proxies.
 
 Next steps will focus on improving the examples with proxies, the negotiation for client supporting this mechanisms or not, making some content optional, and specifying a possible server acting as its own OSCORE Group Manager.
 
-The documents has its core approch stable for a while now, and there has been interest for adoption from 12 people.
+The documents has its core approach stable for a while now, and there has been interest for adoption from 12 people.
 
 People to review: Göran and Carsten (since IETF 108), Jaime, Esko and Thomas.
 
@@ -127,7 +127,7 @@ Need for reviews; promised at IETF 108 are from Christian, Carsten and Francesca
 
 * draft-palombini-core-oscore-edhoc-01
 
-Different approches to combine an execution of EDHOC with the first OSCORE exchange following it. The different approaches can also be signaled in different ways. The third and final EDHOC message from the client is merged with the first OSCORE request protected with the derived security context. This would reduce the overall number of roundtrips.
+Different approaches to combine an execution of EDHOC with the first OSCORE exchange following it. The different approaches can also be signaled in different ways. The third and final EDHOC message from the client is merged with the first OSCORE request protected with the derived security context. This would reduce the overall number of roundtrips.
 
 Following feedback from IETF 108, this update reduces the candidate approaches to the one using "EDHOC in OSCORE". The goal is now to select the exact way for signaling this approach, as either a flag bit in the OSCORE option or a dedicated new CoAP option (which seems preferred). Both ways require an IANA registration.
 
@@ -187,7 +187,7 @@ CoRE chairs will approach tsvarea chairs for more reviews.
 
 Presented updates on the exchange of CoAP messages of GATT, a mode of Bluetooth Low Energy, targeting applications with limited APIs. The goal is to gather implementation experience and have this as Experimental "This is how a few people do it" document.
 
-There was consensus that it is good extend support for CoAP on more environments/platfors, and that Experimental is the right type of target at the moment. It was noted that GATT specific new COAP URI scheme might need detailed examination.
+There was consensus that it is good extend support for CoAP on more environments/platforms, and that Experimental is the right type of target at the moment. It was noted that GATT specific new COAP URI scheme might need detailed examination.
 
 ## Rekeying for OSCORE and AEAD limits
 
