@@ -151,7 +151,7 @@ Need to integrate the comments following the WGLC after IETF 108. After that, pl
 
 The document refers to draft-bormann-core-media-content-type-format (MCTF) , which would preferably be an adopted draft before this document is sent to the IESG.
 
-It's not clear where MCTF belongs to (out of scope for EMAILCORE, very generic for CoRE), so it will go through DISPATCH. Alexey offered as shepherd for MCTF, while Barry can possibly sponsor it as AD.
+It's not clear where MCTF belongs to (out of scope for EMAILCORE, very generic for CoRE), so it can go through DISPATCH. Alexey offered as shepherd for MCTF, while Barry can possibly sponsor it as AD.
 
 ## New Block
 
@@ -169,7 +169,7 @@ Work is ongoing on new parameters and their usage, also relevant in OMA LwM2M, i
 
 It seems reasonable to allow pmin == pmax. It's still open if and how this should support the presence of proxies, that are not used in LwM2M but have to be assumed in REST as scope of CoRE.
 
-There will be more discussion at the next series of CoRE interim meetings.
+There will be more discussion at the next series of CoRE interim meetings, framed around the larger end-to-end vs hop-by-hop topic.
 
 ## Fasor
 
