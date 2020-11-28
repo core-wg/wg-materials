@@ -22,7 +22,7 @@ The recordings of the two CoRE sessions are available at:
 https://www.youtube.com/watch?v=aCiY4HS0-IY
 
 [Friday, November 20, 2020]
-https://www.youtube.com/watch?v=A70LOOSrfdg
+https://www.youtube.com/watch?v=iCWg3hMirOQ
 
 ---
 
