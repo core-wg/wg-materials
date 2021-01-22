@@ -1,0 +1,150 @@
+# CoRE Virtual interim - 2021-01-21 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-01/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m790e95229319dac1566d4677f2067d56
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-01-core?both
+
+Minute takers: Rikard Höglund
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Rikard Höglund, RISE
+3. Christian Amsüss
+4. Carsten Bormann, TZI
+5. Göran Selander, Ericsson
+6. Peter Yee, Akayla
+7. Michael Richardson
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[MB]: Mohamed Boucadair
+*[JS]: Jon Shallow
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Status of CORECONF documents
+
+CB: Sent nits to the authors and got new versions of the document. One nit about the media type registration text in Yang-CBOR is not ready. So we can't fill that in the shepard report.
+   https://github.com/core-wg/yang-cbor/pull/16
+   
+MT: All 4 documents were recently resubmitted.
+
+CB: We may need new versions of 2 of them.
+
+MT: When you say so we can finalize.
+
+### Cachable OSCORE (Christian Amsüss)
+
+https://tools.ietf.org/html/draft-amsuess-core-cachable-oscore-00
+
+https://gitlab.com/chrysn/core-cachable-oscore/
+
+Discuss latest design developments and open points.
+
+CA: Implementations now exist for this. Main idea for this is to allow caching of OSCORE responses. Input from last meeting have been processed.
+
+GS: There are 2 consensus requests, one is the deterministic. Is the consensus request in group mode?
+
+CA: The request is not a group mode request. It uses pairwise mode. The response is instead in group mode.
+
+GS: In the HKDF H is not a secret?
+
+CA: Correct.
+
+GS: I wonder if we want to  not send H in plaintext?
+
+CA: We must since it's used for the key.
+
+GS: True but we can use a secret based on H in the HKDF instead of H directly.
+
+CA: But this HKDF is for deriving a key in the first place.
+
+GS: Right but we're deviating from the normal pattern.
+
+CA: We can go over this in more detail to make sure.
+
+CB: This is about deterministic requests? So I cannot use it for sensor data, since it changes.
+
+CA: You can't use it for transmitting sensor data. But can phrase the request in a deterministic way, then the response will be cachable.
+
+CA: Request is in pairwise mode and response in group mode.
+
+CA: Some security properties compared to OSCORE are lost. Source authentication for clients are lost, but kept for servers.
+
+CB: Is there a way to get request confidentialty (at least for outsiders)?
+
+CA: We only reveal limited information here. 
+
+CA: (ACTION CA) Exploring levels of group membership and rights is an idea. To have the proxy not completely untrusted, but still not as trusted as other group members. But my expectation on the result is that this is quite complex and out of scope. 
+
+GS: Some properties reduce security compared to OSCORE but that may be okay. I have no objections for now.
+
+CA: One open point is that if the hash check on the server fails the attacker may get information that it guessed the AEAD tag correctly. I think this is okay since it will be difficult for an adversary to guess hash & AEAD tag correctly.
+
+CA: Plan is to submit -01 in around 2 weeks. aiocoap now includes an implementation of this. Marco has announced he wishes to implement this on Californium.
+
+GS: Do you have performance measurements?
+
+CA: Yes, in the setup we did on IoT lab preliminary results indicate we get all nice properties from information centric networks. Energy consumption should not be impacted too much (even for assymetric operations - the energy consumed to sign a response is in the same order of magnitude of the energy consumed to transmit the message).
+
+GS: Was distribution of firmware updates a potential use case?
+
+CA: Yes, if clients use a pull model getting the data from a central server, they can opt into deterministic OSCORE. Then the firmware will come from the a cache without hitting the server.
+
+MR: That is a killer use case. Any node that heard the request can respond (if it was in their cache).
+
+MR: It can be important that observers cannot tell which nodes have updated. Due to server overload and privacy issues. Does this extend to where a node never needs to communicate with the firmware source?
+
+CA: Yes, but then you get no freshness.
+
+MR: Please put this into the use case area.
+
+GS: Have you tested with block-wise?
+
+CA: No, not yet. Inner and outer block-wise tradeoff can be a question. Use of fragmentation is another.
+
+MR: There are other ways to cache firmware updates. In section 3.1 this needs to be considered. For sensors behind a proxy, contrasting this with observe may be good.
+
+CA: This can be combined with observe.
+
+MR: But how does it compare?
+
+CA: There is also the multicast responses draft. We can use this also.
+
+https://tools.ietf.org/html/draft-tiloca-core-observe-multicast-notifications
+
+MR: We may need a document to compare and contrast the approaches. Adding real world use cases would be good.
+
+MR: How can we be sure a device (client) has not been tricked into using this?
+
+CA: It's only accepted for safe requests. This should not require much configuration. But in general this concern requires more explanation.
+
+### AOB
+
+CB: CBOR working group is looking for a new chair. If you're interested or can think of someone, tell Christian or the responsible AD.

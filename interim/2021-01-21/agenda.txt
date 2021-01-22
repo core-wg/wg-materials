@@ -1,0 +1,36 @@
+CoRE Virtual interim - 2021-01-21  15:00 UTC
+
+
+* Cachable OSCORE
+
+https://tools.ietf.org/html/draft-amsuess-core-cachable-oscore-00
+
+https://gitlab.com/chrysn/core-cachable-oscore/
+
+Discuss latest design developments and open points.
+
+* AOB
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-01-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m790e95229319dac1566d4677f2067d56
+
+Meeting number: 178 150 1389
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1781501389@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 178 150 1389
+
