@@ -1,0 +1,223 @@
+# CoRE Virtual interim - 2021-02-04 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-02/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m19b9f925e95745c07e366296aa99a8ed
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-02-core?both
+
+Minute takers: Jaime
+Jabber scribes: Marco
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Rikard Höglund, RISE
+3. Michael Koster, Dogtiger
+4. Peter Yee, AKAYLA
+5. Carsten Bormann
+6. Bill Silverajan
+7. Jaime Jimenez
+8. Alan Soloway, Qualcomm
+9. Michael Richardson, Sandelman Software Works Inc
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[MB]: Mohamed Boucadair
+*[JS]: Jon Shallow
+*[MK]: Michael Koster
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Dynlink (Bill Silverajan, Alan Soloway)
+
+Discuss new attributes, usage of proxies, and other open issues.
+
+https://tools.ietf.org/html/draft-ietf-core-dynlink-12
+
+https://github.com/core-wg/dynlink/issues
+
+Presented slides at:
+https://datatracker.ietf.org/meeting/interim-2021-core-02/materials/slides-interim-2021-core-02-sessa-dynamic-resource-linking-for-constrained-restful-environments-00.pdf
+
+Bill presenting.
+
+* Changes -11 to -12
+    * pmin and pmax may be equal.
+
+BS: What does the group think?
+
+MK: it might be helpful to explain what the expected behaviour is, rather than the use case. Agrees that they should be equal.
+
+CB: Previous behaviour was that they were tolerance bound, indicating the acceptable tolerance. If they are set to the same it is not possible to fullfill the expression of that tolerance level. We lost some features by letting the boundaries be so close to each other.
+
+MK: I use it to set a timer in a state machine. I see no problem in extending the idea of this. It has worked out in other cases and it is how it is done in lwm2m (arm mbed) and ocf.
+
+BS: do you think it woud be usefull to indicate this in the implementation consideration section as to how they should be treated.
+
+ALL: Agreed. 
+
+* Changes -11 to -12
+    * two new attributes epmin and epmax
+
+
+MT: why measurements of the condition instead of the evaluation of the condition.
+
+AS: fine with both/either. To me reading the sensor itself vs comparing the evaluation is different. Both possibilities could be correct.
+
+BS: basically talking about sampling values. 
+
+AS: correct.
+
+JJ: what is the status of epmin and epmax on lwm2m v1.1 and v1.2 Alan?
+
+AS: yes, it is in the specification. Available at [http://openmobilealliance.org/release/LightweightM2M/V1_2-20201110-A/OMA-TS-LightweightM2M_Core-V1_2-20201110-A.pdf]
+
+JJ: And on OCF?
+
+AS: not on OCF.
+
+MK: they implement it in a similar way, they are called a different thing but the same state machine.
+
+BS: Referring to this draft or duplicated in lwm2m?
+
+AS: as soon as draft is stable we will add it to lwm2m to avoid duplication.
+
+MK: this is a hint to the sampling system about the frequency you want to be notified of measurements.
+
+AS: (explaining use case)
+
+MK: A very common pattern that fits in dynlink. Good to have it here.
+
+BS: Two sets of parameters; dealing with how frequently getting samples and configuring the sampling (Note: or similar)
+
+... general discussion ...
+
+
+* Changes -11 to -12
+    * editorial changes to better reflect state transfer. 
+
+hop-by-hop vs e2e
+
+MK: Cashing proxy was the main issue being able to transparently cash it. New set of behaviors proposed to deal with that but they'd break implementation thus the discussion stopped.
+
+MT: Issue on github on this subject. Would you like a way out for v13 based on Christian's approach?
+
+MK: We could not agree on whether to prohibit things that were currently allowed. I see no problem with adding things ... 
+
+BS: may want to set a separate session for this.
+
+
+* New attributes
+    * "edge" query parameter from lwm2m
+
+JJ: No text on the draft on github only on issue tracker.
+
+    
+... discussion on the youtube recording ...
+
+
+BS: edge then is used to send notifications whenever boolean state changes from true to false. 
+
+CB: Request to the server to spend effort notifying one edge instead of another edge ("0" or "1").
+
+BS: Consensus?
+
+Group seems to be in favor...
+
+
+* New attributes
+    * "con" to enforce confirmable transport.
+
+CB: Just don't call it QoS.
+
+MK: I would like to have it as a control attribute.
+
+JJ: What does confirmable transport mean? Is it UDP + CON, is it TCP?
+
+BS: Agreed. 
+
+AS: Fire and forget means the radio can close, with CON it needs to keep connection on. It also implies a certan priority on the observation. An ALARM for example would require an ACK from the client side and the behavior is important.
+
+JJ: Please note that the LwM2M jargon needs to be generalized to CoAP endpoints on the draft. Avoid the usual confusion with "resources", client/server roles, etc.
+
+MK: Not even CoAP specific, other protocols may use other behaviour.
+
+BS: Confirmable transport can be UDP + CON, is it TCP?
+
+AS: this is more about acknowledgment rather than the transport...
+
+MK: Your system may map the acknowledgment to TCP
+
+
+* New attributes
+    * "hqmax" maximum historical queue attribute
+
+When offline and doing observations, how many do you keep.
+
+CB: Hard to translate into a more generale sense. What does it mean for a client to be offline? If NON notifications no idea what it means, if it happens in CON maybe the server could keep note if some notifications did not succeed. 
+
+AS: Violating some layers definitely. It includes an evaluation of the comm state.
+
+MK: We could say that you are allowed to send multiple notifications and this is the max you are expecting. You can just say it when do you notify.
+
+CB: problem with the text is that when you get back connectivity it assumes that you replay all changes that happened in the meanwhile, and that is not how observe works. 
+
+Bill: agree
+
+CB: Better if we had a way to keep history officially.
+
+MK: It could be an application behaviour. If it is not coap... maybe it is an application layer question.
+
+BS: do not know how might it work if there are queued messgaes and getting normal notifications anyways.
+
+MK: With timestamping.
+
+BS: this is historic data.
+
+MK: not what we expect from Observe. To do efficient notifications this is used.
+
+JJ: Clarification, this draft is still intended or RFC7252 endpoints, right? We should conform to RFC7641 requirements, right?
+
+BS:  It is more than just coap. There is the concept of linkbindings too, especially later on in the draft. REST methods that might not support observe are also there. Not CoAP specific.
+
+MK: We provide a pattern that surely will work on CoAP but that it is also a higher application pattern. Having it to be useful in other systems is also useful so that everyone can use it.
+
+MT: Can this be achieved with non-traditional responses instead?
+
+https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+
+CB: Or through the series transfer pattern
+
+https://datatracker.ietf.org/doc/draft-bormann-t2trg-stp/
+
+CB: We have this gap here and we maybe shouldn't solve it in an ad-hoc fashion for every case but we should address the gap.
+
+* other comments
+
+MK: Might be a case fo closing additions to this draft and just follow up on future drafts? Keep this draft simple and having on a diff draft the additions.
+
+
+### AOB

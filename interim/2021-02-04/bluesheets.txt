@@ -1,0 +1,13 @@
+# CoRE Virtual interim - 2021-02-04 - 15:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Rikard Höglund, RISE
+3. Michael Koster, Dogtiger
+4. Peter Yee, AKAYLA
+5. Carsten Bormann
+6. Bill Silverajan
+7. Jaime Jimenez
+8. Alan Soloway, Qualcomm
+9. Michael Richardson, Sandelman Software Works Inc
