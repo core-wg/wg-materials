@@ -1,0 +1,35 @@
+CoRE Virtual interim - 2021-02-18  15:00 UTC
+
+
+* Limits of key usage for OSCORE
+
+Background:
+
+https://datatracker.ietf.org/meeting/109/materials/slides-109-core-sessb-ietf-109-core-aead-limits-oscore-00
+
+https://mailarchive.ietf.org/arch/msg/core/bbzZCt6ZZn4ysR7yLujPNscBF3g/ 
+
+* AOB
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-03-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=mb6a8494e161c079941cba71c5c26a212
+
+Meeting number: 178 721 6307
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1787216307@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 178 721 6307
