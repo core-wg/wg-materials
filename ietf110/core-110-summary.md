@@ -34,6 +34,33 @@ Slides for the two CoRE sessions are available at:
 
 # Summary
 
+## WG and document status
+
+* Published
+    * RFC 8974 (was draft-ietf-core-stateless)
+
+* RFC Editor Queue
+    * draft-ietf-core-dev-urn-11
+
+* IESG Processing:
+    * draft-ietf-core-resource-directory-28: Approved-Announcement Sent
+    * draft-ietf-core-echo-request-tag-12: Approved-Announcement to be Sent::Revised ID Needed
+
+* In Last Call
+    * draft-ietf-core-yang-cbor-15:  In Last Call, until 2021-03-17
+    * draft-ietf-core-sid-15:  In Last Call, until 2021-03-17
+
+* In Post-WGLC processing:
+    * draft-ietf-core-yang-library-03: waiting for shepherd write-up
+    * draft-ietf-core-comi-11: waiting for shepherd write-up
+    * draft-ietf-core-oscore-groupcomm-11: processed WGLC comments and one more review; ongoing work on open points
+    * draft-ietf-core-senml-data-ct-03: processed WGLC comments; synch with draft-bormann-core-media-content-type-format
+    * draft-ietf-core-new-block-07: processed WGLC comments
+
+## TBD
+
+* TBD
+
 TBD
 
 ---
@@ -64,9 +91,30 @@ Numbers in parentheses are minutes of time allocated.
 
 huzzah for new working group chairs (jaime has a new child)
 
-* WG and document status
-
 Two sessions, Monday + Friday, agenda trying to avoid conflict with Friday's DANISH BOF.
+
+WG and document status
+
+* Published
+    * RFC 8974 (was draft-ietf-core-stateless)
+
+* RFC Editor Queue
+    * draft-ietf-core-dev-urn-11
+
+* IESG Processing:
+    * draft-ietf-core-resource-directory-28: Approved-Announcement Sent
+    * draft-ietf-core-echo-request-tag-12: Approved-Announcement to be Sent::Revised ID Needed
+
+* In Last Call
+    * draft-ietf-core-yang-cbor-15:  In Last Call, until 2021-03-17
+    * draft-ietf-core-sid-15:  In Last Call, until 2021-03-17
+
+* In Post-WGLC processing:
+    * draft-ietf-core-yang-library-03: waiting for shepherd write-up
+    * draft-ietf-core-comi-11: waiting for shepherd write-up
+    * draft-ietf-core-oscore-groupcomm-11: processed WGLC comments and one more review; ongoing work on open points
+    * draft-ietf-core-senml-data-ct-03: processed WGLC comments; synch with draft-bormann-core-media-content-type-format
+    * draft-ietf-core-new-block-07: processed WGLC comments
 
 ## Groupcomm-bis (Esko) (15)
 
