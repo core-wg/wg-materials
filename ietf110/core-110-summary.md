@@ -197,9 +197,9 @@ We will start a Working Group last call.
 
 This version provides editorial clarifications and decompression bomb security consideration.
 
-Still having a normative reference to draft-bormann-core-media-content-type-format (MCTP), which seems to require some time to become an adopted document, based on the Monday discussion in DISPATCH.
+Still having a normative reference to draft-bormann-core-media-content-type-format (MCTF), which seems to require some time to become an adopted document, based on the Monday discussion in DISPATCH.
 
-Proposed to remove MCTP as normative reference, and include into senml-data-ct only the minimal set of things needed from MCTP.
+Proposed to remove MCTF as normative reference, and include into senml-data-ct only the minimal set of things needed from MCTF.
 
 This seems good and straightforward, but better to first wait for more discussion in DISPATCH before deciding. The two documents can anyway separately proceed in parallel.
 
