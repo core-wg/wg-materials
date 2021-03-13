@@ -217,7 +217,7 @@ Reviewers largely happy with the current version. This can be seminal material f
 
 The document will move forward; Marco will be shepherd and start the shepherd review and write-up soon.
 
-## Dynlink (Bill)
+## Dynlink
 
 * draft-ietf-core-dynlink-13
 
