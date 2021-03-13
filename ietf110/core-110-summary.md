@@ -19,10 +19,10 @@ Thanks to the note takers Michael Richardson, Göran Selander and Rikard Höglun
 The recordings of the two CoRE sessions are available at:
 
 [Monday, March 8, 2021]
-TBD
+https://www.youtube.com/watch?v=GteEGOyW5JI
 
 [Friday, March 12, 2021]
-TBD
+https://www.youtube.com/watch?v=VKhUnOji8XA
 
 ---
 
@@ -35,6 +35,10 @@ Slides for the two CoRE sessions are available at:
 # Summary
 
 ## WG and document status
+
+Carsten Bormann standing in as chair for Jaime during IETF 110.
+
+Thanks to Barry Leiba as outgoing AD, welcome to Francesca Palombini as new AD.
 
 * Published
     * RFC 8974 (was draft-ietf-core-stateless)
@@ -90,6 +94,10 @@ Numbers in parentheses are minutes of time allocated.
 ## Intro, agenda, status (Chairs) (10)
 
 huzzah for new working group chairs (jaime has a new child)
+
+Carsten standing in as chair for Jaime
+
+Thanks to Barry Leiba as outgoing AD, welcome to Francesca Palombini as new AD.
 
 Two sessions, Monday + Friday, agenda trying to avoid conflict with Friday's DANISH BOF.
 
@@ -584,9 +592,7 @@ MT: No agenda yet. I can imagine Dynlink, cachable OSCORE and groupcomm-bis, as 
 
 CB: Can be good to have an agenda for the first interim. We can discuss this on the mailing list.
 
-
-
-Σ 120
+***Meeting closed at 13:36 UTC***
 
 ---
 
