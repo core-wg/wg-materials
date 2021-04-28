@@ -1,0 +1,41 @@
+CoRE Virtual interim - 2021-04-28  14:00 UTC
+
+0. Administrivia (Chairs)
+  * Note Well
+  * Bluesheets
+  * Jabber + Minutes
+  * Agenda Bashing
+
+1. AEAD limits and key usage
+  * Background
+     - https://datatracker.ietf.org/doc/draft-irtf-cfrg-aead-limits/
+     - https://mailarchive.ietf.org/arch/msg/core/h5JHgX5wTBkJtrKl_ezswiCdUBI/
+
+2. Key usage limits in OSCORE
+  * https://datatracker.ietf.org/doc/draft-hoeglund-core-oscore-key-limits/
+
+3. AOB
+
+
+ 
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-04-core
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m888a990760425271a1327f53c6714b07 
+
+Meeting number: 185 248 9231
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1852489231@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 248 9231

@@ -1,0 +1,201 @@
+# CoRE Virtual interim - 2021-04-28 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-04/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m888a990760425271a1327f53c6714b07
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-04-core?both
+
+Minute takers: Esko Dijk, Marco (helping)
+Jabber scribes: 
+
+
+## Participants
+
+1. Marco Tiloca
+2. Rikard Höglund
+3. Francesca Palombini
+4. Scott Rose
+5. Esko Dijk
+6. Carsten Bormann, TZI
+7. Peter Yee, AKAYLA
+8. Alan Soloway
+9. Göran Selander
+10. John Preuss Mattsson
+11. Klaus Hartke
+12. Michael Koster
+13. Michael Richardson
+14. Dave Robin
+15. Oliver Borchert
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[JM]: John Mattsson
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+### AEAD limits and key usage
+  * Background
+     - https://datatracker.ietf.org/doc/draft-irtf-cfrg-aead-limits/
+     - https://mailarchive.ietf.org/arch/msg/core/h5JHgX5wTBkJtrKl_ezswiCdUBI/
+
+JM: John presenting slides (from the SAAG presentation at IETF 110)
+* https://datatracker.ietf.org/meeting/110/materials/slides-110-saag-analysis-of-usage-limits-of-aead-algorithms-00.pdf
+
+JM: Need a process to come up with the values for the limit; start from the ones in TLS, relax some of them in CoRE, others should become stricter.
+
+JM: Possibly no limits for the ChaCha algorithm.
+
+JM: 'l' and the limit for 'q' can be reduced; the limit for 'v' can be increased with CCM.
+
+GS: What's the practical aspect of multi-key?
+
+JM: in literature, it is single user = single key. In practice it doesn't matter who owns the key(s).
+
+JM: (slide 10) completely different conclusion than for the TLS analysis. CCM_8 very close to ideal 64-bit MAC.
+
+CB: this is an online attack scenario?
+
+JM: Yes
+
+JM: (slide 11) CCM_8 is perfect MAC for IoT. We can use a much higher 'v' value for CCM_8, for (OS)CoRE. If we stay in the shown range it will be very secure.
+
+RH: we can lower the 'q' limit?
+
+JM: the TLS process that was used makes no sense. Probabilities used in those formulas are not so useful except for forgery attack case.
+
+GS: this would all go into security considerations in Rikard's draft?
+
+RH: Yes. We need to use some probability values.
+
+JM: No, prefer not doing probability values. Use 'security level'. Deriving the limits from the formulas as currently done (TLS) is arbitrary/flawed. The inequalities could still be used to calculate security level. But not worth the effort to do this. Don't spend much time on it. We improve on TLS security.
+
+RH: ok we pick lower value for ... and motivate this.
+
+JM: e.g. pick value 2^20 for 'q' and 'v' limits, for both algorithms.
+
+MT: about raising the value 'v', how can we motivate it has been raised enough?
+
+JM: (slide 10) see right graph, up to 2^35 at least is ok.
+
+RH: check also what the effect is of lowering 'l'.
+
+JM: again, we shouldn't spend much time on it; already did that enough.
+ Note that TLS assumes in the analysis that all messages are max length. (Not so in practice.)
+
+JM: will do a Pull Request for draft-hoeglund-core-oscore-key-limits to give input. Use numbers suggested on slide 11 as a start.
+
+RH/MT: can start a mail thread on the list for these numbers.
+
+JM: yes, can get input from others e.g. Christian also.
+
+
+### Key usage limits in OSCORE
+  * https://datatracker.ietf.org/doc/draft-hoeglund-core-oscore-key-limits/
+
+Presented slides:
+  * https://www.ietf.org/staging/slides-interim-2021-core-04-sessa-aead-key-usage-limits-in-oscore-core-20210428-ss1213.pdf
+
+(RH: presents the slides.)
+
+RH: starting from the CFRG approach, to come up with limits for 'q' and 'v' considered for rekeying. Mentioned existing methods for rekeying.
+
+RH: some updates in the editor's copy: covered more algorithms; added the LwM2M re-bootstrapping as a way to rekey; 'v' is not incremented in case of replays; added an 'exp' parameter to the security context as expiration time.
+
+(slide 6)
+JM: should clarify the lifetime of a context vs lifetime of a key.
+
+RH: if supporting Appendix B.1 of OSCORE, convenient to do a similar regular storage of count_q and count_v. Need considerations on storing rates vs. rekeying rates.
+
+JM: is storing the numbers the only solution, or is rekey-on-reboot also ok?
+
+RH: yes, that's also fine - rekey if I lose the sequence number, or on reboot.
+
+CB: so the counts saved are a limit on what numbers can be re-used? Can use a clock and apply a linear formula / line instead; no need to store anything in reboot scenarios - as long as you can rely on the local clock. Only do "store" operation if the count goes beyond the linear line. RFC8613 scheme can be extended for this. 
+
+JM: we should allow many different implementations on this; what's presented is one way. (Can include those in an appendix). These are suggestions for implementations to stay in the limits.
+
+CB: the only reason to show this in the draft is to make people aware it can be done like this; and to avoid patents on such methods.
+
+RH: agree
+
+(CB: clarifies the proposed method. Application has to make sure it stays on the safe side of the line before reboot; then no saving needed.)
+
+RH: thanks everyone for the feedback.
+
+RH: (slide 7 - only writing here additions to the content) on 3rd point, understood from JM that probabilities p_q / p_v aren't needed. 
+
+JM: two important aspects - 
+   1) how do the different limits affect applications; 
+   2) how do we do (light-weight) rekeying with or without SSN reset, keep forward secrecy.
+
+RH: draft describes rekeying methods, are there more?
+
+GS: we said before we should write another draft to list the key update / rekey methods.
+
+JM: could include in the same draft; why do we need a new one?
+
+RH: it does describe the current methods for rekeying. More updates could be done to these.
+
+GS: JM are you saying that such new draft would be closely linked to (update of) the current draft?
+
+RH: putting the methods in the current draft is an option. Based on current Appendix B.2
+
+MT: any strong opinion on single document vs separate documents for covering a new lightweight rekeying method?
+(None heard)
+
+RH: (slide 10) more details on possible optimization to not store 'count_q'; it relies on the SSN, by overestimating 'count_q' and possibly requiring rekeying more often.
+GS: is this from client point of view?
+RH: Yes, but it actually works both ways for requests and responses.
+
+RH: (slide 11) this could work for both client/server. X is the estimate of the other party's SSN.  It may be overestimating count_q.
+  
+JM: how large is the overestimation (worst case)?
+
+RH: the highest is 2x overestimation of actual 'count_q'.
+
+GS: so this corresponds to one 'power' so estimate is 2^21 instead of actual 2^20 count_q ?
+
+RH: Yes. 
+
+MT: In summary
+
+* We can build on John's new numbers with supporting security considerations and there will be a mailing list thread to discuss more.
+
+* Approaches building on Appendix B.1 of OSCORE can be further expanded on storage optimization here.
+
+* More details on light-weight rekeying procedures can actually be here rather than in a separate document as originally planned (point (2) above).
+
+* Have to discuss limits for applications. (point (1) above)
+
+JM: can we use 2^23 for all applications? Do we consider values 2^20,21,22,23 for applications? This has no security relevance, it's for applications and their preferences/needs.
+
+JM: (Discussion also on the 'l' value, 2^8 blocks or 2^9 blocks); it could also sum up length of all messages and use that for l size, but that's probably not suitable.
+ 
+### AOB
+ 
