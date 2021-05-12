@@ -1,0 +1,15 @@
+# CoRE Virtual interim - 2021-05-12 - 14:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Christian Amsüss
+3. Michael Richardson, Sandelman Software Works
+4. Rikard Höglund, RISE
+5. Carsten Bormann, TZI
+6. Scott Rose, NIST
+7. Thomas Fossati, arm
+8. Göran Selander, Ericsson
+9. John Mattsson, Ericsson
+10. Klaus Hartke, Ericsson
+11. Mike Jones, Microsoft

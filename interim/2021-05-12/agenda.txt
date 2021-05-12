@@ -1,0 +1,42 @@
+CoRE Virtual interim - 2021-05-12  14:00 UTC
+
+0. Administrivia (Chairs)
+  * Note Well
+  * Bluesheets
+  * Jabber + Minutes
+  * Agenda Bashing
+
+1. HREF
+  * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+2. CoRE option for well known resources
+  * https://github.com/lake-wg/edhoc/issues/87
+
+3. Problem details for CoAP APIs
+  * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+4. AOB
+
+
+ 
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-05-core
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=mb2d62b1da561183acc59e83e93a5dae6 
+
+Meeting number: 185 242 5774
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1852425774@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 242 5774

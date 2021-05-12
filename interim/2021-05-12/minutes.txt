@@ -1,0 +1,180 @@
+# CoRE Virtual interim - 2021-05-12 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-05/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=mb2d62b1da561183acc59e83e93a5dae6
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-05-core?both
+
+Minute takers: Christian, Marco
+Jabber scribes: 
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Christian Amsüss
+3. Michael Richardson, Sandelman Software Works
+4. Rikard Höglund, RISE
+5. Carsten Bormann, TZI
+6. Scott Rose, NIST
+7. Thomas Fossati, arm
+8. Göran Selander, Ericsson
+9. John Mattsson, Ericsson
+10. Klaus Hartke, Ericsson
+11. Mike Jones, Microsoft
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[MJ]: Mike Jones
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+### HREF
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+[no slides as nothing high-level changed; looking at draft for CDDL]
+
+CB: CDDL for a CRI reference (allows both absolute CRIs and to be combined with a base in relative resolution)
+(section 5.1 "CBOR Serialization" of document)
+
+CB: Changes compared to RFC3986: Splitting query by "&" (same as CoAP), allow numeric label for scheme, allow binary addresses -- but all details. New: "discard" := "this is a relative reference, and this many path components need to be thrown away". A consolidated ../../../. A relative reference not starting with ../ discards 1 (./), and discard 0 does not change the path at all.
+
+CB: Same high-level structure -- but before the components were numbered, and now there is a syntax to step through to find what goes into which section.
+[looking at Table 1, "Values of the Variables T and E"]
+
+MCR: Do you want to have a co-author from W3C, or Mark Nottingham?
+CB: Depends on whether we want to replace URIs (which we don't). In the end, some 3986 expert should look at this, but they will be irritated by not having percent encoding at all.
+MCR: I'd rather have this happened early.
+CB: When things are in good shape, we should tell them.
+MCR: Do early; they need to feel we can still change things.
+KH: Still some bugs in text. When they are fixed, approach URI community. Latest and greatest is in PR...
+MCR: who would use CRIs apart from CoRAL?
+KH: anyone using URIs with CBOR.  For example, Carsten's IAF.
+MCR asks how a URL and a CRI could be distinguished. CA clarifies that the [] is not an array, but a placeholder for a CBORSEQ.
+
+MT: clear what is missing and how to move forward.
+
+KH: good if more people implement this.
+TF: I can give it a shot.
+
+
+### CoRE option for well known resources
+
+https://github.com/lake-wg/edhoc/issues/87
+
+Presented slides:
+- https://www.ietf.org/staging/slides-interim-2021-core-05-sessa-core-option-for-well-known-resources-ss1217.pdf
+
+CA: Would be useful to have an option to shorten a URI.
+CB: The query would still be seen by the parser.
+
+MCR: Is this for CoRE or for future well-known?
+CA: This could rather be all an IANA table; alternatives have to be discussed
+
+CA: More feasible for deployments where all know about this and use it.
+
+CA: Is this urgent (also thinking of EDHOC) and valuable as a generalization?
+
+GS: Need to digest this, the overall approach seems right
+
+MT: on the parallel with the EDHOC option, maybe that's true only as a particular case. The EDHOC part of the combined EDHOC+OSCORE request with the EDHOC option is intended to be consumed by the same EDHOC resource where EDHOC message_1 of that EDHOC session was sent. But the server may have multiple EDHOC resources, e.g. to support multiple applicability statements.
+CA: Yes, you need to be careful if there are multiple EDHOC resources on the server.
+
+GS: Multiple alternatives to compare?
+
+CB: Why option number 501?
+CA: 2-byte space, value not hit by combination of previous options + EDHOC option. Trying to avoid those for now.
+CA: Could do in 1+1 just as well, was trying to emphasize that savings can easily be achieved even w/o standards action.
+GS: If we do this, lower option numbers are fine, right?
+CA: Yes.
+
+KH: I have a URI. How do I know whether to use DTLS or EDHOC?
+GS: Based on the applicability statement, guiding on understanding it's an EDHOC message.
+KH: Is there a coape://? Can coaps:// also mean EDHOC?
+CB: Doesn't make sense. In order to be able to use DTLS, you need lots of context already. That ton of context could just as well tell you that this coaps URI goes via EDHOC.
+MCR: Don't agree it needs that much context.
+KH: If you have the context that tells you to use edhoc, you could also from that context know that EDHOC is to be used. And while we're at it, that could also provision us with the context to pick the right CoRAL dictionary.
+GS: /.well-known/ EDHOC is just an example, which can make things homogeneous.
+KH: A solution to the 18-byte problem would be for the application to define something else.
+KH: So .well-known/coral next? Have been discussing these context for some time -- security contexts, vocabularies.
+CB: When you are "tossed a URI" is not how it works. There must be a reason to dereference that URI, and that reason is the first element of that context. Whatever supplies that reason can define other things.
+KH: Can we standardize something there, or is that too application dependent to try?
+CB: Can try to give it vocabulary. That may be as far as we get, but may still be useful.
+TF: Are we reinventing DIDs? For discovery of security contexts and other stuff that is API(?) dependent.
+CB: The impression DIDs left in my brain are "just another layer of indirection".
+
+
+### Problem details for CoAP APIs
+
+https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+GH issues:
+- https://github.com/core-wg/core-problem-details/issues
+
+Presented slides:
+- https://datatracker.ietf.org/meeting/interim-2021-core-05/materials/slides-interim-2021-core-05-sessa-problem-details-00.pdf
+
+TF: Recap on document timeline. Worked resumed recently along with CoRAL.
+
+TF: Some open issues/points are feasible to close in the short term. We may have one or two resubmissions before the IETF 111 cut-off.
+
+KH: Some points are very tight related to CoRAL, but problem-detail may be brought to conclusion anyway, and then go on hold until also CoRAL is completed, before we can finalize it.
+
+CB: Anything we can learn from the JSON document?
+TF: Maybe, from [HTTPAPI](https://datatracker.ietf.org/doc/draft-ietf-httpapi-rfc7807bis/), we'll check
+
+CB: For the x- problem, it's also about efficiency in encoding. It's important to get the processors in place, IANA, etc. Good to think how to make 1st/2nd class citizens.
+
+KH: From discussions ... want low barrier of entry. For first prototype and dummy values, shouldn't have to interact with IANA or anyone like that. Want to mix and match problem details from different domains. SIDs are good for the world they're applied to (consecutive increasing IDs, mechanism for properties), but CoRAL and PD in the end might be less formally organized than CoMI world, where developers build APIs and put in error code and just put value somewhere without registering an account.
+KH: Right now we have as a proposal namespace tables, which allow using items from multiple vocabs even if some of these are private and some are public. Doesn't even have to be defined for that purpose (eg. can pull in IANA registries). There are unresolved issues, in particular: which to use? ... and then we get back to "If we have more context to a URI, can we stick security details and tables in there was well"?
+
+### AOB
+
+CA: "tossed URIs" for mailing lists
+
+CB: On Tuesday had discussion on https://JSONpath.com and regexps. Wrote another with yet another regexp scheme, but it's not yet another new one because it's a subset of everything else. Look at iRegExp draft if you care about regular expressions. https://datatracker.ietf.org/doc/draft-bormann-jsonpath-iregexp/
+
+MT: announcing agenda for next interim - CoRAL document and relation between CoRAL and SDF.
+
+MCR: CoRE YANG/SID stuff has been waiting for revised ID for months ... chairs?
+CB: Still trying to get meeting between people knowing about the drafts.
+KH: Any implementors outside the group of authors?
+MCR: Me; depending on this for ANIMA constrained voucher. Authors are unresponsive, regularly, for years.
+CB: One option to short-circuit them, go ahead and fix things. If WG wants me to do that, I will.
+MCR: Let me help. So just send PRs on the documents?
+CB: Also merge them, publish new draft.
+MT: Check with Francesca.
+CB: Chairs will need to decide who editors of these are. Interested in knowing why things are that weird there, and for that it'd help to get by the authors.
+
+KH: On next interim, not sure what I should prepare on the CoRAL-SDF relation.
+CB: On CoRAL/SDF, the interesting thing are the thing descriptions where they now emulate SDF with TD templates. Maybe in CoRAL space we would want to look at that too. No idea how this will [break up].
+
+CB: Relatable work on CBOR-LD
+- Proposal: https://digitalbazaar.github.io/cbor-ld-spec/
+- Running JS code: https://github.com/digitalbazaar/cborld
