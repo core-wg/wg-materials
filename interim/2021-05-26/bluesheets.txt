@@ -1,0 +1,19 @@
+# CoRE Virtual interim - 2021-05-26 - 14:00 UTC
+
+## Participants
+
+1. Rikard Höglund, RISE
+2. Thomas Fossati, arm
+3. Jaime Jiménez, Ericsson
+4. Klaus Hartke, Ericsson
+5. Peter Yee, AKAYLA
+6. Christian Amsüss, Generally Awesome Inc.
+7. Marco Tiloca, RISE
+8. Michael Koster
+9. Francesca Palombini, Ericsson
+10. Carsten Bormann, TZI
+11. Ari Keränen, Ericsson
+12. Oliver Fed, Borchert (part)
+13. Doug Montgomery (part)
+14. Niklas Widell
+15. Alan Soloway, Qualcomm

@@ -1,0 +1,251 @@
+# CoRE Virtual interim - 2021-05-26 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-06/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=mba8c947cd147f3335a5455cfbcc067dc
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-06-core?both
+
+Minute takers: Jaime, Marco
+Jabber scribes: 
+
+
+## Participants
+
+1. Rikard Höglund, RISE
+2. Thomas Fossati, arm
+3. Jaime Jiménez, Ericsson
+4. Klaus Hartke, Ericsson
+5. Peter Yee, AKAYLA
+6. Christian Amsüss, Generally Awesome Inc.
+7. Marco Tiloca, RISE
+8. Michael Koster
+9. Francesca Palombini, Ericsson
+10. Carsten Bormann, TZI
+11. Ari Keränen, Ericsson
+12. Oliver Fed, Borchert (part)
+13. Doug Montgomery (part)
+14. Niklas Widell
+15. Alan Soloway, Qualcomm
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+### CoRAL
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+* https://github.com/core-wg/coral/issues
+
+**HREF**
+
+KH: HREF has now a proposal for a new CBOR compact serialization on -04
+* https://www.ietf.org/rfcdiff?url2=draft-ietf-core-href-04.txt
+
+KH: Looking for new implementors to see if the draft text is sufficient for developers. WGLC to come soon.
+
+KH: We might want to reach out to communities using URIs (HTTP) to see what to do before or during WGLC.
+
+TF: How many implementations needed?
+KH: Me, CA, CB, ... if we can have one more that would help. 
+TF: I promised to provide one.
+KH: That'd be great.
+
+CB: more examples needed for implementors.
+KH: Ideally we should have draft + companion repository, so that implementors can use our test vectors. Hard to implement this right without test vectors.
+CA: What is hard to implement, pure CRI parts or the conversion to URIs?
+KH: All of the above
+
+**CoRAL**
+
+Roadmap: https://hackmd.io/xjHWsCWdT3-94573HdDQDQ
+
+KH: Lots of open issues https://github.com/core-wg/coral/issues
+Most on compression and semantics of CoRAL documents.
+
+KH: CoRAL is being used in other docs. We might not want to rush CoRAL but to move it forward in few steps, adopt them, get insights, make changes to CoRAL, adopt them, etc.
+
+KH: Two implementations available. 
+
+* Syntax and semantics (most of the Github issues).
+* Names (compact identifiers) and their negotiation.
+* FETCH and PATCH operations, different approaches to evaluate
+* Shapes and components --- Initial to-be documents were started, also on design patterns such as "collection" and "configuration" (see CoAP pub-sub and ACE Group Manager for Group OSCORE).
+* Provenance and trust --- C receives a CoRAL document from server A, including info on resources in a server B; should C trust those statements from A? Generally depending on the application. Something to better look into, e.g. through COSE signing of the full CoRAL document, or through assertions in the request. A typical example is the Resource Directory.
+* Formats and representations --- JSON; Text; conversion to/from RFC 6690 Link Format.
+
+KH: Good to prioritize negotiation and shapes; those may just end up in also addressing syntax and semantics.
+
+CB: The recent discussion on tossed URIs is somehow related too. A "thrown out" URI should really come together with the intent for it, having in mind the audience is constrained devices.
+* https://mailarchive.ietf.org/arch/msg/core/L6aUaCrsx2xPlj_7n3VS3umTiis/
+    
+TF: And also keep in mind the security context needed for URI dereferencing. Should this go at the application layer too, or is it orthogonal input?
+
+CA: The application should have a say, but we need a good general model.
+
+### Relation between CoRAL and SDF
+
+JJ: Thoughts about looking for comparisons between SDF and CoRAL, and how they can work togeter.
+
+MJK: This is interesting; let's use the expressiveness of CoRAL for SDF definitions. Especially for link relation, observe and pub-sub. That would well describe an API in a self-contained way.
+
+CB: How does ASDF describe data shapes? We can extend it to use CoRAL structured information.
+
+MJK: The common collection shape might help.
+
+KH: SDF allows to describe classes of things. CoRAL is a representation format. For CoRAL to be useful for SDF, where does SDF need CoRAL? E.g., representing temperature sensors. But they would likely not use CoRAL to talk to each other (already using OCF, LwM2M, ...). It's maybe about a cloud-based API, e.g. for homes, so the homeowner can for instance query the device.
+
+```
+OpenAPI  GraphQL  CoRAL-based REST API
+   \      |      / 
+    \     |     /
+     \    |    /
+   +------------+
+   | Northbound |
+   +------------+
+   | Southbound |
+   +------------+
+     /    |   \ 
+    /     |    \
+   /      |     \
+LwM2M    OCF    ...
+```
+
+MJK: To identify a room you need additional vocabulary. You can indicate a location, and use link relation e.g. to say what device type it is.
+
+KH: Based on experience with a MSc Thesis on a northbound interface, it's interesting to derive a CoRAL-based API from SDF files. Similarly thinking of a southbound interface, you can think of producing CoRAL shapes from SDF files.
+
+CA: A converter can be used by non-constrained applications to interact with constrained devices with CoRAL.
+
+MJK: We can think of how a toolchain of this kind would work.
+
+JJ: Would be good to see an example. Start from a CoRAL-based REST API, then interacting with OCF or LwM2M from the same SDF instance.
+
+MJK: Yes, especially if we use a standardized CoRAL shape/pattern.
+
+JJ: There used to be Carsten's coffee machine as example.
+
+MJK: That was represented in SDF.
+
+KH: Need to bring it up again.
+
+JJ: Probably this? (slide 4) https://datatracker.ietf.org/meeting/104/materials/slides-104-t2trg-coral-constrained-restful-application-language-00
+
+**SDF Example with CoRAL interactions**
+
+JJ: We had some early ideas (see below) that can lead to an example (always helpful); can also be shared on the list.
+
+```json=
+{
+  "namespace": {
+    "api": "https://iot.ericsson.com/api/",
+    "ipso" : "https://omaspecworks.org/ipso",
+    "saref" : "https://saref.etsi.org/saref4bldg/"
+  },
+  "defaultNamespace": "api",
+
+  "sdfInstances": {
+    "room1" : {
+      "sdfInstanceOf": "api:#/sdfObject/Room/",
+      "sdfProperty" : {
+      },
+      "sdfRelations" : {
+        "adjacentTo" : "#/sdfInstances/room2"
+      }
+    },
+    "room2" : {
+      "sdfInstanceOf": "api:#/sdfObject/Room/",
+      "sdfProperty" : {
+      },
+      "sdfRelations" : {
+        "saref:adjacentTo" : "#/sdfInstances/room1",
+        "saref:iscontainedIn": "#/sdfInstances/sensor1"
+      }
+    },
+    "sensor1" : {
+      "sdfInstanceOf": "ipso:#/sdfObject/Temperature/",
+      "sdfRelations": {
+        "saref:iscontainedIn": "#/sdfInstances/room2"
+      }
+    }
+  }
+}
+
+```
+
+
+1. Client knows entry point for discovery <http://api.example.com/> gets collection resource of SDF instances. 
+
+```
+-> GET http://api.example.com/
+
+<- 200 OK
+   Content-Type: application/coral
+
+   contains </room1>
+   contains </room2>
+   contains </sensor1>
+```
+
+2. Discovers `room2` and gets current value.
+ 
+```
+-> GET http://api.example.com/room2
+
+<- 200 OK
+   Content-Type: application/coral
+
+   adjacentTo </room1>
+   contains </sensor1>
+   action-on </actuator1>
+```
+
+2. (or 3 depending on case) Discovers `sensor1` and gets back instance of IPSO temperature sensor, with the relation to other resources (using saref ontology in this case) and a description of the possible  interactions (Sensor_Value with the location where to get the current value, units, resetting Min and Max by oding POST)
+
+```
+-> GET http://api.example.com/sensor1
+
+<- 200 OK
+   Content-Type: application/coral
+   
+   #using ipsotemperatursensor = <http://omaspecworks.org/ipso#/sdfObject/Temperature/vocabulary#>
+
+   instanceOf <http://omaspecworks.org/ipso#/sdfObject/Temperature/>
+   iscontainedIn </room2>
+   
+   ipsotemperatursensor:Sensor_Value </sensor1/value>
+   ipsotemperatursensor:Sensor_Units "Cel" {
+     change -> </sensor1/sensor_units> []
+   }
+   ipsotemperatursensor:Reset_Min_and_Max_Measured_Values -> </sensor1/reset> []
+```

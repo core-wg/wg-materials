@@ -1,0 +1,51 @@
+CoRE Virtual interim - 2021-05-26  14:00 UTC
+
+0. Administrivia (Chairs)
+  * Note Well
+  * Bluesheets
+  * Jabber + Minutes
+  * Agenda Bashing
+
+
+1. CoRAL
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+  * https://github.com/core-wg/coral/issues
+
+Status
+
+Way forward
+
+Discussion of open issues
+  
+
+2. Relation between CoRAL and SDF
+
+Things description in CoRAL space
+
+
+3. AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-06-core
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=mba8c947cd147f3335a5455cfbcc067dc 
+
+Meeting number: 185 992 1344
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1859921344@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 992 1344
