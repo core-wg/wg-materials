@@ -1,0 +1,46 @@
+CoRE Virtual interim - 2021-06-09 - 14:00 UTC
+
+0. Administrivia (Chairs)
+* Note Well
+* Bluesheets
+* Jabber + Minutes
+* Agenda Bashing
+
+
+1. Groupcomm-bis
+* https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+* https://github.com/core-wg/groupcomm-bis/tree/v-04
+* https://github.com/core-wg/groupcomm-bis/issues
+
+
+2. Groupcomm-proxy
+* https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+* https://gitlab.com/crimson84/draft-tiloca-core-groupcomm-proxy/-/tree/v-04
+* https://gitlab.com/crimson84/draft-tiloca-core-groupcomm-proxy/-/issues
+
+
+3. AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-07-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m39160e23c122b545abcd4e12f73da257
+
+Meeting number: 185 202 4858
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1852024858@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 202 4858

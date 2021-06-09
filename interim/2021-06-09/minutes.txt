@@ -1,0 +1,147 @@
+# CoRE Virtual interim - 2021-06-09 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-07/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m39160e23c122b545abcd4e12f73da257
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-07-core?both
+
+Minute takers: Christian Amsüss
+Jabber scribes: 
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Christian Amsüss
+3. Rikard Höglund, RISE
+4. Peter Yee, AKAYLA
+5. Göran Selander, Ericsson
+6. Esko Dijk, IoTconsultancy.nl
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+MT: CA, updates on ERT?
+CA: Working on it; GS please look at point-to-point responses growing as working.
+
+### Groupcomm-bis
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+* https://github.com/core-wg/groupcomm-bis/tree/v-04
+* https://github.com/core-wg/groupcomm-bis/issues
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-07/materials/slides-interim-2021-core-07-sessa-core-groupcomm-bis-00.pdf
+
+ED: going through slides: caching model for the proxy and validation Client-Proxy moved to groupcomm-proxy. Going through John's review/comments.
+
+Q&A up to p4:
+
+GS: What's written today about amplification and spoofing attacks?
+ED: Now only mentioned, pointing to group OSCORE for mitigation. But request was for more detail to that, and it doesn't address all the problems.
+GS: There certainly *are* threat analyses around that we can use, but don't have any off my head. Esp. on multicast -- then see what is applicable. (So basically "what you said").
+MT: John wanted to cover something like this also in coap-attacks, AFAIK not done now but intended. Maybe can connect. For groupcomm-bis doesn't want to give false hopes that group-OSCORE and Echo alone solve this.
+ED: Some text in the document is already covering the problem (see 6.2.3 "Countering Attacks"); the idea was to make that more explicit and detailed (e.g. to what extent that applies). Anyway, good to clarify.
+
+ED: continuing on slides (p5..=7)
+GS on slide 7 top: This is about the CoAP group, right?
+ED: Yes.
+GS: Is anything different when it's about the OSCORE group?
+MT: Not in this respect, you need to know about the servers possibly in the OSCORE group, as they are the one sending responses to possibly cache.
+ED: The new caching model at the client is limited to a client that knows of *all* the servers in the group and has a fresh response for each of those.
+ED: For the proxy case, it's similar when thinking of the "Aggregated" cache entry of the proxy. Eg. if proxy is on BR it can see when someone joins the group and quickly have an up-to-date view of the group membership. Unless you have that kind of knowledge, can't do anything and it's rather better to not have this aggregated cache entry (which risks to not reflect the current group membership). Can also be other out-of-band knowledge related to the application/network context, eg. if you know that group members only join at midnight. Still, have to be sure you have fresh responses from all known members.
+
+ED: continuing on slides (p7...10). Different ways to do response revalidation, good to converge to a single one. Alt 1: Multi-ETag option from v-03 of the draft; Alt 2: adapted use of the original ETag; Alt 3 and 4 proposed by CA.
+ED: Plan for this document is to follow alternative 2, i.e. adapted use of ETag.
+CA: Alternative 3 was a form of compressing away the addresses from Alternative 1, and lossily compressing the ETags to allow some chance of misbehavior with still compact requests. Alternative 4 is most likely to be useful. Alternatives 1 and 3 would need very strong use cases especially to justify the overhead on the wire.
+
+ED: continuing on slides (p8..), \[ clarifying on GS and CA's questions \]
+
+GS: Thinking about John's input on DoS aspects ... we have NoSec mode, also here. If we designed CoAP today, would we really allow that? (Would also ask that if we were thinking about a version 2 of CoAP).
+MT: E.g. early discovery.
+GS: But just that can be exploitable.
+CA: Not all applications of multicast do result in an exploitable number of responses. Say, discovery of group manager or resource directory -- there's only one or two of them active on the network joined in the group. It's just that the client doesn't know their address and thus has to send it out to the group, but in these deployments it's not an amplification vector.
+ED: Agree, this use of discovery doesn't result in amplification. If request is for "anyone with any CoAP resources", that will result in large sets.
+GS: Should be clear at design time what can and can not be used. Shouldn't be able to trigger multiplication attacks.
+
+GS: Maybe it's a security consideration to add: Try to restrict the cases where NoSec multicast works and is acceptable in the face of possible amplification.
+MT: Scope and type of traffic should be narrow, ensuring there's only a few possible places targeted and possible to exploit for amplification.
+CA: Might be worth pointing out that you don't just always respond to MC request if you can, but only if explicitly configured to join the group and respond.
+
+
+### Groupcomm-proxy
+
+* https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+* https://gitlab.com/crimson84/draft-tiloca-core-groupcomm-proxy/-/tree/v-04
+* https://gitlab.com/crimson84/draft-tiloca-core-groupcomm-proxy/-/issues
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-07/materials/slides-interim-2021-core-07-sessa-core-groupcomm-proxy-00.pdf
+
+MT: presenting based on slides.
+CA on p5: isn't the aggregate state obsolete now that "fresh only if group known out of band" model is there in groupcomm-bis?
+MT: coming back to that, continuing.
+GS: So what is the suggestion?
+
+CA: Thinking of proxy as server tacked to caching client, so rules should be the same, and if we need more than what can be done on a client, move that there and not make this special.
+
+MT: So build more on the requirements for the client recently added to groupcomm-bis. Like for the client covered in the previous presentation, the proxy has to know of all the other group members and have fresh responses for all of them. This may be possible by sitting on a (multicast) BR or through other out-of-band knowledge related to the application/network context, eg. if you know that group members only join at midnight.
+
+ED: Client can have an aggregate entry?
+MT: Sounds like overkill.
+
+CA: With client-has-to-know-which-servers-are-around (explicitly or implicitly), there is nothing to store any more in the aggregate entry.
+GS: What is conclusion?
+MT: The functionality is good to have. Given the hypothesis above fulfilled, it's sufficient to rely on individual cache entries only. For phrasing, better to not consider explicit aggregated cache entry, but more in terms of "client request may hit all the individual cache entries", because client has to know (for caching) all servers anyway.
+
+MT: Continuing on p7 / handover to ED, about more examples/additions on Reverse-Proxies.
+ED: Example to be added with URI templates, based on RFC 8075.
+
+CA, ED: Discussion about whether to allow a reverse-proxy to operate on a group request, or not, also in case the client didn't include the Multicast-Signaling option. Christian thinks it should error out in this case. So only a client prepared for receiving multiple responses will get those responses, while an unsuspecting client would not. The current examples are in fact aligned with this thinking.
+
+CA: The URI (see example) doesn't necessarily tell that it would resolve to a group request. \[ added only to minutes: but the client may have side information about the URI, like "it was entered into the field for where-to-send-multicast-requests, and if that resolves to a unicast address, then better try sending a Multicast-Signaling in case the actual multicast happens *behind* that" \].
+
+CA: on Response-Forwarding and sending Response-Forwarding: needs further coordination w/ protocol-indication.
+
+MT: Resuming at p8, heads up on updates in the queue, to process with different priorities.
+* p8: Multicast-Signaling will still express server addressing information like in [observe-multicast-notifications](https://datatracker.ietf.org/doc/draft-ietf-core-observe-multicast-notifications/), but both documents will likely consider the more compact encoding possible with CRIs, of which details are being nailed down in [HREF](https://datatracker.ietf.org/doc/draft-ietf-core-href/).
+* p9: OSCORE between client and proxy is convenient, especially if Group OSCORE is also used between client and server; this is now in Appendix A. Agreed at IETF 110 that: there are more use cases than this document; this requires proper design and analysis, better handled in a dedicated document. Ongoing writing of the new document; plan to remove the current Appendix A.
+* p10: revalidation between proxy and servers can work in the same way it would work in groupcomm-bis (which is converging to the adapted use of ETag); though it keeps moving back to the end of the queue, still aiming to define how this all works with a HTTP-to-CoAP proxy, which would enable a HTTP client to talk to a group of CoAP servers. There's a rough idea of how it can work.
+
+### AOB
+
+CA: Plugging the FAQ on the occasion of having updated them for lockstep protocols: <https://github.com/core-wg/wiki/wiki/CoAP-FAQ>
+MT: Is this perhaps useful seminal material for [corrclarr](https://github.com/core-wg/corrclar), whenever it happens?
+CA: Likely so.
+

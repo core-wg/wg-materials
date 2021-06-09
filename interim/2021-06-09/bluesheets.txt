@@ -1,0 +1,10 @@
+# CoRE Virtual interim - 2021-06-09 - 14:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Christian Amsüss
+3. Rikard Höglund, RISE
+4. Peter Yee, AKAYLA
+5. Göran Selander, Ericsson
+6. Esko Dijk, IoTconsultancy.nl
