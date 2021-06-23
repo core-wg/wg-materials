@@ -1,0 +1,57 @@
+CoRE Virtual interim - 2021-06-23 - 14:00 UTC
+
+0. Administrivia (Chairs)
+* Note Well
+* Bluesheets
+* Jabber + Minutes
+* Agenda Bashing
+
+
+1. Dynlink
+
+- https://datatracker.ietf.org/doc/draft-ietf-core-dynlink/
+- https://github.com/core-wg/dynlink
+- https://github.com/core-wg/dynlink/issues
+
+Discuss status, open points and way forward
+
+
+2. HREF and CoRAL
+
+- https://datatracker.ietf.org/doc/draft-ietf-core-href/
+- https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+- https://github.com/core-wg/coral
+- https://github.com/core-wg/coral/issues
+
+Discuss open points such as:
+* Dictionary setup using cbor-packed.
+* URI compression
+  * CRI: CISC vs RISC discussion - Frugal on features (but require verbose representations incl base64) or more features w/ more compact encoding.
+  * Implementation vs specification complexity.
+
+
+3. AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-08-core?both
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m9a2d53595d20a6faffb464cfee95297e 
+
+Meeting number: 185 898 6252
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1858986252@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 898 6252

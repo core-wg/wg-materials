@@ -1,0 +1,20 @@
+# CoRE Virtual interim - 2021-06-23 - 14:00 UTC
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Oliver Borchert
+3. Carsten Bormann, TZI
+4. Peter Yee, AKAYLA
+5. Christian Amsüss
+6. Francesca Palombini, Ericsson
+7. Bill Silverajan, Tampere University (TAU)
+8. Dave Robin
+9. Alan Soloway, Qualcomm
+10. Michael Richardson, Sandelman 
+11. Michael Koster, Passive Logic
+12. Rikard Höglund, RISE
+13. Oliver Borchert, NIST
+14. Henk Birkholz
+15. Klaus Hartke
+

@@ -1,0 +1,183 @@
+# CoRE Virtual interim - 2021-06-23 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-08/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m9a2d53595d20a6faffb464cfee95297e
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-08-core?both
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: 
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Oliver Borchert
+3. Carsten Bormann, TZI
+4. Peter Yee, AKAYLA
+5. Christian Amsüss
+6. Francesca Palombini, Ericsson
+7. Bill Silverajan, Tampere University (TAU)
+8. Dave Robin
+9. Alan Soloway, Qualcomm
+10. Michael Richardson, Sandelman 
+11. Michael Koster, Passive Logic
+12. Rikard Höglund, RISE
+13. Oliver Borchert, NIST
+14. Henk Birkholz
+15. Klaus Hartke
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+
+## Agenda
+
+MT going through the agenda and the generics.
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+### Early AOB
+
+CB: YANG-CBOR/SID had some movement. Will do small changes, new version probably tomorrow. If all works out well, might resume IESG processing.
+
+FP: It happens that some drafts are not blocked, but discussed in the IESG in terms of charter fitting (in general). So reminder for chairs and shepherd: Also check with the charter, and if any interpretation needs to be done, let's discuss that before IESG time.
+
+### Dynlink
+
+- https://datatracker.ietf.org/doc/draft-ietf-core-dynlink/
+- https://github.com/core-wg/dynlink
+- https://github.com/core-wg/dynlink/issues
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-08/materials/slides-interim-2021-core-08-sessa-dynamic-resource-linking-for-constrained-restful-environments-00
+
+Discuss status, open points and way forward
+
+BS: (going through slides): Not much movement so far, but one ahead: Split into 2 documents was agreed on w/ chairs, AD etc. One on conditional attributes (new doc), one is link bindings (current doc).
+BS: One part has been ready for some time (conditional-attributes), one requires work (link bindings, keeping the dynlink name).
+BS: conditional-attributes is depended on from outside; rest-of-dynlink has soft dependency on CoRAL.
+BS: First versions (just copy-paste) to be submitted ASAP (this week).
+BS: Due in conditional-attributes -01: Impact of proxies, for implementation considerations.
+BS: Due for dynlink-15: link-format issues.
+
+Q&A
+
+MJK: There may not need to be a normative dependency between the new docs (-bindings is a way to implement conditional-parameters, so it can be an informative reference in conditional-parameters).
+BS: Still needs to *exist* to be informative reference.
+MJK: Can update C code to reflect that.
+CB: Side note: kramdown-rfc *can* reference nonexistent docs.
+
+CA: Discussing conditional-parameters could spin-up a discussion on how CoRE documents should consider how CoRE works also in terms of proxies. Hannes Tschofenig and I know to have different opinions about how essential it is for CoRE tools to work across proxies.
+
+### HREF and CoRAL
+
+- https://datatracker.ietf.org/doc/draft-ietf-core-href/
+- https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+- https://github.com/core-wg/coral
+- https://github.com/core-wg/coral/issues
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-08/materials/slides-interim-2021-core-08-sessa-href-musings-00.pdf
+
+Discuss open points such as:
+* URI compression
+  * CRI: CISC vs RISC discussion - Frugal on features (but require verbose representations incl base64) or more features w/ more compact encoding.
+  * Implementation vs specification complexity.
+* Dictionary setup using cbor-packed.
+
+CB: The work on CoRAL led to how to represent URIs, which is relevant also in other use cases like SUIT, possibly wider. Helps those who like to use it to get rid of syntax aspect of URIs and to focus on semantics.
+CB: CRIs \[ pronouncing CoRI \], and CRI references. Do the same as URI and URI references of RFC 3986.
+CB: Tried this in CoAP development already (it reduces complexity by not allowing percent encoding).
+CB: (p3) version here is what in the editor's draft.
+CB: Syntax as shown is compact (compared to bespoke one). Downside: ingesting is not trivial. Whether the next item is a scheme, host or path part needs to be derived from context. Requires some code. Simpler processing can be done by going to simpler schema shown on p4.
+CB: (p5) showing examples with the encoding from current -04, namely "Option 1".
+CB: (p6) shows same examples with a possible simplification (paid with 2-4 bytes communication overhead), namely "Option 2".
+CB: (p7) another simplification (paid with 0-2 bytes communication overhead), namely "Option 3".
+CB: Need to decide which option to pick
+
+HB: (just joining at p7): Ingestion complexity is my topic here. Is Curry the spoken-out version?
+CB: Undecided.
+HB: Ingestion complexity is important. Every tool can process URIs now. Any tweak that reduces ingestion complexity is welcome. If compromise in option 3 is viable, don't see anything against that. It's not only a compromise but a naturally progressed-to conversion point. Is option 1 still an option to consider?
+CB: Option 1 maximizes on the "very compact" objective. Still harder to do actual resolution than to do ingestion.
+HB: Still, think processing URIs was always kind of a burden. Option 3 is suitable to me.
+CA: I was concerned of size and preferred option 1, but option 3 sounds good to me to go. (Maybe with some tweaks still).
+KH (also just joining): Henk's points are good input as they confirm my intuition. Cut down complexity on all fronts, ingestion and size. Get this right, not develop more headaches. Is my "in-memory" format still on that list?
+CB: No, this is looking at CBOR based options only.
+KH: My implementation works, though it can't do CBOR-based format yet, instead it is dead-simple "in-memory" format, TLV. Implementation overhead of that is close to perfect. Con is it's not CBOR. Also limited in maximum lengths. Option 3 is more or less the same idea but with the advantage of CBOR and thus variable-length items and reuse of preexisting CBOR implementations.
+KH: Then, we discussed (in design team) about putting more features into CRIs, like encoding binary items as base64 etc. Easy to do with a CBOR-based approach, difficult with "in-memory". Torn between dead-simple and nice features. Leaning towards dead-simple, even with Henk's comments.
+CA: The length limitations are too big to ignore here.
+KH: Multiple name hosts and joined by dots?
+CA: Possibly yes.
+HB: URIs are composite identifiers concatenated. But that's beyond URI, right?
+CA: Wait, that's only about replacing dots with first-class objects, like DNS does.
+CB: DNS doesn't have those dots.
+CB: On extensibility, this 6-element array is pretty rigid. Doesn't lend itself to extension. What's in there can be extended. If we think these 6 components are the parts we want to have, can commit to that.
+CA: Not sure we need to go there, though a fan of extensibility. We can extend outside of this.
+HB: Can always do that. Think the way it's phrased here (p4) implies it's hard to extend.
+CA: It's intended to be mappable to a URI. It's extensible within the URI framework.
+HB: Someone has to guard this against incompatible extensions.
+KH: Since we want URI mappability, I think these items are fixed. CBOR gives us extensibility with respect to types, so different encodings of same information is possible. If you have digit-based path segments, you could use CBOR uint here. Similar with tags to have other information more efficiently. Worried about my dumb constrained node receiving them. That device could not construct a CoAP request from that any more. Sender needs to be sure receiver understands how to translate these. There, worried about moving away from dead-simple.
+HB: But falling back to base should be always in scope. And tags are always "procede with care or not at all". Dead-simple would just stop at that mark.
+KH: In dead-simple you would always write your base64 strings as text strings in path components and you can't make it more compact.
+HB: Haven't thought about it that way, thought you were always thinking of constrained devices for uint segments. Like a URI for an unsupervised long-lived thing that really needs to digest for building something for CoAP (while it is not useful at all for humans), and it can finally fall for automatic construction based on uint segment-based resource trees. You say then it's not simple anymore, but then no, it's a sacrifice I would make for my machines.
+KH: In CoAP you have URI options. Need to decode into base64 or whatever. Can have nice things in CRIs, but keep it dead simple, memcpy from CRI to header.
+HB: So not too much scope creep, but some optimizations like uint segments?
+KH: LwM2M OIDs are 1 byte anyway.
+CA: This can express all URIs, not only CoAP URIs. Think of the URI "ni", no good mapping to CoAP now, but there is to HTTP (in CoAP, it might become some well-known to put in a FETCH payload). So focusing on these cases where data does not even need to be mapped back.
+KH:  These use cases are interesting. Not only hashes, but e.g. also the-thing-identified-by-that-hash, geolocations, public keys (or the-entity-that-holds-the-private-key-of-that-public-key). There, design choice is "express everything as URI"? Learned there are geolocations, and "ni" scheme. Could probably design URI scheme for public keys. Another option would be in CoRAL to encode data that addresses itself through some other means, as we do with floats and integers. Could do that as literals but not go through CRIs.
+CA: Relying on something URI-based helps interfacing with other systems. We have an universal scheme for identifiers already. Suggest to trying staying within this framework.
+
+KH: How do we make progress here? Discussing for a while, how come to rough consensus.
+CB: Submit results of today as -05. If happy, ship it.
+MT: Also planning design team meeting for Friday.
+KH: Need to take a look at the slides. If need decision this meeting, my vote is for "in-memory" format.
+HB: What are we "voting on" right now? Still these 3 options?
+CA: In-memory format is not in the shown list, it is basically "Option 4" (to be added to p9). Not changing my opinion (still supporting option 3).
+MT: Seems like everyone but KH is in favour of option 3. KH, can you live with option 3?
+KH: Will take a look at the slides.
+MT: We revisit this at the design team meeting on Friday.
+
+
+MT: Another point under the same agenda item is dictionary compression.
+CA: Use packed cbor to full extent, aligned with how dictionaries are aligned with that. It's more about profiling along these lines.
+
+MT: Can some content about this already go in the next document version, or is more work needed?
+CB: How much is this about semantics and how much about encoding?
+CB: Example: In C we have typedef. You don't need typedef if you have #include, as you can put all types in there and #include. But you want typedefs on semantic layer, not on syntactic. Maybe a revolting example, but sometimes dangerous to rely on syntactic layer if intended to be used on semantic layer. Once on syntactic level, processor doesn't see it.
+
+KH: This started with the need to assign compact identifiers to the semantic vocabulary.
+KH: Compact IDs would be mapped to local semantics, the document is not intended to be inflated to its decompressed size. When we came to cbor-packed, could have identifiers point to shared dictionary.
+
+CA: Whether packed CBOR is syntactic/semantic may depend on the implementation, it's not really *defined*, is it?
+
+MT: So something to be explored more possibly also in the design meeting, but it looks like some content can already be added.
+
+### AOB 
