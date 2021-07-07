@@ -1,0 +1,52 @@
+CoRE Virtual interim - 2021-07-07 - 14:00 UTC
+
+0. Administrivia (Chairs)
+* Note Well
+* Bluesheets
+* Jabber + Minutes
+* Agenda Bashing
+
+
+1. HREF
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+
+2. SenML data-ct
+
+https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+
+
+3. CORECONF documents
+
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-library/
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+
+4. AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Etherpad: https://codimd.ietf.org/notes-ietf-interim-2021-core-09-core
+
+Meeting link: https://ietf.webex.com/ietf/j.php?MTID=m9e7a5d60740a53d0694df4397a9cbe8c
+
+Meeting number: 185 294 9466
+Password: constrained
+
+
+More ways to join
+
+Join by video system
+Dial 1852949466@ietf.webex.com
+You can also dial 173.243.2.68 and enter your meeting number.
+
+Join by phone
+1-650-479-3208 Call-in number (US/Canada)
+Access code: 185 294 9466

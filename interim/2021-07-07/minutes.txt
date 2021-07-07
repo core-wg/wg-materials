@@ -1,0 +1,168 @@
+# CoRE Virtual interim - 2021-07-07 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+material: https://datatracker.ietf.org/meeting/interim-2021-core-09/session/core
+webex: https://ietf.webex.com/ietf/j.php?MTID=m9e7a5d60740a53d0694df4397a9cbe8c
+jabber: core@jabber.ietf.org
+codimd: https://codimd.ietf.org/notes-ietf-interim-2021-core-09-core?both
+
+Minute takers: Marco Tiloca
+Jabber scribes: 
+
+
+## Participants
+
+1. Marco Tiloca, RISE
+2. Francesca Palombini
+3. Rikard Höglund
+4. Klaus Hartke
+5. Carsten Bormann, TZI
+6. Peter Yee, AKAYLA
+7. Henk Birkholz
+8. Alan Soloway, Qualcomm
+9. Michael Richardson
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Bluesheets / Jabber & Minutes / Agenda bashing
+
+Fill the "Participants" list and other info above.
+
+### HREF
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+Slides from the CoRE interim on 2021-06-23: https://datatracker.ietf.org/meeting/interim-2021-core-08/materials/slides-interim-2021-core-08-sessa-href-musings-01.pdf
+
+- "Tweaked-array syntax" (aka Option 3)
+    - Carsten's PR: https://github.com/core-wg/coral/pull/76
+    - Christian's implementation: https://gitlab.com/chrysn/micrurus/-/commit/4963ed5308c1e68c07aa970a05a6b822fc8467b5
+
+- discard=True against authority-less schemes
+    - discard=all doesn't mean ```/```, see https://github.com/core-wg/coral/issues/77
+    - See "file" scheme: https://datatracker.ietf.org/doc/html/rfc8089
+
+CB: Christian says he likes it (Option 3 above) and then I think we are done.
+MT: Weren't you also implementing it?
+CB: Yes, I'm still working on it. I can't add anything more.
+MT: Good to have also your implementation done and checked against Christian's.
+MT: Thoughts from Henk and Klaus?
+HB: I see no blockers and we should move on.
+MT: So you also support Option 3?
+HB: I can't remember the option numbering, but hadn't changed my mind since last interim (Later offline checking: indeed Option 3 as "0-2 bytes waste option")
+KH: This proposal needs some more verification, we have a GH issue https://github.com/core-wg/coral/issues/58   on the equivalence to RFC 3986 and on our own reference resolution algorithm. I guess Carsten's has taken care of that, if all that matters is Christian's input I have nothing more to add.
+MT: Christian also wanted to check both ways to have a better opinion.
+MT: So we need some more feedback from implementations.
+
+( Showing https://github.com/core-wg/coral/issues/77 )
+
+CB: Christian said he likes the result. Last minute surprise on authority-less scheme, and we need to check it. Hopefully no more surprises come but I'm positive.
+MT: About this corner case, you also wanted to check RFC 8089 to have a better opinion.
+CB: Still on my todo list.
+
+### SenML data-ct
+
+https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+
+* Carsten's PR
+    - https://github.com/core-wg/senml-data-ct/pull/3
+
+CB: Took out the material we needed from different RFCs and added it here; most of it used to add content with ABNF. Looks good.
+CB: Done some check against errata and need to be continued; nothing bad found so far.
+
+(Checking the new ABNF content)
+
+CB: Maybe ABNF could be done just better, but just copied over and good enough to finish this document.
+MT: I checked your PR, it looks good. Ari said it's good too.
+MT: One editorial thing, "Content-Format-Spec" shows up here, but not earlier in the document. You can use it when you give a pointer to the ABNF part.
+CB: I was struggling when defining names.
+MT: Names are fine, just thinking to actually use "Content-Format-Spec" earlier in the document.
+CB: Yes, can do as editorial improvements
+MT: Plan to resubmit by the cut-off?
+CB: Yes
+
+### CORECONF documents
+
+Status check
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+  https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+      
+CB: -yang-cbor and -sid got the expected changes in their latest version -16. They are now in "Waiting for AD Go-Ahead".
+FP: Got the message.
+CB: Next is to get them on the telechat?
+FP: Will check with the shepherd and fix the action holder in the meanwhile.
+MT: As shepherd of -yang-cbor, the write-up is already up-to-date with version -16.
+FP: The IESG appreciates up-to-date write-ups. Will take a look now during the meeting.
+
+(later at the end of the meeting)
+
+FP: For -sid, got update answers from Ivaylo and they look good. No answers from the YANG Doctors, so I guess that's just fine too. There's a comment from the CoAP content-format expert, maybe on the call? Not sure it's addressed.
+CB: I think we addressed it. What's left is something redundantly repeated and should not be. Though I think I fixed that.
+CB: That's the input from Klaus about the media-types part. That should be done now. Does this document have IANA OK?
+FP: It's "Review needed" from "IANA NOT OK". I guess, it will be re-reviewed when I push for the telechat.
+CB: The other points were reference and we fixed them.
+KH: -sid should have a green light now or soon. For -yang-cbor I got the review request today.
+FP: Then I wait for you, or should I move ahead? (if no green light, I put DISCUSS).
+KH: I can provide the review today or tomorrow.
+CB: How does it work for scheduling discussions in the telechat.
+FP: Need to request the slot latest one week before. So if I request by tomorrow, it will be discussed next week. Otherwise it gets delayed also with IETF 111 in between.
+CB: Would be good to have it in the next telechat.
+FP: Ok, will move ahead and wait for Klaus' review.
+CB: Sounds good.
+KH: Sounds good.
+
+CB: The other document is -comi. We have some editorial issues (see link below) that were part of my shepherd report. These are no blockers, but work to be done.
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+CB: There's an open point related to mail and section below
+
+(https://mailarchive.ietf.org/arch/msg/core/Iu4CAXJRnttY9IjYbkhTrabQwjg/)
+  * https://datatracker.ietf.org/doc/html/draft-ietf-core-comi-11#page-14 see also <https://mailarchive.ietf.org/arch/msg/netmod/Fiffm5YbcBFh5K085dtZXccz-M4>
+
+CB: When you build a request in COMI with (audio chopping ...) the mapping depends on the base YANG data type. There was a lot of discussion in NETCONF, it's possible. We can attach different semantics to different YANG base data types. The table and its content are consistent with YANG, but it's a surprise for an implementor. What the request says looks different depending on what the YANG specification says.
+CB: We haven't found out why we're doing this, I'd like to simplify it to reduce the surprise effect. That requires input from the authors, who are difficult to reach.
+CB: Anybody here caring about these URI query components?
+HB: This can be an inspiration in general for other domains using YANG, CoAP Observe telemetry for YANG and YANG pushed. I care a bit but no surprised so no barrier of concern. In theory, you can do these things in the URI itself. I'm neutral, I don't see it as a surprise.
+CB: Ultimately need to find the answer to why it is that way, and we seriously don't know, then maybe we can just fix it.
+
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-library/
+
+CB: Finally -yang-library, which relies on anything else being in order. This will finish last or together with -comi.
+
+
+### AOB
+
+MT: After today we'll have a 2-hour session at IETF 111 on Wednesday 28. We'll resume interim meetings on Meetecho, in mid-September alternating with the CBOR weeks. Expected same day of the week and time as in this series of interim meetings.
