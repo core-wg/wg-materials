@@ -1,0 +1,165 @@
+# CoRE Virtual interim - 2021-09-15 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2021-core-10/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=086b9da2-6dc7-4de8-8969-ef42503ad5cc
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-10-core?both
+
+Minute takers: Marco Tiloca and Jaime Jiménez
+Jabber scribes: Marco Tiloca and Jaime Jiménez
+
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Jabber & Minutes / Agenda bashing
+
+FP: agenda bash on the SID and YANG status.
+CB: good feedback but comments would require time in order to update drafts.
+MCR: Where are the comments?
+JJ: ballots from the IESG - https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/ballot/
+CB: also on mailing list 
+FP: good to check the ballot in case you don't get an email.
+
+### SenML data-ct
+
+https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+
+CB: Reviews from Francesca (pushing forward) and 2 last call; processed those; submitted -05 covering those comments; still waiting for two more reviews (they wanted to have -05 to look at).
+FP: I will send to the next IESG telechat in one week.
+AK: (agrees on chat)
+
+### CORECONF documents
+
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-library/
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+CB: Have to find the time to work on yang-cbor and -sid; comments to address are clear.
+CB: Need to better understand how to address an open point in -comi: (lack of) commonality of formatting keys in URI.
+CB: For yang-library, it's needed to check what has happened recently in the YANG universe.
+CB: high on the agenda to find some well YANG versed person. Michelle is very busy at the moment.
+
+MT: yang-cbor/sid will be addressed before cutoff?
+CB: Yes, I'm pretty sure.
+
+CB: looking for some volunteer to add YANG chops? Perhaps Michael Richardson?
+MT: So we focus on the first 2 drafts now, and next 2 have to come later?
+CB: I guess so.
+MCR: I thought we were done with the YANG section, and I muted you guys. Now is not good.
+
+### HREF
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+CB: We have a draft that pretty much works; need to improve a bit the implementation experience (cabo, CA, TF).
+CB: Last week in CBOR interim I brought up something related to bringing cbor-packed and href together.
+
+MT: We also have TF implementation at the moment, looking for updated test vectors from Carsten (some have to be included in the draft at some point).
+MT: Most of the remaining feedback was about the authority anomaly. We need to close that point and add test vectors. Doable before next meeting?
+CB: I think so. Shortest Job Next processing is a bad strategy when having the coreconf cluster in the backlog. SJN causes process starvation for time consuming tasks (https://en.wikipedia.org/wiki/Shortest_job_next)
+
+### CoRAL
+
+https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+MT: work is continuing, regular design team meetings; current focus on two main points, which can proceed in parallel.
+(1) information model; placeholder text in PR; More design team meetings for aligning CoRAL IM to SDF
+(2) diagnostic notation (cri'...' shown at CBOR interim), for which it can be useful to use something from CBOR (see below).
+
+CB: (presenting slides from the last CBOR interim)
+https://datatracker.ietf.org/meeting/interim-2021-cbor-16/materials/slides-interim-2021-cbor-16-sessa-coral-and-edn-01.pdf
+
+CB: The CBOR diagnostic notation is tedious. We started to explore application-specific extensions. Got positive feedback last week; we need to take some examples now in the CoRAL text-based notation, and write them down in diagnostic notation. The implementation may be mixed-in with the HREF part.
+CB: The result might be getting rid of the text-based notation in CoRAL. We want to be sure that the CBOR diagnostic notation works fine.
+
+CB: More thoughts needed about how to use CBOR-packed
+MT: In CBOR you mentioned a draft you had in LPWAN that might help for this.
+https://datatracker.ietf.org/doc/draft-bormann-lpwan-cbor-template/
+
+### New charter text
+
+https://notes.ietf.org/BkpQ-gttSRuVKlEgxho5gw?both
+
+https://mailarchive.ietf.org/arch/msg/core/haBtninO85UjsyqASeeO0FFr_Wo/
+
+MT: comments welcomed and needed for the new charter to progress. We have tried to be conservative and simply try to reflect what is available. 
+ED: (offline comment) Charter looks good to me - a quite comprehensive description of CoRE work.
+CB: IESG used to be very supportive of CoAP work in the past. At the moment that might be the case a little less, so we have to be a bit more careful on what we do to keep IESG support in the future. Do we really have to do a recharter at this point of time?
+MT: One reason was to make work easier with the IESG, making sure is aligned. It also helps newcomers to better understand what we do.
+FP: Some of the work is at the limit of the charter and that may create delays, requiring convincing from my side. Such objections would probably not be there if the charter better reflected what we are doing. We do not want to add work for nothing, my opinion was that rechartering would help the WG.
+CB: We are looking for an expansion of the charter and we might get a reduction instead. It is just a perception, it might not be true at all.
+
+Diff:
+https://www.diffchecker.com/sYU7sMxD
+
+Current charter diff:
+https://github.com/core-wg/core-wg.github.io/commit/133861a92ef62a2130427521455fb58bce23aa3e?branch=133861a92ef62a2130427521455fb58bce23aa3e&diff=split
+
+MCR: Maybe consider a balance on spinning off design teams and offloading things to ACE.
+GS: For Group OSCORE there is a design meeting, just not presenting its detailed progress/outcomes. But that led to a preprint from Eric on security of key derivation that resulted in updates in the draft. ACE is related but covers mostly the key distribution part, not the actual communication part.
+
+CB: Some things from the new text seem good, some may be not necessary. Question is if it's overall worth it.
+FP: The WG should give a look at ongoing documents and judge the charter and the rechartering itself based on that. An outcome can be to not do it. The overall impression is that the IESG looks at a chearter closely when documents to review come. I'll also check with other ADs and what they think.
+
+GS: Looking at the latest ACE charter, there is a nice tie with CoRE. Things fit well.
+
+### OSCORE-capable Proxies
+
+https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+
+Slides: https://datatracker.ietf.org/meeting/interim-2021-core-10/materials/slides-interim-2021-core-10-sessa-oscore-capable-proxies-00.pdf
+
+MT: In the agenda for IETF 111, skipped for lack of time.
+MT: Use of OSCORE also at proxies, as OSCORE consumers, in addition to origin client/server.
+MT: Some use cases need this (proxy for groupcomm; protected multicast notifications with proxy; external application servers in OMA LwM2M). It was agreed and confirmed to have it as a separate document for more visibility and dedicated design analysis --- was an appendix of [draft-tiloca-core-groupcomm-proxy](https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/)
+MT: Proposed update to OSCORE, proxies can also use OSCORE; a message can be protected by multiple OSCORE layers (now forbidden). Applicable to Group OSCORE "as is".
+MT: Good feedback from Christian and Göran - Use cases look good and can be more; too complicated description of message processing. Revise the content presentation to be more general without heavy notation and too fine-grained steps.
+MT: Goal for v-01 is to address comments and think more of >2 nested OSCORE layers (also possible and promising).
+
+CB: if the "longer-range" layer content is inaccessible to the intermediate proxies, then by definition it must be nestable to arbitrary layers?
+MT: Yes, and that's possible to do. The new formulation will make it easy/easier to think about, also thinking of a long chain of proxies.
+
+MCR: Do you need to know the exact proxies in the chain? What about the final destination?
+MT: For sure the final destination, especially if you want security end-to-end with it. You need to know the entry point in the chain, after all you are sharing a Security Context to use with it.
+MCR: ok thanks
+
+GS: I saw most of this already, now you've added some recent updates, just not in the draft yet. Looking forward to the draft.
+
+### AOB
+
+FP: Have to check with Christian about the status of echo-request-tag.
+MT: Last thing was a mail from Ben saying that it's fine.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
