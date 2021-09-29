@@ -1,0 +1,197 @@
+# CoRE Virtual interim - 2021-09-29 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2021-core-11/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=60e19424-f37d-4715-b45b-8bb74ef6aea5
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-11-core?both
+
+Minute takers: Marco, Jaime
+Jabber scribes: Marco
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Jabber & Minutes / Agenda bashing
+
+### Echo-Request-Tag
+
+CA: Responding to Ben's point, Göran already started, few nits left only.
+FP: I reminded Roman, no reply yet, will do again.
+
+### CORECONF -yang-cbor and -sid
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Issues at: https://github.com/core-wg/yang-cbor/issues
+
+MT: Michael Richardson opened issues on Github to track IESG comments. Also established Design team, next to meet Thursday 1430Z (then recurring according to schedule to agree).
+
+CB: Top of the agenda, will have an overview by tomorrow's Design meeting. First technical issue is whether to leave string-based identifiers at all... it is a big change if we do it. This has deeper interactions with the YANG ecosystem, we have to examine the comments we got. 
+
+MR: enough for us to specify that numbers and strings won't appear in the same YANG document. 
+
+CB: there is space for all three cases: no SIDs (only strings), constrained ep that uses SID only, mix of both. Right now we have only two media types and we might want to revisit that in order to accommodate the mix situation.
+
+### SenML data-ct
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-11/materials/slides-interim-2021-core-11-sessa-draft-ietf-core-senml-data-ct-00.pdf
+
+CB presenting
+
+2 DISCUSSes that need resolving. 
+
+2 content formats needed? Yes
+
+(page 4)
+CB: Nested content-coding: use a syntax that we come up with (i.e. application/json@deflate@aes128gcm) or do not do nexted content-coding in coap or senml at all.
+AK: Prefers option 1 for nested content-codings. How does HTTP do it? 
+CB: HTTP has header field, with its way to repeat it. Emulating it would be doing one of the two, since HTTP does both.
+AK: Still light preference, but no big difference.
+CB: No big coding differences either.
+CA: Can't we redefine the CoAP content-format registry opening for lists?
+CB: We can do that, not in this document maybe.
+CA: And not until we have a good use case for it.
+
+(page 5)
+CB: Reuse and cleanup of ABNF rules. Do we need recheck for replacing 7230/7231 by httpbis semantics (C430)?
+    
+CB: HTTP is defining its things, so it should be fine for us too. Room for fine-grained alignment is limited, but we can clarify this point editorially, without conceptual changes.
+(No comments on it)
+
+(page 6)
+CB: Error handling. Is there general guidance for error handling behaviour (e.g., out of range, value not registered)? Leave it to the application? It is the responsability of the SenML generator to provide valid, processable SenML. 
+AK: SenML can be used with CoAP, HTTP and many others. Not ideal to cover error handling in detail and in a general way too. Maybe in another document? No strong opinion anyway.
+CB: So it should be mostly about clarifying that the general policies from SenML apply again, with no more specific expectations for implementations raised here.
+
+CB: Following points fall as no-action or editorial clarifications.
+CB: Plan to check with Ben on some points, then submit an update.
+
+### CoRAL
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+PR on information model: https://github.com/core-wg/coral/pull/1
+
+CA: selected points currently on focus during the design team meetings. 
+- serialization of CRIs (HREF document) going on on its own, closed to be finalized
+- diagnostic notation
+- information model to be considered by applications, mostly to cover today. The PR (see link above) captures the current status.
+
+CA: (showing a graph diagram as refence for the information model). Still has to think of the best way to disambiguate literals. Forms are not a special thing for the information model, and can be just seen as statements.
+CA: Requirement for constrained applications to consume statements and a CoRAL document efficiently.
+MCR (on the chat): so if I label myself correctly, people will put coffee in my coffee slot?
+CA: also about trust model.
+
+CA: when preparing the information to specific applications we will need to select a specific serialization. In order to express the information we would follow a path among all "items/objects" (?) to construct the reply. Different applications might have requirements on the order in which "items/objects" (?) are processed. That's what the "serialization path" (?) represents. Would like to evaluate other models (SDF, etc) when used with CoRAL. 
+
+CA: "serialization path" might work; still need to define exactly what it means.
+
+MT: there is another planned PR with an example, right?
+CA: yes.
+MT: one more PR was also mentioned about the diagnostic notation. This should be material for the next design team meeeting, so likely more to bring here after the next round.
+
+### Conditional Attributes and Dynlink
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+* https://datatracker.ietf.org/doc/draft-ietf-core-dynlink/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-11/materials/slides-interim-2021-core-11-sessa-conditional-attributes-for-constrained-restful-environments-00.pdf
+
+Issues at: https://github.com/core-wg/conditional-attributes/issues
+
+BS presenting conditional attributes draft. 3 issues remaining.
+
+Pages 3-5 - The value of the Band attribute 
+
+Band is specified as a boolean but the band parameter itself has no significance. Do we need the band attribute to have a value to begin with? This query component can simply be a name, instead of name-value pair (i.e. band does not have any datatype).
+
+Example:
+``` /temperature?band&gt="30"&lt="35 ```
+
+alternative is to not have band at all and just modify the behaviour of gt, lt, etc. Opinions? 
+
+CA: just to understand the band example, where is not receiving an update when the value jumps useful?
+BS: answer coming later. 
+
+MK: The Band value might be significant, as 0 or 1. 
+CB: Using band in a boolean way is fine and aligned with CoAP design choices. Presence/absence looks right.
+BS: So proposal 2 on Github?
+CB: Yes.
+MJK: Sounds good to me.
+MJK: As to set/unset the band, not sure there's a good way or it being useful.
+MJK: Multiple bands are theoretically nice, but that requires band labels or something like that and complicates things. Maybe more useful if there are more notifiers that should consider one different band each. I recommend to not include unless a strong need comes up.
+CA: (on page 4) band does not trigger when there is a jump through the values . That's inconsistent with the view of the resource as presented before. Ignoring the jump in the middle violates this model and the behaviour (of gt and lt). As soon as it goes to the lower threshold it should report it. It should report also when there is a sharp crossing between values.
+BS: No opinion on notifications when the threshold is crossed. Believed there is a use case for that behaviour.
+CA: Most application would like to know that they are within the threshold. Client can still ignore if it wants.
+MJK: Agree with CA premise. Signaling state change from inband to outband and vice versa. 
+BS: I will open a separate new issue about this point.
+
+(page 6-onward) - Proxy and Caching considerations (hop-by-hop and e2e discussion)
+
+BS: A proxy might break the intended semantics of parameters like pmax. It seems too hard to fundamentally fix this, better to go for implementation considerations explaining how to mitigate it.
+MJK: Another way to see it is that pmax could be defined as working only on a link (or by-hop) basis and not end-to-end. It does not work between proxies
+CA: Text for issue 2 looks good to me, I'd probably go for SHOULD, but there might be reasons not to. Proxy is in no situation to know what is going on. 
+CB: Is pmax implementation required?
+BS: None of the attributes are required to be supported.
+CB: Then if it can already be ignored by the client, a proxy is not much worse.
+
+MT: Any updates on the Dynlink document instead?
+BS: Not yet, conditional-attributes was prioritized; plan to also get back to that one soon.
+
+### New charter text
+
+* https://notes.ietf.org/BkpQ-gttSRuVKlEgxho5gw?both
+* https://github.com/core-wg/core-wg.github.io/blob/master/core-charter.txt
+* https://github.com/core-wg/core-wg.github.io/commit/133861a92ef62a2130427521455fb58bce23aa3e?branch=133861a92ef62a2130427521455fb58bce23aa3e&diff=split
+
+MT: Unchanged text since last time; only official feedback was Esko's mail:  Happy enough, good overview, too many details risk to have too frequent future rechartering.
+CB: 40 paragraphs, looking like a humongous program to be shouldered by 10 active people. That's the actual problem but also the problem of perception. 
+MT: Should we compress the text?
+CB: In some ways the charter text constrains the work. WG interest is broad and IESG interest is narrow focus. Maybe look into the parts that we think IESG will be looking into it. Also compress text about already done work and about maintenance activities.
+FP: IESG reaction, so far not so much. We have to create a charter that prevents the IESG question: "is this document in the charter?". General input on possible more things to add about CoAP. If rechartering happens, it will also be a lot of wordsmithing.
+CB: Should not give too much emphasis to SMS and BLE.
+CA: +1
+CA: Using proxy paradigm for URI management can be emphasized instead.
+CB: +1
+CB: And we're covering security in a more aware way than when we started, that's good too.
+MT: This is good input, please continue providing it on the channels we have set up; a text revision can follow. Clearly important to compress the text length and to find a balance so that we don't constrain the scope but it's still convincing enough for the IESG.
+
+### AOB
+
+CB: Anything specific already planned for the next meeting in 2 weeks?
+MT: Not already out of my hat; for now it can be status/progress update.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz

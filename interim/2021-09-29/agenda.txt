@@ -1,0 +1,52 @@
+CoRE Virtual interim - 2021-09-29 - 14:00 UTC
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+   
+* SenML data-ct
+
+https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+
+
+* CORECONF -yang-cbor and -sid
+
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+
+* CoRAL
+
+https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+
+* Conditional Attributes and Dynlink
+
+https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+https://datatracker.ietf.org/doc/draft-ietf-core-dynlink/
+
+
+* New charter text
+
+https://notes.ietf.org/BkpQ-gttSRuVKlEgxho5gw?both
+
+https://github.com/core-wg/core-wg.github.io/blob/master/core-charter.txt
+
+https://github.com/core-wg/core-wg.github.io/commit/133861a92ef62a2130427521455fb58bce23aa3e?branch=133861a92ef62a2130427521455fb58bce23aa3e&diff=split
+
+
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Notes: https://codimd.ietf.org/notes-ietf-interim-2021-core-11-core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=60e19424-f37d-4715-b45b-8bb74ef6aea5
