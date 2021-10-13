@@ -1,0 +1,40 @@
+CoRE Virtual interim - 2021-10-13 - 14:00 UTC
+
+* Administrivia (5 min)
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Document status (15 min)
+    * echo-request-tag approved for publication
+        * https://datatracker.ietf.org/doc/draft-ietf-core-echo-request-tag/
+    * senml-data-ct
+        * https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+    * CORECONF documents
+        * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+        * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* CoRAL (20 min)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+* Key update for OSCORE (20 min)
+    * https://datatracker.ietf.org/doc/draft-hoeglund-core-oscore-key-limits/
+
+* DNS over CoAP (20 min)
+    * https://datatracker.ietf.org/doc/draft-lenders-dns-over-coap/
+
+* New charter text (10 min)
+    * https://notes.ietf.org/BkpQ-gttSRuVKlEgxho5gw?both
+    * https://github.com/core-wg/core-wg.github.io/blob/master/core-charter.txt
+    * https://github.com/core-wg/core-wg.github.io/commit/133861a92ef62a2130427521455fb58bce23aa3e?branch=133861a92ef62a2130427521455fb58bce23aa3e&diff=split
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2021-core-12/session/core
+
+Notes: https://codimd.ietf.org/notes-ietf-interim-2021-core-12-core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=3cedb9b5-b3ec-4685-ab43-5bff97c4b642

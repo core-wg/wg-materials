@@ -1,0 +1,214 @@
+# CoRE Virtual interim - 2021-10-13 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2021-core-12/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=3cedb9b5-b3ec-4685-ab43-5bff97c4b642
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-12-core?both
+
+Minute takers: Christian, Jaime Jiménez, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Jabber & Minutes / Agenda bashing
+
+### Document status (15 min)
+
+* echo-request-tag approved for publication
+    * https://datatracker.ietf.org/doc/draft-ietf-core-echo-request-tag/
+
+Which is also good news for documents in the cluster 280 (including resource-directory and new-block from CoRE) !! :trophy: 
+
+* senml-data-ct
+    * https://datatracker.ietf.org/doc/draft-ietf-core-senml-data-ct/
+    * Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-12/materials/slides-interim-2021-core-12-sessa-senml-data-ct-last-round-00.pdf
+
+
+CB presenting senml-data-ct (see slides)
+issues:
+* Different ABNF now in httpbis for parameters in media-type. Should we have to allow legacy expressions like HTTP chose to? (Agreement from CA, AK)
+* internal structure in parameter value: We don't allow quoted pairs right now. Parameters coming in containing double quotes or backslashes, we need to allow quoted pairs. Should we leave out the obsolete stuff (obs-text) but allow quoted pairs? (It's substantive change, but I think we need this to avoid surprises). 
+
+AK (via chat) pointing out application/cose;cose-type="cose-encrypt0". 
+CB: cose-type is parameter name, value is a quoted string, that we can do today already. What we can't do right now is embedded double quotes in there.
+AK: So like application/cose; cose-type="cose-\"encrypt\"0"
+CB: Not hearing opposition; as AK said "we don't want to deviate from substance, only legacy baggage"
+(AK, CA agreeing via chat to go ahead)
+
+* error handling: SenML documents may live long enough that producer doesn't know consumer (because it's consumed in the future). Thus use "must be understood" when needed. Here we don't know yet whether recipient will know any of the details (numbers, parameters, content codings). Recipient knows when it needs to be updated. Would be editorial change highlighting this. (AK via chat agreeing with doing as proposed)
+
+CB: Plan is to have a new version in a few days, then BK and Murray can clear their discusses, FP can approve if all good.
+FP agreeing on chat.
+(AK on chat says: And we could consider later on updating SenML RFC with guidance on error handling in general, but don't think there's much -ct specific.)
+
+
+* CORECONF documents
+    * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Ongoing design team meetings, latest last week, one planned for Monday next week.
+
+MCR: Several issues were opened. Hope to have bulk of work done before cut-off. Please comment on Github if you have any stake in it.
+CB: Lots of things going on in the issues, which essentially boil down to answering the DISCUSSes.
+
+### CoRAL (20 min)
+    
+https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-12/materials/slides-interim-2021-core-12-sessa-constrained-restful-application-languager-coral-01.pdf
+
+CA presenting:
+* (slide 2) On last status update: 
+    * Information model merged to the main Editor's copy.
+    * Handling literals. Either each literal is an item of its own vs literal value and its attributes as a single entity. Latter easer.
+* (slide 3) new things: Packed CBOR, CBOR diagnostic notation (thus file is human-readable), mapping with link-format and CoRAL with RDF.
+    * CoRAL should convey information the device can directly act upon. We can't just define link-format to coral conversion and expect 1to1 conversion. Link-format may have other items that are not expressed in coral, and applications using those would break. 
+* (slide 4) Sample link-format mapping
+    * ct is numeric, interfaces are split up into semantic relations that have meaning on their own.
+* (slide 5) some of the current issues
+    * #5 deterministic encoding. Section probably a remnant from when CRIs where part of main spec.
+    * #10 lock in the "property" model of literals
+    * #9 do without circular visitation
+    * #3 open/close world
+
+AK (via chat): are there examples of the CoRAL CBOR diag format vs the original text format?
+CA: I've none right available but can pick up some.
+
+\[ CA scribbling the example \]
+```
+#using rdf = <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+#using foaf = <http://xmlns.com/foaf/0.1/>
+
+foaf:maker null {
+   rdf:type        <http://xmlns.com/foaf/0.1/Person>
+   foaf:familyName "Hartke"
+   foaf:givenName  "Klaus"
+   foaf:mbox       <mailto:klaus.hartke@ericsson.com>
+}
+```
+
+```
+[2, 6(101), null [
+  [2, 6(33), cri'http://xmlns.com/foaf/0.1/Person'],
+  [2, 6(102), "Hartke"],
+  [2, 6(103), "Klaus"],
+  [2, 6(104), cri'mailto:klaus.hartke@ericsson.com'],
+]]
+```
+
+### Key update for OSCORE (20 min)
+
+https://datatracker.ietf.org/doc/draft-hoeglund-core-oscore-key-limits/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-12/materials/slides-interim-2021-core-12-sessa-key-update-for-oscore-00.pdf
+
+RH presenting: 
+* (slide 2) Recap. Key usage needs to follow certain limits due to AEAD. Therefore  draft has 2 parts: there is (1) a study on AEAD, its limits and how an endpoint tracks it's approaching them; and (2) a new method for rekeying OSCORE.
+
+* (from slide 3) On key limits
+    * Limits needed to be set to stay within good security levels expressed as probabilities. Computed using the CFRG formulas, building on recommendation from John Mattsson.
+    * Clarified how to practically not exceed the limited on message size.
+    CA: Would be easier to just express that in terms of bytes, to not think of cipher blocks.
+    * It was fine to have a higher 'l' limit for most ciphers, it's still safe enough, according to a "bound" probability from CFRG. Maybe some limits can be increased even more.
+    * Different story for CCM_8, limits have to be lower to stay around good proabilities. Found a good set of limits to practically recommend, still following the overall CFRG direction. Good, or fine to deviate?
+    CA: Probably the 'l' limit does not matter so much for us, given the possibility of inner blockwise limiting to 1 KB and outer blockwise bringing more limits. That should releave the pressure from having the best 'l' limit since this is all very specific to OSCORE anyway.
+
+* (from slide 6) On actual key update
+    * Recap of the procedure and its properties
+    * In the client-initiated version, removed a nonce R1 from the server's response as not really needed
+    * Clarifications on the server-initiated version; checkings on the server aligned to OSCORE Appendix B.2; more of this to add
+    * Size of exchanged nonces as 8 bytes like in OSCORE Appendix B.2. Ok?
+        CA: Might be good, but some devices may keep it shorter if sure of no reuse. Similar to what raised in the Echo-Request-Tag document.
+    * Now observations have to terminate after a key update. There's a way to let me safely continue, but the price to pay does not look worth it.
+    * Aligned with new exporter interface of EDHOC if this was used to originally establish the Security Context. This implies a MUST support of that interface if EDHOC is used (it's a SHOULD support in the EDHOC draft).
+    * This key update can replace the use of OSCORE Appendix B.2 in 6TiSCH, with additional convenience, since it does not change the Context ID which is used as node (pledge) identifier in 6TiSCH.
+    * This would "deprecate and replace" OSCORE Appendix B.2 in RFC 8613. Ok?
+    * Do we need a name for this procedure?
+    CB (via chat): Names are good
+    CA (via chat): yeah name it
+    RH: KUDOS was something we internally thought about
+
+GS (via chat): this key update is preferred to Appendix B.2 in all aspects, I think.
+
+### DNS over CoAP (20 min)
+
+https://datatracker.ietf.org/doc/draft-lenders-dns-over-coap/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-12/materials/slides-interim-2021-core-12-sessa-dns-queries-over-coap-doc-00.pdf
+
+ML: DNS is not encrypted, clearly risky if used by IoT devices. Big traditional security solutions don't fit constrained environments. Advantage over DNS-over-DTLS: Can share resources (socket, buffer, retransmission mechanism)
+ML: Basic encapsulation process at the moment. Use CON messages, thought of GET/POST/FETCH as possible methods. Defined new content format.
+ML: How to indicate a response as non out-of-date? Max-Age option? 1. Minimum TTL for Max-Age; 2. adopt Max-Age to TTL; 3. new "Age" option like HTTP (maybe hard to sell here).
+ML: Comparison of the different CoAP methods. POST not caching-friendly, GET cannot have payload. FETCH looks great, but maybe not widely deployed yet. Then compromising use of GET/POST in Appendix.
+ML: Investigation on implementations with FETCH. Most support it. FETCH is trivial to implement, shouldn't be too generous with implementations still not supporting FETCH.
+CB: We really might want to use FETCH at this point as the right thing. Completely favorable in abandoning GET/POST as alternative for legacy applications.
+CA (via chat): Agreed.
+ML: Authentication method proposed in this group can be used.
+MCR (via chat): I think this should happen in DNSOP, with review from CoRE.
+CB: That's a good point, with things to discuss here as well.
+MW (via chat): To be clear, the draft is not only about DNS queries
+MCR (via chat): DNS started on UDP. Then all this moved to DTLS/UDP, then TLS/HTTPS, now DNS over QUIC... and here we show up with DNS over CoAP (which is over UDP).
+MCR: Will be bizarre for the DNS group why we are not doing DNS over QUIC or UDP. Scoping why the current solutions are not valid will be key.
+CB: +1
+CB: what would be the expectation on progress?
+MT: resubmission before cutoff?
+ML: If we decide that GET/POST should go out, maybe. We were planning to have the topic done asap, not to spend years on this. 
+MW: Done soonish if possible. RIOT has an implementation. What would be the expectation of the update? Is it the scope a justification of why not DNS+DTLS?
+CB: It would be good to spend a couple of sentences elaborating. No epic text on that. Just mention URIs, proxies, encryption, etc.
+MW: Then before cutoff possible.
+CB: Looking for MvP (Minimal viable Protocol) 
+ML: POST removed or appendix?
+CB: No appendix - No confusion.
+
+### New charter text (10 min)
+
+* https://notes.ietf.org/BkpQ-gttSRuVKlEgxho5gw?both
+* https://github.com/core-wg/core-wg.github.io/blob/master/core-charter.txt
+* https://github.com/core-wg/core-wg.github.io/commit/133861a92ef62a2130427521455fb58bce23aa3e?branch=133861a92ef62a2130427521455fb58bce23aa3e&diff=split
+
+GS: I read the proposed new charter, it's a bit long. Rechartering is good as there are things out of date and that can come back to us.
+GS: The first proposal is 3 page long and up-to-date. I took out content from its second half about ongoing/planned activities, that I tried to structure as bullet list. This is a starting point.
+MT: Have to share for everyone to see and edit.
+CB: Main issue is that this exposes explicitly the work.
+FP: thanks Göran! Still looking for the WG opinion on this, we have your point of view. CB, I wonder if your view of being cautious has changed or not. Anybody else has opinions?
+MT: Hope that more input and opinions come.
+CB: Would like to do a PR on Github. There is a danger people wake up to the size of our plate. In this respect, the already long ongoing charter might actually help.
+CB: Worst that could happen is that we do not recharter. If ask for rechartering and it's not approved, what's the possible consequence?
+FP: That might result in even closer looking than now when documents are submitted for publication. So we need to be sure and in agreement on the content when doing that.
+MT: Will make Göran text available on the same CodiMD (see above) and Github repo as a PR. Please, give your comments and input there or on the thread we already have for this on the mailing list.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
