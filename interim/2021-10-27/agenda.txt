@@ -1,0 +1,42 @@
+CoRE Virtual interim - 2021-10-27 - 14:00 UTC
+
+
+* Administrivia (5 min)
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Charter (10 minutes)
+    * https://github.com/core-wg/core-wg.github.io/pull/1
+
+* CORECONF - Carsten, Michael (10 min)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+    * https://datatracker.ietf.org/doc/html/draft-bormann-core-yang-sid-pen
+
+* Profiling of EDHOC for CoAP and OSCORE - Rikard (15 minutes)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+* Observe multicast notifications - Christian (15 minutes)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-observe-multicast-notifications/
+
+* Group communication with proxies - Esko (15 minutes)
+    * https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+
+* Transport indication - Christian (15 minutes)
+    * https://datatracker.ietf.org/doc/draft-amsuess-core-transport-indication/
+
+* AOB (5 minutes)
+    * Next interim meetings
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2021-core-13/session/core
+
+Notes: https://codimd.ietf.org/notes-ietf-interim-2021-core-13-core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=4b108e95-9886-4b1f-94dc-aee7b0a004ce

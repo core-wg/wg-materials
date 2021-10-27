@@ -1,0 +1,232 @@
+# CoRE Virtual interim - 2021-10-27 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2021-core-13/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=4b108e95-9886-4b1f-94dc-aee7b0a004ce
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-13-core?both
+
+Minute takers: Christian Amsüss (when not presenting), Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Jabber & Minutes / Agenda bashing
+
+### Charter (10 minutes)
+
+* https://github.com/core-wg/core-wg.github.io/pull/1
+
+MT: Discussion continued; seems that not many people are interested in doing anything here. Seems best to put this aside now and wait if interest comes back. Whenever we do, we have good input for that now.
+FP: Thanks for the summary.
+MCR: Recharter would not be approved -- so we stick with the one we have that wouldn't be approved now either?
+FP: It got approved.
+MCR: A decade ago.
+FP: Good to hear if you do not agree here.
+MCR: Sounds like "Don't ask questions you don't want the answer to". If that's OK even for our AD, ... but can still be challenged easily.
+FP: Nobody from the IESG has done that. I asked "Do you think it is time?", and if the answer is "No", I guess we'll take questions when they come.
+MCR: I don't think that the question is in the rough, and there is support for being more precise, but when we write that down, people are concerned it's too much and will be chopped. So we stick with "doing even more things"? If we asked for approval of the current charter now, it probably wouldn't get approved.
+CB: Quite obviously it wouldn't be -- because it's overtaken by events. Upside of this is small, downside is large, let's not do it.
+FP: Good for me, thanks for the feedback.
+
+### CORECONF - Carsten, Michael (10 min)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+* https://datatracker.ietf.org/doc/html/draft-bormann-core-yang-sid-pen
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-yang-cbor-sid-00
+
+CB presenting, see slides.
+(ranting on Meetecho's slide selection)
+Formal status is incorrect, we're still in "revised ID needed" because about half of the issues are addressed, have to talk to ADs about that.
+One DISCUSS on core-sid should be easy to resolve, others require more work.
+
+FP (on chat): I can move the status back to revised id needed
+
+(p2) see issues list for details.
+(p3) YANG ecosystem has moved while we finished these drafts. YANG was for data-at-rest (?), now it is also about static data in messages (?). Do we join in with this modernization? md:annotation is post-schema validation, does arithmetic based on names in JSON maps, we'd have to do something similar with SIDs (eith '@'-signs in front of names). It would be a major new piece of work there. sx:structure is not risky, md is risky. Don't feel good about embracing the two.
+MCR: As a user, I don't see these helping me. What slows them down is unwanted. If there is some community that wants to do this, should be in bis. Unless something here fundamentally obsoletes what we have done, I don't see an advantage.
+CB: Main problem with yang-data is that it's now "old-fashioned".
+MCR: Changes formulas, but not how I use it.
+CB: Proposal: Go back to ADs saying "we don't want to do this in this round, can still do that when there is clearer view of use cases". Would give that feedback.
+
+(p4) Instance identifiers. In JSON it's called JSON pointer; in YANG-JSON almost XPath. Turing-equivalent. And it requires schema knowledge. Without the schema, nothing goes (with YANG-XML, YANG-JSON is slightly different). Current draft takes JSON approach. Could do that for instance identifiers too, but they are really important. Could go to name-based instance identifier that looks like SID-based one: listing all parameters from root on the way to the schema node to identify the data node. As with SID version you need to know schema, but we'd achieve parity with SID approach and get rid of weird need to parse out keys.
+MCR: I don't care. All martian to me.
+CB: Other opinions?
+ED: Why would these queries be needed? Just because you want to map as much as possible of YANG?
+CB: Need instance identifier in a YANG model to talk about something else. Saying "here is something I need to say about Ethernet interface X", that's a cross reference.
+CB: Will do a PR, try to get reviews from Andy and Michelle. If all fails, fall back to YANG-JSON.
+
+(p5)
+(p6) How does a small organization get a SID? Discussion says "go to one of the megaranges", eg. comi.space. But who'll run that on the long run? If there isn't anyone, we have a hole.
+MCR: One discussion we had was whether we'd allocate for comi.space in this document, but we don't know who'll run it on the long term.
+CB: Not sure if discussed, but that's the outcome. We wouldn't know what to write in the document right now. Would be a good thing, but when registry exists we can do that, doesn't need to be in document.
+CB: To demonstrate, I wrote a strawman document allocating 100k megaranges. Allocated for first PEN numbers. (Everyone in management space has one). People can use them, ship products with them. Then again, these allocations are kind of second-class being 64bit SIDs. Not a big deal w/ delta coding, but still. And it's not as clear as with comi.space how to find back to YANG module. So just not so great to use as comi.space. Wrote document to answer concerns. If comi.space gets taken up, don't need this finished. tl;dr: Don't have to do anything with that document, it suffices that it exists.
+
+### Profiling of EDHOC for CoAP and OSCORE - Rikard (15 minutes)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-profiling-edhoc-for-coap-and-oscore-00.pdf
+
+RH presenting.
+
+(p2) Background on EDHOC. Draft originally only on an EDHOC+OSCORE combined request, to minimize round-trips.
+
+(p3) Agreed at IETF 111 to broaden the scope, synching with LAKE WG. Now has efficient conversion from OSCORE to EDHOC identifiers, extensions, and web linking.
+
+(p4) General alignment to EDHOC. Early allocation for "EDHOC" Option with number 21 requested. No feedback yet.
+
+(p5) OSCORE ID to EDHOC ID conversion now in the document body. Required if server supports the combined request; good for performance anyway as it picks the smallest of the two equivalent EDHOC IDs.
+
+(p6) More guidelines on how EDHOC applicability statements should / should not be, and what more information they can provide.
+
+(p7) Building on rt=core.edhoc defined in the EDHOC draft, here defined target attributes to discover EDHOC resources and how they are supposed to be used as per the associated applicability statement. Open question on MUST/SHOULD attributes other than 'rt'.
+ED: better to not use /.well-known/edhoc in the example; that would suppose to be a well-known resource so a client knows how it works.
+RH: yes, of course the server can have more resources than that only
+(CA on Jabber: +1 on that)
+CB: Wondering about those target attributes that are arrays; we used to use space-separated values there, don't remember what exactly the conditions were.
+CA: There should be guidance in the RD document, which discourages single attributes with values including a white space. There might be even more points to consider.
+CB (via chat): 8288: Target attribute definitions SHOULD specify: o The semantics and error handling of multiple occurrences of the target attribute on a given link. -- OK, so that is indeed allowed. Thanks for the clarification.
+
+(p8) Open points
+RH: Needed IANA registry for OSCORE to EDHOC ID conversion method?
+CA: Seems like no reason if it's limited to applicability statement.
+CA (via chat): I don't think we'll need more conversion methods at all.
+
+RH: Error handling - Possibly after OSCORE decryption, a request has EDHOC option but no OSCORE option. Proposal: return 4.00 (Bad Request)
+CA via chat: +1 on 4.00
+RH: Error handling - After OSCORE decryption, the request has the EDHOC and OSCORE options. Proposal: admit it, as possible with nested OSCORE
+CA: OSCORE with unexpected EDHOC would more realistically happen not with nested OSCORE (because there it is on a different encryption layer). It *would* though happen when client is eager to send OSCORE and tacks Message3 on all of its initial requests. Might run into issues with created replay window though, will need to explore.
+RH: Taken up for discussion
+
+RH: Updated Californium implementation.
+RH: Next steps planned about:
+- using Christian's "URI compression" option when available, see https://datatracker.ietf.org/meeting/interim-2021-core-05/materials/slides-interim-2021-core-05-sessa-core-option-for-well-known-resources-00.pdf;
+- more on web linking and error handling;
+- block-wise and security considerations.
+
+### Observe multicast notifications - Christian (15 minutes)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-observe-multicast-notifications/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-observe-notifications-as-coap-multicast-responses-00.pdf
+
+(p2) Recap of the whole idea, a server sends observe notifications over multicast to "subscribed" clients, synchronizing them on the same Token and Group OSCORE external_aad.
+
+(p3) Updated payload of the error informative response, sent by the server to synch the clients subscribing to the group observation. This includes optimizations about omitting parameters in particular cases; and a new additional parameter informing on "not before when" the next notification is expected to be sent.
+
+(p4) Now simpler way to cancel group observations; more optimizations for OSCORE group self-managed by the server; stressed the importance of security between client and proxy, with DTLS or OSCORE (see https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/).
+
+(p5) Added more security considerations to have a best-possible alignment with those of RFC 7641, since here all multicast notifications are Non Confirmable.
+
+(p6) New appendix with example using Group OSCORE + Proxy + Deterministic requests (see https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/). Has performance advantages and re-enables cacheability.
+The above implies particular understanding of replying with an unprotected response to an OSCORE-protected request. Please have a look at this particular point, I think it should work this way. See also "Q: When should my CoAP server send an unprotected Response to an OSCORE-protected Request?" at https://github.com/core-wg/wiki/wiki/CoAP-FAQ
+
+(p7) Plan to use CRIs to indicate addresses in the payload of the informative response, and to add more examples with reverse proxies which requires special care.
+
+Need for reviews – Previously promised: Göran, Esko, Jaime, Carsten, Thomas
+
+### Group communication with proxies - Esko (15 minutes)
+
+* https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-proxy-operations-for-coap-group-communication-00.pdf
+
+ED presenting.
+
+(p3) Recap on how it works. On C ->P, "Multicast-Signaling" option telling the proxy for how long to accept responses to the forwarded group request. On P -> C, "Response-Forwarding" option to tell the client the address of the origin server. Emphasis on security requirements.
+
+(p4) Updates since IETF110 (!).
+- Caching model at the proxy moved here from core-groupcomm-bis.
+- Clarified that responses are forwarded to the client as they come, even when multiple from a same server.
+
+CB on chat: Multicast-Signaling name is not my favorite CoAP option name.
+CB: Just "signaling" is a bit redundant, every option is "signaling", name should say what it does.
+ED: Multicast-Timeout? CB: For instance.
+
+(p5) More updates
+- Using OSCORE between client and proxy was moved out to a separate document, see https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+- Added support for HTTP-CoAP proxies. Single batch HTTP response contains multipart/mixed of the individual responses as application/http.
+
+(p6)
+Example of HTTP request ... response collection at the proxy ... single batch HTTP response to the client. As in the draft.
+
+(p7) Plan for
+- Using CRIs to express servers' addresses in the Response-Forwarding option;
+- More examples with reverse-proxies
+- More on HTTP-CoAP proxies, i.e. relay responses as a stream with Content-Encoding: Chunked
+- Revise security considerations from RFC 8075
+
+Need for reviews – Previously promised: Christian, Carsten
+
+### Transport indication - Christian (15 minutes)
+
+* https://datatracker.ietf.org/doc/draft-amsuess-core-transport-indication/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-coap-protocol-indication-00.pdf
+
+(p2) Recap: considering different schemes for CoAP and its transport, enable the indication of those through proxing.
+
+(p3) Using rel=has-proxy building a relation between "/" as anchor and a URI with diferent scheme than "coap" indicating the alternative transport. Still relies on including a proxy-scheme option with value "coap" in a request, with the server going to act as proxy for itself.
+
+(p4) To avoid recurring overhead due to the above, proposed also rel=has-unique-proxy , so that the server understands that the request is intended to the canonical URI. Then the client can spare repeating the proxy-scheme option in all requests.
+
+(p5) The proxy should really use all the information circulating with this to well serve cached responses and avoid duplicate cache entries.
+
+(p6) Real proxies can also use this to announce being cross-proxies. Security considerations are important since security cannot be downgraded.
+
+(p8) Elaborating on security consideration, following discussions from IETF 111. The server still needs to authenticate what the request really tries to access, and this may not be trivial for a proxy.
+
+MT: Anyone really interested in doing the DNS part in slide 10? Hearing none, put on hold. If revised, indeed needed one more author.
+
+MT: Would be good to have reviews, will do one myself in November.
+ED: Not necessarily volunteering, but had some thoughts. Describing typical use cases, eg. discovery over nonsecure CoAP but server can indicate that they can only be reached over something else.
+CB via chat: volunteering after YANG-CBOR/CORECONF is done.
+MT: Great if comments and reviews could come in November / December.
+
+### AOB (5 minutes)
+
+* Next interim meetings
+
+MT: Would be good to have a single December meeting, on December 8th at 15:00 UTC (same local time as today). Partial overlap with TAPS interim, but it seems nobody has conflict, so we keep it for 90 minutes.
+
+MT: Main series to resume in January. Synchronized with CBOR that continues to take even weeks, with CoRE taking odd weeks. We start the new series on January 19th, every other Wednesday, at 15:00 UTC for 90 minutes.
+
+CB: We'll have a T2TRG meeting (not very official) tomorrow on security in context of W3C WoT, if interested send me private mail to get access. Around 1300-1500 UTC.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
