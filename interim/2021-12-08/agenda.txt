@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2021-12-08 - 15:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CORECONF - Carsten, Michael
+    * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* HREF - Carsten
+    * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+    
+* KUDOS - Rikard
+    * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+    
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2021-core-14/session/core
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-14-core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=d0d8d377-c8f9-46ef-8708-1f13d069af9f

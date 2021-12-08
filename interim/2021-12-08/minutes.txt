@@ -1,0 +1,142 @@
+# CoRE Virtual interim - 2021-12-08 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2021-core-14/session/core
+Webex: https://ietf.webex.com/ietf/j.php?MTID=mdd42b7c13deac94af584c4f5a7bf0ffa
+~~Meetecho: https://meetings.conf.meetecho.com/interim/?short=d0d8d377-c8f9-46ef-8708-1f13d069af9f~~
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2021-core-14-core
+
+Minute takers: Marco Tiloca, Christian Amsüss
+Jabber scribes: Marco Tiloca
+
+## List of Attendees
+
+* Marco Tiloca
+* Carsten Bormann
+* Christian Amsüss
+* Francesca Palombini
+* Klaus Hartke
+* Michael J. Koster
+* Rikard Höglund
+* Sean Turner
+* Michael Richardson
+* Thomas Fossati
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Try to be nice.
+
+### Jabber & Minutes / Agenda bashing
+
+### CORECONF - Carsten, Michael
+
+https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-14/materials/slides-interim-2021-core-14-sessa-coreconf-cri-00.pdf
+
+CB: Working on the IESG comments for yang-cbor and -sid, prioritizing DISCUSS points. One remaining DISCUSS for yang-cbor, 2 remaining for -sid addressed in v -18. Future v -19 will address COMMENT points. (Detailed progress/status on p4)
+FP: Ben had also COMMENT points. Are they addressed?
+CB: I think most of them, some may need additional discussions.
+FP: We need their replies, I'll do the nagging.
+CB: Also, need to ensure everyone can get a SID.
+
+CB: Almost addressed a DISCUSS from Rob Wilton, still working on some points, plan to finish a big one this week. Then reply to Rob. Ben cleared his DISCUSS and we'll reply to his comments. (Detailed progress/status on p5)
+
+CB: Lot is happening through the design team meetings, involving both CoRE and YANG people. One more meeting scheduled in December. Also got better ideas on what to do later for core-yang-library and core-comi.
+
+CB: Summary of latest technical updates (p7)
+FP: New version planned?
+CB: -18 isn't out yet; many are in editor's version, and when -18 is out then the comments out there now will also be addressed, except for a few comments that'll need -19s in both documents from responding to the comments.
+FP: But comments there right now will be addressed in -18?
+CB: Y...y..yes, but look at comment of p4 where we're really not sure. We'll have to send him an answer, nothing to nag him about yet.
+
+### HREF - Carsten
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-14/materials/slides-interim-2021-core-14-sessa-coreconf-cri-00.pdf
+
+CB: (p8) Had extensive discussion at IETF112. Some open issues from there we haven't really addressed yet, but these are about best ways to use CRIs, not about the definition of CRIs.
+
+CB: (p9) technical updates on CDDL features and percent-encoded text. Upcoming v -09 should be an implementation draft incorporating those changes. Also have to update test vectors with a PR to merge.
+
+### KUDOS - Rikard
+
+https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-14/materials/slides-interim-2021-core-14-sessa-key-update-for-oscore-kudos-00.pdf
+
+RH: document in two parts: limits of key usage and key update.
+RH: focus on key update procedure today. Based on extending the OSCORE option, to exchange parts of a nonce in a new 'id detail' field. The nonce is used to derive a new OSCORE Security Context.
+RH: three open points: observations surviving a key update or not; key update possibly without perfect forward secrecy (PFS); possible (separate) update of OSCORE identifiers.
+
+RH: on keeping observations, if nothing special is done, responses can cryptographically match different requests (since OSCORE partial IVs are reset after rekeying). Always and simply terminating observations after rekeying for now, but there are two possible approaches to avoid it.
+RH: (p6) one approach is "long-jumping", i.e. after rekeying, set the Sender Sequence Number (SSN) to be higher than the highest PIV of any ongoing observation. Simple but with some communication performance downside.
+RH: (p7) another approach is "skipping", i.e. keep a list of already taken SSNs and don't use them. Better communication performance, though check to be done for every request.
+CA: you need to take into account any observation that the server has not yet acknowledged as terminated, not just the current ones.
+CB: the client can still terminate the observation, so there would be no waste of SSNs.
+RH: Right.
+CB: So you can have a choice for the device between terminating and long-jumping.
+MT: But do you prefer "long-jumping" over "skipping", right?
+CB: Yes, "skipping" sounds onerous to do for each and every request.
+CB: Rekeying is disruptive anyway, we need to understand what this means for an application, especially one thinking real-time. Describe how desctructive it is.
+RH: And what should not be done while rekeying.
+CB: Yes. The above is useful to reduce disruptiveness, specifically as to observations.
+CA (on the disruption not only to observations while this runs): Gotta go over the document again, but I *think* we can make it continuously usable. (So that at every point in time the device can send a message, even if it's using the intermediary context)
+RH: Right, it's most about understanding which OSCORE context to use to protect messages in the meanwhile.
+
+RH: (p8) on PFS, the original design and main mode is about preserving PFS. This requires that devices are able to store in persistent storage, which may not be possible. For such devices, we define a possible alternative mode without PFS.
+RH: (p9) this affects also the best key update a device can go for after rebooting.
+RH: (p10) actual working of the no-PFS mode, setting one more bit to 1 in the OSCORE option. The peers will always start from the "old context" built from bootstrap Secret/Salt, so always the same at every reboot, so no PFS.
+RH: (p11) the original way with PFS is still valid and to be normally used; the no-PFS mode is for when at least one peer can't do better; in a hybrid pair, it's possible to start in PFS mode and "agree to shift" to no-PFS mode to accommodate the less capable device.
+RH: Overall good to do and to do this way?
+CB: Is this exposed to a downgrade attack?
+RH: It should not be possible the way the no-PFS mode is defined now.
+CA: The OSCORE option is not protected though.
+RH: True, but the sender peer wishes to genuinely downgrade anyway and proves that. An attacker might still flip the bit to force an upgrade to PFS mode (which would not work anyway since at least one device is not capable to).
+RH: Content to still add to the draft.
+
+RH (p12): procedure to update OSCORE Sender/Recipient ID. It can be used stand-alone or embedded in a KUDOS execution. Not to use right after a reboot to avoid reuse of AEAD nonce. An exception is when OSCORE Appendix B.1 is used, and thus the node can restart from a safe SSN.
+CA: Might be easier to phrase in terms of "when having lost state", and being explicit about which state is lost (here it's probably the set of Sender IDs ever used on this Master Secret).
+RH (p13): defined new CoAP option to transport the new OSCORE Recipient ID of the sender node. It's class E for OSCORE. Proposed number 24, elective to allow the recipient to refuse updating the OSCORE IDs. Good to be an elective option? Anything better than an option?
+RH (p14): example when run stand-alone (not in KUDOS). An important point is when it is earliest safe to delete the old IDs and the Security Context using those, to avoid running into an unrecoverable deadlock.
+RH (p15): next steps on both limits of key usage and KUDOS refinements (also based on GH issues and point discussed today). Can KUDOS messages also transport data payload? Also plan to implement.
+
+### AOB
+
+MT: Biweekly interim meetings will resume on Wednesday, January 19th, at 15:00 UTC.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
