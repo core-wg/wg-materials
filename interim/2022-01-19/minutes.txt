@@ -1,0 +1,206 @@
+# CoRE Virtual interim - 2022-01-19 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-01/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=ae5982a9-e70c-4936-b066-487e96dc93ab
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-01-core
+
+Minute takers: Marco Tiloca, Christian Amsüss, Rikard Höglund
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+### Jabber & Minutes / Agenda bashing
+
+MT does introductions and goes through agenda.
+
+### CORECONF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-01/materials/slides-interim-2022-core-01-sessa-coreconf-cri-00.pdf
+
+CB presenting.
+
+CB: no DISCUSS left on core-yang-cbor, COMMENTs remain.
+CB: DISCUSS on core-sid not done yet. Details: (p4) SIDs need to reflect evolution of underlying schema definitions (in this case: YANG definitions). Back and forth between text improvement and comment sharpening. How does mapping evolve? Current approach: SID-to-semantics (A sufficient criterion indicating semantics-change is when CBOR structure changes.) Alternative: SIDs map to item names, though you need a reason.
+CB: (p6) isolating implementations from name changes would help, also considering changing names of published modules. If that can happen to YANG files in non-backward-compatible ways, it can happen also to SID files.
+CB: (p7) Rob Wilton suggested a possible way forward based on always accepting the originally published SID value.
+FP: Mail from Rob Wilton on the CoRE mailing list: https://mailarchive.ietf.org/arch/msg/core/BAmLlafGdVmySldEWdu3Wkmjp6U/
+CB: We should not make translating proxies between CoREconf and RESTconf impossibly hard to write.
+
+CA: If we stick to SID-Semantics, wouldn't we have two names as a good thing for proxies?
+CB: On the way back it'd have to choose.
+CA: Right, and same if there was a disagreement on the names' meaning.
+CB: Yes -- but the difference is that SID-to-name mapping is an afterthought (it's not necessarily curated carefully to keep these possible), whereas changes would be considered carefully. Module evolver will try to keep damage at minimum, but may not be aware of proxy issues.
+CA: That's reasonable.
+CB: It's hard because there are not many implementations out there; we have to forecast a little.
+
+ED: Is there also a problem with different versions of a module? So if the module gets a SID number, and another version pops up, is it an issue that it needs another SID number?
+CB: Would have to look that up. Still, contents of the module could remain stable.
+ED: As I have used SIDs there were base numbers, and relative numbers for the elements, and module number is kind of the root number / first number. Would a versioned one use a different root number?
+CB: You normally don't see module numbers in data node items; top-level is usually container or other top-level item (not identifying module, but top-level item). That item's namespace indicates a family of modules. But the compression completely be abstracted away, as it's independent, it's schema-free.
+
+CB: Will need to continue discussing this in a CORECONF design team meeting; please provide also input on the mailing list.
+
+## HREF & CoRAL
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-01/materials/slides-interim-2022-core-01-sessa-coreconf-cri-00.pdf
+
+CB: covering HREF (from p12 of the previous and same slideset)
+CB: (p13) Submitted -09 based on discussions at the December interim; added CDDL features; percent-encoded text is byte strings; addressed no-authority corner cases.
+CB: (p14) with authority present, distinguished between no path and path with one empty element (both possible to exist and be represented). The two cases are equivalent for CoAP and HTTP, but only within these schemes. At structure level, they're different, and URI encoding should not exercise the equivalence. In CoAP implementations, it would be done at CRI-to-CoAP conversion following RFC 7252 rules that already talk about that.
+CB: Why and why now? Good to cover this also to make CRIs useful to other schemes too. Added also a related appendix with weird examples (to be completed).
+CB: (p15) Next is ensuring implementations are correct (also thoughout turning bugs into features:-). We already have PR #12 with test vectors.
+
+Current CoRAL items (More "pointers to open-for-input items" than discussion-for-today, looking at the rest of the agenda):
+* https://github.com/core-wg/coral/issues/3 -- support both open and closed world assumptions, but recommend open models, anticipating that some tooling may require them (Say "limited-time-feeding for gremlins, allowed-time before-midnight" rather than "feeding for gremlins, excluded-time after-midnight")
+
+```
+[2, gr:feeding, null, [
+    [2, coreapp:target, cri'/feed-gremlins'],
+    [2, gr:deny-time, "after midnight"]
+]
+```
+
+vs
+
+```
+[2, gr:limited-feeding, null, [
+    [2, coreapp:target, cri'/feed-gremlins'],
+    [2, gr:allow-time, "before midnight"]
+]
+```
+
+CA: CRIs very much thought also with CoRAL in mind at the design team meetings. Feedback is welcome on the issue.
+
+* https://github.com/core-wg/coral/issues/21 -- security model; not about reinventing the wheel, but about finding where this ties in to ACE or OAuth, and how this is not just same-origin-policy all over again (because the entity driving the agent can inform the agent about an operation's security requirement, which a browser's mouse click can't do).
+
+CA: This discussion has very recently started, we have to elaborate more, input are welcome. Not planned to develop a whole security model, but at least good hooks to existing means like ACE.
+CB: Anecdote on why this is good for CoRE: infosec class. Had pentesting assignment, people ran local copies of some university system. Student found problem, sent mail with proof-of-concept URI to admin. Admin knew about proof-of-concept URI, so student did fine. But admin forwarded that, other admin didn't know why it's there, and thought they should click on it. So one admin tricked other admin to execute PoC; unhappiness ensued. Not knowing why something should be followed can be dangerous. Have to avoid that in CoRAL and any other hypermedia system.
+
+## Group communication for CoAP
+* https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-01/materials/slides-interim-2022-core-01-sessa-group-communication-for-coap-00.pdf
+
+ED presenting.
+
+ED: (p2) especially working on examples requested by Jaime and related to two open issues #28 #29. There is an open PR #32.
+
+ED: (p3-) one class of examples is about way of encoding names of application groups in CoAP requests. Recommended to use the URI path. Showing selected examples.
+CA: Strange case when using the CoAP request but not in the group URI, through the Uri-Host option.
+ED: When the message is ready, you may add a Uri-Host option as last thing providing a custom value.
+CA: That's in fact the group URI, just represented in a different way, possibly just achieved through a different API.
+ED: There should be more difference than that, it's kind of misuing Uri-Host, not as related to a destination address, but with a custom value. Since that can be perceived as a misuse, the alternative also not relying on the group URI is to entirely go for a custom application-specific COAP option.
+CA (via chat): I don't think it's abuse of the option, but more putting meaning into an implementation detail that may be there on POSIX systems but is more of an artifact (but let's take that offline). (elaborating for minutes only: Whether you sendto("hostname", ...) or sendto(getaddrinfo("hostname", ...) has no effect on the wire; the only distinct options are to send to an IP address or to send with a Uri-Host)
+
+ED: (p6-) examples for CoAP/application group discovery from servers. Possible to start from a specific CoAP group or application group. Possible to target any application group.
+
+ED: (p8) added also a new appendix with examples with message exchanges (plain, w/ observe, w/ blockwise).
+
+ED: (p9) next will be about merging the PR, double-checking all is fine, submit v-06, then WGLC.
+
+## Group OSCORE
+* https://datatracker.ietf.org/doc/draft-ietf-core-oscore-groupcomm/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-01/materials/slides-interim-2022-core-01-sessa-group-oscore-secure-group-communication-for-coap-00.pdf
+
+MT presenting.
+(p3) Proposal: Keep as is, but explain trade-off between storage and complexity. Good way forward?
+RH: I think the current proposal makes sense (storing the full credentials). Otherwise you need to define, for all existing credential types, what metadata to store (and how to encode it). And not only that, but also define this for any future credential types.
+CB: What's the difference between "relevant subset" in size? Some numbers?
+MT: Minimally it's Public Key plus signature algorithms, and encoding of the key. All that applies to EDHOC likewise.
+CB: So <100Byte.
+ED: X.509 credentials are about 1KiB for constrained certificates; sometimes just the Public Key was sufficient (e.g., in BRSKI). All was fine when clearly communicated -- needs for precise definitions of which bytes go in where.
+GS: If storage is tight, you choose a credential type that contains precisely the relevant subset. Maybe entire X509 is not the right credential for these cases.
+ED: Some will need to store the entire credential. For groupcomm you may want to use as small as possible a data item. Still needs to be defined for every type of credential.
+MT: Exact credential type is decided by the Group Manager admininstrator when creating/configuring the group, and then practically enforced by the Group Manager; devices as group members don't need to concern themselves with them.
+(...)
+MT: It's overall a trade-off between storage and complexity/feasibility. Simpler for devices to store a whole credential verbatim and use it as-is for the processes involving it.
+MT summarizing for p3: Direction appears to be good enough (keep approach and clarify a lot)
+
+MT continuing on p4. How much to say in text (regarding the "birth GID" concept)? Do we need more detailed explanation, possibly as part of security considerations?
+ED: Complex and corner case. Isn't it also possible to not use a Birth GID, but rather just evict all group members and re-join them?
+CB: Don't add something unlikely to happen(?)
+CA: You can split the GID into subsections.
+ED: So the complexity is only on the GM side?
+CA: Yes.
+ED: For a reader, this sounds complex, arbitrary and scary; may not want to have that in a draft.
+MT: We should add more context, in the relevant section, and possibly as dedicated appendix. One point from Esko is that a GM can enforce a policy to never recycle GIDs, then when that happens the group is simply shut down.
+ED: Yes, or completely re-established.
+MT: That was the original case, we introduced this to do something better. But it can be optional functionality.
+ED: Yes, it can be something the GM optionally does.
+MT: A GM using this mechanism can use this to safely let observations continue across rekeying occurrences. Group members don't have to bother.
+GS (in chat): +1 to make the mechanism optional
+
+MT continuing on p5. Proposal to change title of section 10 to "Implementation compliance".
+ED: Sounds good
+
+MT continuing on p6. Normative statement on informative references.
+MT: Options are non-normative statement, or normative "do it using any X such as"
+CB: Can also make factual statement. "By using X you avoid problems you'd run into otherwise".
+ED: Can be a third option for this.
+MT: Sounds good.
+GS: I have a problem with proposal 2 (normative "do it using any X such as"). If we want to recommend something we want to make a precise reference. Either we shouldn't have a normative recommendation or we should point to a specific reference.
+MT: OK with CB's proposal?
+GS: Not sure what that'd be in this concrete case of incomplete document; slightly in favor of proposal 1.
+CB: The problem is that the IESG can change this back. This is about reducing likelyhood of having normative references keeping this in the RFC editor queue.
+GS: So how about going with CB's proposal, but formulating the problem rather than the properties obtained?
+MT: I think that is Carsten's proposal.
+CB: Göran has a point, any factual statement may change, it's better to say technologies are being developed and reference that document without saying what it does. Just that technologies are being developed to do this.
+MT: And that "this" is the class of problems addressed.
+GS & CB: yes
+ED: Sounds good.
+
+MT continuing on p7. Also about the type of reference. Proposal to keep it informative and relax text referring to the draft.
+ED: What is the reason to keep it informative?
+MT: In terms of process it is aligned to this document. It may be an overkill to have as normative reference.
+
+MT continuing on p8. About reference type and section for draft-ietf-core-echo-request-tag. Proposal to make it normative and to move Appendix E to the body. Objections?
+ED: Sounds good.
+
+MT: Thanks for the early feedback, we will be working on these. I posted a reply to Esko's review on the mailing list. Hope to have version -14 submitted before the next IETF meeting.
+
+### AOB
+
+None.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch

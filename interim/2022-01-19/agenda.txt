@@ -1,0 +1,36 @@
+CoRE Virtual interim - 2022-01-19 - 15:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CORECONF
+    * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* HREF & CoRAL
+    * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+    
+* Group communication for CoAP
+    * https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+
+* Group OSCORE
+    * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-groupcomm/
+    
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-01/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=ae5982a9-e70c-4936-b066-487e96dc93ab
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-01-core
+
