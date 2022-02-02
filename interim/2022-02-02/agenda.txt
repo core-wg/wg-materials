@@ -1,0 +1,34 @@
+CoRE Virtual interim - 2022-02-02 - 15:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CORECONF
+    * https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* HREF & CoRAL
+    * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+    * https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+* CoAP Attacks
+    * https://datatracker.ietf.org/doc/draft-mattsson-core-coap-attacks/
+    * Ready for WG Adoption Call?
+    
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-02/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=2691d628-2315-480d-992e-8275e383e820
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-02-core
+

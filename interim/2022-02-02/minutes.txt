@@ -1,0 +1,159 @@
+# CoRE Virtual interim - 2022-02-02 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-02/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=2691d628-2315-480d-992e-8275e383e820
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-02-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+MT doing introductions.
+
+### Jabber & Minutes / Agenda bashing
+
+## CORECONF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+We need progress on the Yang-SID/Yang-name relationship:
+<https://mailarchive.ietf.org/arch/msg/core/QPzjacnl9DUTfIYUWXoKKUcHxks>
+
+CB giving an update (no slides).
+
+CB: Ongoing discussion before DISCUSS can be cleared. Discussion on relation between YANG SIDs and names. Rob Wilton proposed simplification; would be losing some functionality, not much, but it may make job of intermediates a lot easier. If it were just my draft, I'd go ahead with this -- but it has more contributors and is a WG document; please look at it and state opinions (maybe now).
+(silence in the room)
+CB: No single good answer here, but I think we're very close to finishing. If there's no strong opposition in next couple of days, I will apply these changes. Chairs, want to delay for more WG participation?
+FP via chat: How big will the changes be?
+CB: w/rt text, will just remove some and replace with simple rule. W/rt long-term operation of the protocol, it changes things only when YANG modules actually change themselves, and that's hard to predict, especially whether the change is material in the first place.
+FP (on chat): I'm wondering about necessity for LC re-run
+CB: Nothing changes on the wire, but how things are used does change. Sorry, that's no clear-cut answer.
+FP: Will have to look at diff to decide on LC rerun necessity. Worried about 2 more weeks. Don't think taking it back to telechat is necessary. Approaching March...
+
+MT: That's about SID. YANG-CBOR is done, right?
+CB: Few last-minute runs through documents need to be done, would prefer to combine these when big issues done.
+
+## HREF & CoRAL
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+CB: Ongoing work on implementation, cleaning up test vectors, then some to be selected for inclusion in the document. Timeline: next two weeks.
+
+CA (on chat): Nothing new on CoRAL.
+
+## CoAP Attacks
+
+* https://datatracker.ietf.org/doc/draft-mattsson-core-coap-attacks/
+* Ready for WG Adoption Call?
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-02/materials/slides-interim-2022-core-02-sessa-coap-attacks-draft-mattsson-core-coap-attacks-02-00.pdf
+
+JPM presenting.
+
+JPM: (p2) summarizing scope of the document, both attacks against CoAP and using CoAP. Reference to echo-request-tag as mitigation.
+
+JPM: recent changes in -02 (addressing received comments; p3).
+
+JPM: ERT now only waiting for GS's acknowledgement. BCP was asked for, question on timeline (soon? after T2TRG research? Prefer soon, attacks do happen now). Attacks would still be informational-only and aiming to be published soon.
+
+CB: Important work; we were sidetracked by ERT and forgot to really describe how to use things the best way against a class of attacks. Disagreement on danger of some attacks and which should be mitigated. Will have consensus on "something should change", but exceeding that opinion will differ. My take: We should understand the space before doing next set of recommendations. To do it right, we need big picture. May also be good to split "attacks using CoAP" from "attacks on CoAP". Document that provides information (data) on what is going on in DoS/amplification will be needed. Discussion should include cost of mitigations (e.g., round trips of Echo). And should look at mitigations w/rt their effect (because attackers could evade them). Requires lot of discussion and actual research input, thus see SecCoRE in T2TRG. Then we have data for authoritative BCP statement on what should be done.
+
+JPM: Also consider cost of not doing mitigations, as attacks come now. At least we need to make sure it's not getting worse. Attacks could be published earlier.
+
+MT: Also think should have informational now and more research into BCP. Also as sequence of steps.
+
+CB: Could write state-of-union document in 2 steps, could start with "this is happening now" and then expand with "here is more data and exact reason". Then again, putting an RFC number on document doesn't make it significantly more valuable.
+JPM: RFC number shows IETF takes it seriously. Option for splitting is theoretical attacks now, and removing kinds-of-implementations and which-countries for a later T2TRG document.
+
+MT summarizing: So coap-attacks can mention that CoAP can be used for attacks, but details in future document?
+JPM: Diagrams in current doc should be published soon.
+CB: Current does "attacks on CoAP" and "with CoAP", which are we discussing?
+JPM: Both, as companion to ERT. I think IETF should publish that soon, and be stricter in future RFCs even w/o BCP in place. We have to document the current understanding that we have, and that soft requirements are not enough.
+CB: But that's where different views come in, and we should focus on part where we have consensus. No point in publishing a controversial position quickly.
+JPM: What's controversial if guidance on mitigation is removed?
+CB: What we describe is how people have not implemented the protocol correctly, and what consequences were.
+JPM: Not sure it's clear they did something wrong.
+CB: That's where differ in our assessments.
+
+MT: CB, would you be fine with publishing attacks against CoAP?
+CB: We should document what happened when people didn't heed what documents say. Not a "oh we messed this up", but "there are consequences for actions of implementers, here they are".
+MT: Is something missing for that?
+CB: See my PR.
+CB: Should split attacks-on-coap and attacks-with-coap. Nothing more in common than being triggered by ERT. And then be quick on DoS side.
+JPM: Fine with separating.
+
+CB: Should adopt the one about DoS first; open: where?
+JPM: Split first before adoption calls.
+CB: Fine with adopting both parts, just wondering where it should be.
+(Summary: Not removing anything, just splitting.)
+
+MT: Split in near future, then adoption of the first part about attacks-on-coap?
+JPM: Yes.
+CB: Should be reasonably easy, it's along section 2 and 3 boundary.
+CA (on chat): Split sounds good.
+
+JPM: Don't care so much about who adopts it, just that it doesn't take years. It's also related to other documents that have to start using a stronger language against these attacks, e.g., groupcomm-bis and conditional-attributes.
+MT: BTW, groupcom-bis has now improved text based on this already.
+JPM: Good, I'll review.
+
+ST: Interested in publication. BCP can't be in RG, has to be in WG, like anything above informational.
+JPM: BCP would be new document, not either of the two new parts.
+CB: agree
+
+GS: About the timeline, CB was requesting research activity -- do you know people who'd be interested in doing more paper-like research?
+CB: People have been reporting on blogs etc; not sure if research available already. T2TRG may have chance of pulling them in.
+
+MT: Next step is doing split, then asking adoption call for the part on attacks-on-coap.
+
+### AOB
+
+* Next interim meetings
+
+MT: 2 left before IETF 113, I'll have to skip first of them on Feb 16. JJ can't fill in either. Cancel, or reschedule for week after at 15:00 UTC, e.g., on Tuesday 22nd or Thursday 24th.
+
+Conclusion after some feedback: 16th moving to 24th, 15:00 UTC.
+
+FP: Will CoRE request 2 sessions for IETF 113?
+MT: One session of 2 hours, we'll manage.
+FP: In ART many WGs indicated they won't be meeting because interims go so well. Still IESG careful to allow > 1 meeting.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
