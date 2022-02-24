@@ -1,0 +1,143 @@
+# CoRE Virtual interim - 2022-02-24 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-03/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=dca7677a-a7e4-4f63-812a-19b9a041c958
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-03-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+MT doing introductions.
+
+### Jabber & Minutes / Agenda bashing
+
+## CORECONF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+We need progress on the Yang-SID/Yang-name relationship:
+<https://mailarchive.ietf.org/arch/msg/core/QPzjacnl9DUTfIYUWXoKKUcHxks>
+
+MT: Not much on the list ... anything in the background?
+CB: Had meeting with authors, ADs and YANG people. Discussed yang-catalog.org support for SID files. Halfway, decided that it's necessary to write that up in core-sid document. Substantial chunk. Will need another last call, maybe just IETF last call.
+CB: Told Rob Wilton that normative reference from yang-cbor to core-sid is a mistake ... not immediately rejected, needs discussion with him, maybe yang-cbor can get through. We will have another yang-sid update, maybe even telechat. But that will allow us to get information that was previously negotiated with IANA who doesn't have the budget to do it, and yang-catalog.org does have it.
+
+## HREF & CoRAL
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+MT: Did see some activity around HREF on Github
+CB: Still adjusting implementations, it takes long because it's hard to find time.
+MT: Revision before cut-off that can be ready for WGLC?
+CB: Aspirational goal.
+
+CA: No updates on CoRAL.
+
+## CoAP Attacks
+
+* https://datatracker.ietf.org/doc/draft-mattsson-core-coap-attacks/
+* Ready for WG Adoption Call?
+
+MT: Discussion at previous interim emphasizing that it is important but also indicating a split to happen (what needs to happen now in CoRE vs. research PoV for now).
+MT: Now we have a document "attacks on CoAP" in here for which there seems to be consensus to work on here; "attacks using CoAP" was moved to T2TRG as a different document.
+MT: Any objection to adopt as informational document in CoRE?
+(heard none)
+MT: We will start a 2-week call for WG adoption on the list for this informational document.
+
+(CB: was distracted, but WGA has my full support!)
+
+## Conditional Attributes
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-03/materials/slides-interim-2022-core-03-sessa-conditional-attributes-for-constrained-restful-environments-00.pdf
+
+BS submitted new version; presenting slides.
+BS: (note: has been split out from the dynlink document)
+BS: band now boolean (presence-only)
+CB: Compare integer values, what if there is a non-integer string? Empty value is not defined very well. We're using "attribute" that is not really well defined in the first place. When we've defined attribute ("query parameter used in a particular way"), we can make a better statement. Defining attributes (based on query parameters) can also help other documents that use query parameters.
+
+BS: Proposed text now "SHOULD use Max-Age", let's go with that, it's in -02 now.
+
+BS (p5): Do we need a registry with these names?
+CA: Makes sense to define general use attributes/parameters? (Think "don't usurp application namespace", not sure of relevant RFC number)
+CA: But yeah, if it's opt-in for interfaces, it'd be OK.
+CB: Had conflict with lt previously
+
+CA: If going to be general "attributes in interfaces CoRE defines", it might update RD and take over its registry. Not sure if it is a good idea, but we should consider.
+BS: Taking this offline.
+
+MT: Good to submit an updated version including what was discussed today and present it at IETF 113 (including summary from today). Then it should be ready to move on to WGLC.
+BS: Will do.
+
+## Transport Indication
+
+* https://datatracker.ietf.org/doc/draft-amsuess-core-transport-indication/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2021-core-13/materials/slides-interim-2021-core-13-sessa-coap-protocol-indication-00
+
+CA presenting (slides from previous interim meeting to recap)
+
+CA: Received reviews from Klaus and Marco; working on those
+CA: Apparent aliasing on the wire, but client and server know what is really going on - To be clarified
+CB: Can we ensure that the aliasing-related statement is originated from the server?
+CA: Depends on the application-specific security model. If the application wants absolute ensurance of no traffic redirection, there is need for special care. Otherwise, trusting secure communication with OSCORE would suffice.
+CB: Would like to have section in seccons for that. 
+CA: Will do.
+CB: "Web address translator" as new term to introduce?
+CA: Kind of feel it's not good, maybe ...
+
+CA: Also have to clarify the use of "hosts". Happy to hear about possible easier approaches to use.
+
+CA: How do we move on from here?
+
+MT: Important work, I personally believe it would be good to happen in the WG. Good anyway to have a revised version for IETF 113 addressing the reviews and the points from today.
+MT: What do people here think? Good approach overall? Objections?
+CB: Promised to solve the problem 5 years ago; this is a possible approach and so far the most promising one. I support this.
+MT: Looking forward to a revised version.
+
+### AOB
+
+MT: We meet again next week on 2022-03-02 15:00 UTC (typical time unlike today); that's the last interim before IETF 113 where we have a 2-hour session.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
