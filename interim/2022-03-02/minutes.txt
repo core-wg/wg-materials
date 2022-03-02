@@ -1,0 +1,151 @@
+# CoRE Virtual interim - 2022-03-02 - 15:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-04/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=68582070-4342-4d01-a2d9-fc79a2e86173
+Jabber: core@jabber.ietf.org
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-04-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+### Jabber & Minutes / Agenda bashing
+
+## CORECONF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-cbor/
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+We need progress on the Yang-SID/Yang-name relationship:
+<https://mailarchive.ietf.org/arch/msg/core/QPzjacnl9DUTfIYUWXoKKUcHxks>
+
+CB: No time to really work on it since last keek; have to process new ideas to integrate into the -sid document. Should consider to liberate -yang-cbor to have at least that processed. Rob Wilton has still to agree.
+CB: Have to process IESG comments to -yang-cbor and resubmit.
+
+FP: I missed the last meeting. Let me know when/if I can check with Rob to speed up the process.
+CB: We may need a nudge to get -yang-cbor free from the normative reference. Regardless, negotiation to be done.
+
+CB: Rob might be able to use some information on where there are things that could really use an RFC on all this soon.
+
+FP: Will also look at the linked mail and last changes. Then best time is when the new version is out.
+
+## HREF & CoRAL
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+* https://datatracker.ietf.org/doc/draft-ietf-core-coral/
+
+CB: On href, almost have agreement on test vectors. Hope to have that done very very soon, so there are stable test vectors within days, in next submitted version of document.
+
+CA: Discussing directions related to CBOR offlist; many links to share if interested.
+CA: Anyone interested in corner cases of i18n, I have a long reading list for you ;-)
+
+## Constrained Application Protocol (CoAP) Performance Measurement Option
+
+* https://datatracker.ietf.org/doc/draft-fz-core-coap-pm/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-04/materials/slides-interim-2022-core-04-sessa-coap-performance-measurement-option-draft-fz-core-coap-pm-01-00.pdf
+
+Giuseppe Fioccola presenting.
+
+GF: Goal to measure things like RTT and packet loss. Requiring minimal cooperation from endpoints; reading MIDs etc would be too taxing for constrained devices.
+GF: Reusing techniques from RFC 9000 (QUIC) and RFC 9321 (Spin bit and sQuare bit); proposed new CoAP option to do the measurements.
+
+GF (p5): Events as an add-on.
+
+GF: Probes can observe end-to-end behavior.
+GF: Other case is proxies as observers.
+GF: Can have different servers, so will need to check other fields when bundled.
+
+CB: CoAP-over-DTLS is common. Probes won't see anything. Any attempt to get something like this into DTLS?
+GF: Not yet, but can be considered.
+CB: For OSCORE it's easy, can make it outer. Something to consider.
+
+CB: more about ecosystem but draft itself: In which way do peers on kind of configuration they are using here? How do they known "64"?
+GF: For now, control protocol not defiend; 64 is configured. One method is operational for QUIC, but for now we assume static config on the node.
+CB: Control part will need to be extremely extensible; might be good to not tie bits-on-wire to how configuration is exchanged. Even with static configuration, you'll need to exchange configuration between experimenters, so there needs to be something.
+GF: Yes. For some applications we limit it to a single control domain.
+CB: That also depends on whether configuration is a "control" part, or whether parties just exchange what they are willing to do (so they don't need to be in the same domain)
+
+CB: Intended status?
+GF: In CoAP or in IPPM?
+GF: In IPPM this is informational. Telcos have deployments for QUIC. So there we go informational for the methodology by describing transport-agnostic parts.
+CB: Experimental?
+GF: Experiment is mainly done in IPPM. Hackathon activities are also ongoing/upcoming. I can provide pointers to related resources.
+
+CA : Which devices are constrained here, proxies, probes, end points?
+GF: Normal ways are too consuming for constrained devices (at least for timestamp handling); this way is more friendly to those. Same motivation as in QUIC.
+
+CA: Which answers would this provide to which node (especially thinking of origin clients)?
+GF: On client, you can measure same things you measure now but w/ less resources. RTT: You can raise a bit, wait for packet to go back and measure period. Same for packet loss. But main advantage is not on client side, but on-path measurement. When you don't manage the client.
+CA: Thus the focus is on intermediaries doing the measurements, right?
+GF: The added value is simplifying already possible end-to-end measurements but enabling them for intermediaries as well.
+CA: Not sure to understand the improvement for the end-to-end case.
+GF: Maybe should do tests to demonstrate real improvement on endpoints; there should be some little.
+
+CA: so on-path probe mutually exclusive w/ upstream and downstream proxies? How would you know? How would you know what the proxyies split server-side things into, and whether there are multiple clients?
+CA: So you're assuming the flow ID is transported by the proxy?
+GF: Proxies in a chain may cooperate on the use of an option bit.
+CA: Any different from just doing the measurement at the proxy (or on the probe supported by the proxy)? You may look at the Uri-Host option, but that might be inaccurate.
+
+CA: If proxy collaborates, what is the point of the probe?
+GF: Still easier to take measures (based on experiments in the context of other protocols).
+CA: The methodology is sound; doubtful it is any better than having the probe at the proxy.
+GF: The probe can just be in the network.
+CA: If it all depends on too much cooperation from the proxy, it might be easier to just do the measurements on the proxy if there is one (and with a probe if there are no proxies).
+CA: Sure doesn't have to be in the proxy, but need to clarify how it works in the presence of collaborating or non collaborating proxies, again showing what convenience is left. Could be "works only when there are no proxies", "works with proxies provided the proxies collaborte by doing X and Y" or "will work with any CoAP proxy even if it doesn't know (or care about) this option"
+CA: Also good to evaluate if it is worth it; this would work but might be pretty tricky. If no good use case to justify this, just better to do this hop-by-hop. (I'm always for things working through proxies, but don't want you to waste time doing something just because someone here said it needs to be.)
+
+MT: Section 5 on application scenarios can be hard to follow. There are a lot of possible variations, based on proxy or no proxy, probe or no probe, OSCORE or not OSCORE. Possibly the use of one bit, or the other or both further contributes. Try to categorize the different possible setups, and for each to highlight what limitations you have for which entities in doing their measurements. Add examples in ASCII-art, maybe starting from the most important ones.
+
+MT: On the new PM option. It is defined as part of the cache key. Why? I would have expected the opposite.
+GF: Didn't consider this point.
+MT: May also talk about how it's supposed to be treated in OSCORE. When first looking at it, I assumed it was going to be treated as both inner and outer.
+
+MT: You mentioned resources on implementation, testing and hackathon activities. Please share pointer to those on the CoRE mailing list.
+
+
+### AOB
+
+MT: Next meeting at IETF 113 in Vienna; I will be there in person. CoRE meets on Friday 25.
+
+MT: Next series of interim meetings, resuming end of April in same cadence (alternating with CBOR as before). First interim meeting would be on April 27, which means having 6 interim meetings before IETF 114. Works for you?
+(no objections)
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
