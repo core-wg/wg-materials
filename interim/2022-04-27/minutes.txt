@@ -1,0 +1,198 @@
+# CoRE Virtual interim - 2022-04-27 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-05/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=079d3466-b1ef-437c-b8b5-cc947e87f70d
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-05-core
+
+Minute takers: Christian Amüss, Marco Tiloca (helping)
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+### Jabber & Minutes / Agenda bashing
+
+CB going through the agenda, MT joining 14:10.
+
+## CORECONF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+We need progress on the Yang-SID/Yang-name relationship:
+<https://mailarchive.ietf.org/arch/msg/core/QPzjacnl9DUTfIYUWXoKKUcHxks>
+
+CB: yang-cbor approved; core-sid up next. Two things left:
+* Some last minute changes in yang-cbor were too complicated for last minute (about strategy for SID space), but can be done here just as well.
+* Discussion with YANG catalog people on integration between theirs and SID processes; notes from that need to go into the document.
+
+MCR (answering "what do you need"<!-- Because we don't ask "What do you want?".-->): ANIMA (I-D.ietf-anima-constrained-voucher) document has allocation in core-sid already, so not depending on registry creation. Discussion was on how to do mutable allocation during bis transitions, not sure whether this needs changes for SID file format. It might require conversation in NetMod.
+
+CB: We can take that offline. Note that constrained-voucher will be slowed down by normative reference.
+MCR: Yes, but IESG review can progress, and RFC editor delay is OK.
+CB: Any other documents waiting for this?
+MCR: None known, but might show up in NetMod once this is through, as they like the compactness. Should have tech talk at IAB about this. Things like CoRIM(!) could profit from it.
+
+## Problem details
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+* https://github.com/core-wg/core-problem-details/pull/15
+
+MT: 3GPP has a dependency on problem-details and need to publish in mid-june a specification referring to it. But problem-details became CoRAL dependent in 2020. A new version submitted today is an attempt to take a direction that works on this timeline, living the work on a CoRAL-based version for later on.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-05/materials/slides-interim-2022-core-05-sessa-problem-details-3gpp-stopgap-01.pdf
+
+CB presenting. 
+
+CB (p2): HTTPBIS is working on this in 7807bis now; not possible to make use of this right now, but it's good input from their issue tracker.
+
+CB (p3): CoRAL needs some more time, 3GPP needs something now (see above).
+
+CB (p4): Things 7807bis authors found implementers get wrong (e.g., the type attribute).
+
+CB (p5): Similar to 7807bis, use registry -- in the (now also I-D) version, using CBOR tag (for which it is described how they are created).
+MCR: is example.com here a vendor or a consoritum?
+CB: Typically it's the code developer; might be either.
+MCR: Just trying to understand how many codes we need here.
+CB: One per problem. Might be thousands, ten thousands.
+
+CB (p6): bundled proposal: problem type signaled by a CBOR tag to be registered; standard (negative) details from a single, global namespace and to be registered; and custom per-problem-type (unsigned/tstr) details belonging to the type from the registered tag.
+
+CB (p7): unbundled proposal: no type, just defines details one needs, on a global namespace. Details work across "problem types" (which don't exist here). 4711 is arbitrary here.
+
+CB (p8, p9, p10): similar, but with internal structure. p8 with registered numbes, p9 with URIs. Supports composition.
+
+CB: Whether we go with bundled or unbundled is just a matter of editing. Can we get this done this week? (so it might be approved before mid-june before 3GPP release).
+
+MCR: They can only reference an RFC?
+AK: Needs to be feature stable, 3GPP understand RFC is optimistic, so they'd use something we consider stable and update reference to RFC later.
+CB: I'd translate that as "should be approved by the IESG by that point".
+MT: By "get this done" you mean a new stable version?
+CB: For WGLC.
+
+TF: As for readiness, we'd need the IANA registries to be usable.
+CB: They start existing at approval time. Of course you can use part of the document if you use URIs in the positions.
+
+CA: Understood that a CoRAL version will come later. Then I prefer the bundled version or any that uses a registry, it allows us to keep track about what can be used as input for the later CoRAL-based. Tags for problem types allow us to track patterns for a later CoRAL version.
+CB: Registries would be FCFS.
+CA: We'd still see what is going on.
+
+TF: Examples of what problems you envision with future compatibility / conversion with / to CoRAL?
+CA: Take the tag example on p10. Had I not seen that (and I'd only see it if it were registered), I wouldn't have foreseen that list of references is one thing that needs to be considered.
+
+MT: Do you expect convertability?
+CA: Yes, at least if there's some minimal cooperation from the PD tag authors.
+
+AK: Short-term considerations: feature parity with HTTP (looks OK to me).
+AK: If I understand correctly, HTTP problem-details have URI types. How are they converted? It would be useful to have that documented.
+
+TF: ...
+
+MT: CA, can you elaborate on conversion and the kind of minimal cooperation you expect among those registering tags?
+CA: Agree with CB that FCFS is good policy for the CBOR problem-details, so we can't make requirements. But by the time CoRAL problem-details are there, any CoRAL problem-details type (or group thereof) has its packing dictionary, and that packing dictionary could have extra data that explain the mapping to CBOR problem-details.
+
+MT (hat off): prefer tag approach.
+TF: How do you do type extensibility? Nested tags?
+CA: You wait for CoRAL ;-)
+MT: HTTP problem-details is abandoning that; you'd define a new type.
+CB: Thomas' approach is painless; 7807bis has baggage we don't. Nested tags would be weird.
+
+MT: AK, how much does composability matter to 3GPP?
+AK: Initially not, they'd have two extension fields. Short term requirements are simple. Long term, ...
+MT: Long term, CoRAL was the idea.
+CB: So they'd have a single problem type?
+MT: I suppose they might even do with basic type.
+CB: In the bundled proposal, for custom entries you have to register a problem type. It seems there are some 3GPP custom details, forgot details. AK: "cause", "invalid params" ... [see specification](https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3239) section 5.2.1.2.12
+
+CB: Looks like that is homework. Could have a look at what bundled and undbundled look like for that specification 29122, use that as more solid base.
+
+CB: Taking from this meeting, WG gives authors leeway to do a -03 with either; then have quick transition to WGLC.
+MCR (on chat): Yes, please have -03
+AK: And preliminary discussion with IESG etc.
+
+AK (on chat): "cause" string 0..1: A machine-readable application error cause specific to this occurrence of the problem. This IE should be present and provide application-related error information, if available. "invalidParams" array(InvalidParam) 0..N: Description of invalid parameters, for a request rejected due to invalid parameters.
+
+AK (on chat): https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=3239 section 5.2.1.2.12 Type: ProblemDetails
+
+## Profiling EDHOC for CoAP and OSCORE
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-05/materials/slides-interim-2022-core-05-sessa-profiling-edhoc-for-coap-and-oscore-00.pdf
+
+RH presenting.
+
+RH (p2): Usually 2 round-trips, optimize into 1 RT and data in first OSCORE request. Also goes through identifier conversion, application templates and discovery.
+
+RH (p3): added guidelines on preventing an "impatient" client to flood the server (building on the "outstanding interaction" concept); EDHOC option explicitly said to be removed at the server when done with EDHOC.
+
+RH (p4): EDHOC creates zero-length ID-Context implicitly, thus select identifiers accordingly and consistently with OSCORE constraints.
+
+RH (p5): Relevant with blockwise.
+CA: Outer...?
+RH: This is all about inner.
+CA: Outer blockwise should just be possible. Try to clarify if the EDHOC part is in the payload or the body. If it's specified to be ~"part of the body before the protected message", that should make everything OSCORE related clear on its own.
+
+RH (p6): on the server side, it should all just work out as normal. But when is this combined request overall still convenient if blockwise is used?
+
+RH (p7): giving practical limits on the combined request working fine or not when using inner blockwise.
+CA: There may be situations benefiting of such calculations, but if there's generic CoAP tools around, relying on blockwise from current implementations would be just fine.
+RH: Basically using also outer blockwise on the client?
+CA: Yes.
+RH: What described here is not something that one has to use, it's just trade-off considerations, for a client that does not use outer blockwise of its own.
+
+RH (p8): Practical guidelines for when to do what, if inner blockwise is or can be involved.
+MCR (on chat): I think that I'd rather call it "secured blockwise" (inside OSCORE) rather than inner blockwise.
+
+(on chat):
+MCR: Can message size increase during blockwise?
+CA: It can't, although I'd like it to (and it works with some servers).
+
+Q&A
+
+CA: on p3, client processing, this point on "outstanding interactions" is a SHOULD, I presume? One may have reasons to.
+RH: Currently we say MUST NOT; could be changed.
+CA: The server can't fundamentally prevent the client from being impatient anyway. At the same time, this has no new impact on security, since the same incoming EDHOC message_3 would not be processed multiple times.
+RH: At the end of the day, as a server you have to be ready regardless, so yeah, could consider.
+
+CA (on p4, skipped due to overtime): might be easier to understand to say "look up the C_R from the incomplete OSCORE context" rather than recalculate.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch

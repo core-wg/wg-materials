@@ -1,0 +1,33 @@
+CoRE Virtual interim - 2022-04-27 - 14:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CORECONF
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* Problem details
+    * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+    * https://github.com/core-wg/core-problem-details/pull/15
+
+* Profiling EDHOC for CoAP and OSCORE
+    * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-05/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=079d3466-b1ef-437c-b8b5-cc947e87f70d
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-05-core
