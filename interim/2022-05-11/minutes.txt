@@ -1,0 +1,153 @@
+# CoRE Virtual interim - 2022-05-11 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-06/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=32d2bad8-f2fa-4fa2-8818-4d037e0cd2c4
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-06-core
+
+Minute takers: Christian Amsüss, Marco Tiloca (helping)
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each another.
+
+### Jabber & Minutes / Agenda bashing
+
+Agenda bashing: take -conditional-attributes as first presentation
+
+## Conditional Attributes for Constrained RESTful Environments
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+* Ready for WGLC ?
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-06/materials/slides-interim-2022-core-06-sessa-conditional-attributes-for-constrained-restful-environments-00.pdf
+
+BS presenting.
+
+BS: (p2) Submitted v-03 and v-04, with one main update each.
+
+BS: (p3) reference code updated to reflect presence/boolean change.
+
+BS: (p4) parameter names changed to not have overlap with others (not calling it a namespace, just preventing clashes). These are all the changes. If OK for everyone, can move to WGLC?
+
+CB: Do you suggest what "c." would mean? CoRE? Conditional?
+BS: No particular meaning.
+CB: Could also use "?", but that's maybe not the best. I think "c." is fine, but that will be an FAQ.
+CB: Maybe we can warn a bit on how we use this in future. This infracts on BCP..., we'll do this with a lot of restraint. Just a meta-comment.
+BS: We'll have to wait for comments from others as well. It was just the simplest thing to do.
+
+MJK (via chat): this pattern looks sort of official...
+CA (via chat): I think we'll have to make it very clear that this pattern is not "official" in the sense of becoming mandatory, but more of an "if you want your resource interfaces to be combinable, match our pattern".
+MJK (via chat): It makes all of the names defined in the draft consistent and distinctive from other names. Plus the convention is designed to avoid name clashes. What if someone in another draft also decides to construct their names prefixed with "c."? If we extend the attributes in a subsequent draft or bis, do we continue the "c." prefix convention?
+
+MT: We will starting a 2-week WGLC on the mailing list.
+
+## Concise Problem Details For CoAP APIs
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+* Ready for WGLC ?
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-06/materials/slides-interim-2022-core-06-sessa-problem-details-00.pdf
+
+CB presenting
+
+CB: (p2-3) background on problem details for HTTP (RFC 7807). 3GPP uses this, and wants to do similar things in CoAP/CBOR environment.
+
+CB: (p3) See also 7807bis.
+
+CB: (p4-7) Overviewing the taken "unbundled" approach proposed by Thomas. A more general "status of your account" entry could be combined with a more specific "why did this specific request" thing. This is now in the latest v-03.
+
+CB: (p8) Defined tunneling from RFC 7807 to concise problem details. The reverse has to wait for 7807bis to finish. Good to include also HTTPAPI in the WGLC.
+
+CB: (p9) In CBOR, so far there is no need for text meant for human consumption (human not being a developer, but random end user). Unicode needs a language tag for some regions. But i18n have decided that you can't generally infer a writing direction from a language tag. (Read references on p9 to fully see why). Guessing is often possible, but the sender needs a way to influence the base direction to set "rtl".
+
+CB: (p10): This is not expressed by today's tag 38. Three ways out: i) new tag for direction only; ii) new tag as enhanced version of current tag 38; iii) enhance/fix the current tag 38, which would be though a new thing for CBOR to consider procedurally.
+CB: Maybe that's something for the CBOR Working Group to look at; it's the first time an IETF process fixes up a CBOR tag's meaning; CBOR itself doesn't tell you when that is possible. It's not completely new, e.g., Unicode can extend itself as well. On the other hadn, from an i18n point of view, it's just a severe bug, so this would be a fix. So I'm way less unhappy to do this here compared to fixing tag 4 (as tag 264 does) -- there it's proper to separate that, here there's no proper use for 38 w/o direction.
+CA (via chat):  I'd take the larger question up in the CBOR Working Group, but for here and as it's done here I'm good with it.
+
+CB: Authors' summary: this is ready for WGLC.
+MT: I will review.
+CA (via chat): Also, can review.
+
+MT: Considering the urgency, we can do a shorter WGLC.
+CB: Not sure we are so urgent we even have to shorten that. But could make it so that by next interim we have results.
+MT: Then it will conclude on Tuesday 24th. We'll have CBOR and HTTPAPI in CC.
+
+
+## DNS Queries over CoAP (DoC)
+* https://datatracker.ietf.org/doc/draft-lenders-dns-over-coap/
+* Pick up discussion threads; present progress on response caching schemes.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-06/materials/slides-interim-2022-core-06-sessa-dns-queries-over-coap-doc-00.pdf
+
+ML presenting
+
+ML: (p2-p4) Overviewing the topic
+
+ML: (p5-p7) Comparing results when caching is used (with Max-Age vs DNS TTL) and  when not. Caching helps GET/FETCH a lot. TTLs help with cache validation.
+
+ML: (p8) on suitable abstraction level. Some discussion was on the mailing list.
+
+ML: (p9) possible to define a CBOR-based content format and the use of Observe. There are threads on the mailing list about these different sub-topics.
+CB: On the CBOR-based content format, I think that's good to have it in another document.
+ML: Already planned so.
+CB: On using Observe, I didn't think about it but it would be great to have. We had a project going on trying to do network security based on MUD specs, and a problem there is that they describe connectivity in terms of DNS names, and if the IP address behind that changes, you have to change your network filter. Observe would be interesting there, but more of a research thing.
+
+CB: On the restatement anti-pattern of p8 ... for people using a new protocol in a new environment, examples are good for them -- I wouldn't want to lose them. The anti-pattern is to make normative statements that restate elements of the normative references. (Because it's easy to subtly deviate.) Worst case is that this forks ecosystem by needing special versions of CoAP.
+CB: Let's define it with CoAP in mind and providing examples. Let's also adhere to REST to ensure reusability.
+CB: See also the discussion we had for EAP-over-CoAP. One doesn't have to re-explain the CoAP principles again.
+ML: I don't think we're falling for that risk. At the same time, we'd like to avoid being too abstract.
+MJK (via chat): This reminds me of the pub-sub discussion.
+MJK (via chat): We are considering a CoRAL control document to avoid restating CoAP.
+CB: The key is defining interactions with resources. Up to the server to define URIs; resource discovery can help.
+ML: Need to double-check but I think we're safe. Still we'll try to abstract more.
+
+CB: Reviewers? I can, who else?
+ML: There were some more interested to review at IETF 113.
+CB: The Chairs can remind them to.
+ML: I can also check with people from DNSOP.
+CB: Also based on the reviews, it's good to start seeing if there's interest for adoption, also checking against the WG Charter.
+
+CB: Timeline for a new version?
+ML: Latest for the IETF 114 cut-off.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+

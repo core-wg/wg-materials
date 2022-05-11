@@ -1,0 +1,35 @@
+CoRE Virtual interim - 2022-05-11 - 14:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Concise Problem Details For CoAP APIs
+    * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+    * Ready for WGLC ?
+
+* Conditional Attributes for Constrained RESTful Environments
+    * https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+    * Ready for WGLC ?
+
+* DNS Queries over CoAP (DoC)
+   * https://datatracker.ietf.org/doc/draft-lenders-dns-over-coap/
+   * Pick up discussion threads; present progress on response caching schemes.
+    
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-06/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=32d2bad8-f2fa-4fa2-8818-4d037e0cd2c4
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-06-core
