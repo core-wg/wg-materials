@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2022-05-25 - 14:00 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Concise Problem Details For CoAP APIs
+    * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+* Proxy Operations for CoAP Group Communication
+    * https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+    * Ready for WG Adoption ?
+ 
+* AOB
+
+
+
+=== Meeting Information ===
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-07/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=46d8f147-a420-4ee6-9786-b535fb563435
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-07-core
+

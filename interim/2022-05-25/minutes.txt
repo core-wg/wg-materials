@@ -1,0 +1,167 @@
+# CoRE Virtual interim - 2022-05-25 - 14:00 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-07/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=46d8f147-a420-4ee6-9786-b535fb563435
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-07-core
+
+Minute takers: Christian, Marco Tiloca (helping)
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+MT doing introductions.
+
+## Concise Problem Details For CoAP APIs
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-07/materials/slides-interim-2022-core-07-sessa-concise-problem-details-post-wglc-update-00.pdf
+
+TF presenting.
+
+TF (p2): Draft went to multi-WG WGLC (CoRE, CBOR, HTTPAPI) until yesterday.
+TF (p3): Surprisingly no pushback on the upgrade of CBOR tag 38. Positive comments from Michael Richardson and Christian Amsüss.
+TF (p4): Jaime is on the shepherd write-up; Esko gave positive feedback on media type registration.
+
+TF (p6): Next steps are submitting a new version -04 and proceed with AD review. That would meet the June 2022 milestone.
+TF (p6): For discussion: Should we ask for area reviews already to happen in parallel?
+CB: It's not us who ask for area reviews but ADs, so next step for us is to pass it on to Francesca -- but we can suggest that she requests area reviews.
+
+Carsten's extra slides: https://datatracker.ietf.org/meeting/interim-2022-core-07/materials/slides-interim-2022-core-07-sessa-problem-details-commit-breakdown-00
+
+CB going through WGLC comments and their processing on Github.
+CB (p3-4): Mostly editorial (11/18 commits) and IANA-related fixes.
+CB (p5): base direction auto can now be explicit. (If you don't have more complex environment where direction can be inherited, treat absence like null). All "how to do it" is a draft and clearly not a W3C recommendation, so we're defining this into uneven landscape. Purpose is to deliver information for the algorithm (which is not defined yet, so we can't normatively reference there). Side chat with i18n directorate, there is rough consensus but not written up.
+CA (on chat): Thumbs up on the new i18n text.
+
+CB (p6): New term "Problem shape". Previously we could enumerate problem types, we can't any more. Still possible to import from RFC 7807 if you have that information. Added explanations about that, it should be clearer now.
+
+CB (p7): If there is an embedded URI reference, the base URI might not be clear and needs to be specified. Not really needed when exchanging messages on the wire, but it becomes needed when storing a problem details data iterm. More context, i.e., the base URI, should also be part of what is stored for later processing.
+CB (p7-8): We have now defined a base URI Standard Problem Details entry and explain how to use that. Meshes with response-code -- would be lost when storing just data item. Based on a mailing list thread, we should (probably elsewehere) define what needs to be persisted when storing a representation, but for here we can do it this way.
+
+CB (p9-10): Ignoring unknown entries is a common JSON extensibility pattern (forward compatibility, can add details to items where the item will still be understood by old implementations). False interoperability can still be prevented if required (with new Custom Problem Details entries); this keeps new data from influencing old receivers. Can't write up all of it, what's in should largely suffice.
+CB (p10): Unknown map keys are easy to ignore, but what if data looks different? "internal ignore unknown" is a special case of this. There is a danger of overvalidation (which blocks extensibility / forward evolution). Do we need to define that part of the JSON ignore-unknown pattern? Expectation around enums are easy; numeric restrictions are often handled intuitively. I don't think we should include text here, but be aware that it's not fully defined in the extensibility story.
+
+CB (p11): (careful, slide wrong in the last character of the body, `s/]%/}/`). Prefer to keep it, because it's more natural in CBOR environment. But it's a change, and depends on meaning of TS29112. But the purpose of this is not to do 29112, but example of custom problem details entries.
+
+TF: Initially skeptical on having the base URI in the set of Standard Problem Details entry, but it makes sense now that I see it in the light of error response codes.
+CA (on chat): My comments have been addressed, thanks.
+
+JJ (p6): Discussed with Ari. Looking for 1:1 mapping to RFC 7807. It could be helpful to put more on RFC 7807 type mapping in here; yesterday's text was unclear.
+CB: We have the whole appendix B on the topic of RFC 7807, it also mentions type.
+JJ: We can take it offline.
+
+JJ (p11): Soft agree with Carsten (the array makes sense), but whatever authors and the group decide is fine.
+TF: As Carsten mentioned, this is just an example. Do you want a change there?
+JJ: If it's a non-contentuous issue, the second form would be more clear for casual readers (especially in the context of 3GPP). 
+CB: The first form does not use any strings for identifying things; that's what we normally want in concise environment.
+TF: It took some poetic license for translating the API into CBOR. It seemed like a normal choice in this environment.
+JJ: Ambivalent; it's a bikeshed issue. If you justify what you put in there, you can keep that.
+
+JJ: Timeline-wise, what's left? We check with Francesca to start the AD parts; anything else that needs to be done?
+CB: I will submit a new version based on this PR today, and then we can submit to the IESG at the next possible time (Friday this week). I don't think we should wait a lot, there's still the whole IETF LC ahead.
+
+MT: So Shepherd write-up ready by Friday?
+JJ: Ready now. I may do changes depending on v04 today / Friday. https://notes.ietf.org/-iCmXbrQRz-7hnvfuVvweQ#
+CB: I will submit new version of the draft in next hour.
+MT: Good and fast process on a urgent item; good job everyone.
+
+## Proxy Operations for CoAP Group Communication
+
+* https://datatracker.ietf.org/doc/draft-tiloca-core-groupcomm-proxy/
+* Ready for WG Adoption ?
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-07/materials/slides-interim-2022-core-07-sessa-proxy-operations-for-coap-group-communication-00.pdf
+
+ED presenting.
+ED (p2, p3): recap; concrete solutions to proxy issues raised in draft-ietf-core-groupcomm-bis. It builds on two new CoAP Options used by client and proxy. Group OSCORE would work end-to-end between client and servers. Need for security between client and proxy; if OSCORE, that's defined in draft-tiloca-core-oscore-capable-proxies.
+
+ED (p4): Renamed the two new Options and revised their semantics based on comments from Christian and Carsten.
+ED (p5): A reverse-proxy acts like an origin server; depending on configurations and information at the client, it is admitted to have a default timeout at the proxy, rather than a timeout negotiated with the client.
+ED (p5): Notes on proxy-servers response revalidation; problem if also Group OSCORE is used; might be solved with an "outer ETag", which may be good to define in draft-amsuess-core-cachable-oscore (since that would be needed in the first place for caching)
+
+ED (p6): Added new example with a reverse-proxy, building on the URI construction of RFC 8075. Indications used for forwarding are in Uri-Path options. That means less addresses/ports that the reverse-proxy has to reserve for group forwarding.
+
+ED (p6): Sketched proposal to further extend the HTTP-CoAP proxy. We can further use the Transfer-Coding "Chunked" at proxy, to relay responses back to the client a stream like in the CoAP-CoAP care, rather then as a single final HTTP response containing them. It seems doable, but not final yet.
+CB: Wondering about Chunked. How are responses delimited? Chunk boundaries are not preserved if you have more HTTP-HTTP proxies in the chain doing some juggling.
+CA: It's already in the draft -- it's multipart (and the chunks may or may not align with the multipart boundaries).
+CB: Ok good.
+
+ED (p7): Summary of features at a glance: addressing groupcomm-bis issues with proxies; two new CoAP options; defined response caching at the proxy; new CoAP option Group-ETag for Client-Proxy response revalidation; CoAP-CoAP and HTTP-CoAP proxies; forward/reverse proxies; chain of proxies.
+
+ED (p8): Related to other documents. This is a case of non-traditional responses (see draft-bormann-core-responses); it's a use case for using OSCORE between client and proxy, possible together with Group OSCORE end-to-end yielding to nested OSCORE (see draft-tiloca-core-oscore-capable-proxies); draft-ietf-core-groupcomm-bis heavily relies on this document to address issues with proxies, better to have it adopted before requesting publication of groupcomm-bis, see also the WGLC review at https://mailarchive.ietf.org/arch/msg/core/PtqtDE_3PWR-n-o_z9h0HxW2vDI/
+
+ED (p9): Overview of next steps, main features of this protocol are stable. Plan to add also security considerations specific to HTTP-CoAP proxies (building on RFC 8075).
+ED: It should be ready to consider for WG Adoption.
+
+RH: General comment: I've been following this work and working on an implementation (considering a forward proxy at the moment), based on Californium (which also has Group OSCORE support).
+
+CA: on p5, a default timeout for a reverse-proxy sounds problematic; the client may know it's multicast and then opt in. It can be otherwise problematic. The client might have no idea it's a reverse-proxy (that's usually the case), so it's better to leave it for negotiation with the CoAP option. Otherwise, the client can run into strange things due to something unexpected happening as to receiving relayed responses.
+CB: +1
+CA: For the client, the reverse-proxy is just a regular server.
+CB: The state machine of the protocol can not depend on information that might be unevenly distributed. A specific thing is token retirement at the client: if I send a request to someone and get a response, I'd reuse the token, but if more responses come in, that's not great. I Really need to know.
+ED: So on the protocol level the right tokens need to be generated. Not want to take the risk that CoAP client is unaware of this and uses wrong tokens. Maybe some default from application if requested?
+CA: The reverse-proxy could still not know the application.
+
+CA: on p6, using the Uri-Path approach of RFC 8075 might not be a good idea here; need to look into that. We have Uri-Host! Could you elaborate on packing the address in Uri-Path?
+ED: We had a similar discussion in groupcomm-bis to express the names of groups.
+CA: Relying on Uri-Host would work and it should be more appropriate than Uri-Path, thus avoiding related problems.
+ED: Need to build some examples. We can take it on the mailing list.
+CA: Yes.
+
+CA: And none of that would be in the way of a WG Adoption, which I support.
+
+CB: Christian already took some of what I was about to say. it seems that we do agree on the fundamental approach of this document, and it looks like we have energy for working on it. All the prerequirements for WG Adoption are there. Are we waiting for anything specific, or do we do that now?
+ED: Not waiting for anything specific; I agree that we have energy.
+
+CB: With Marco a co-author and Jaime not being in the meeting any more, the Chairs should look into this soon.
+
+### AOB
+
+MT: reminder: we have a still ongoing WG Last Call for draft-ietf-core-conditional-attributes; it was planned to last until today, but I can see only my own review on the mailing list. Really need for more feedback before closing WG Last Call. Please send feedback. ("I'm fine with it as is" is also valuable).
+
+
+[Don't forget to bring a towel!](https://en.wikipedia.org/wiki/Towel_Day)
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+
