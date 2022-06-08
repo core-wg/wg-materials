@@ -1,0 +1,144 @@
+# CoRE Virtual interim - 2022-06-08 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-08/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=08a866db-d268-4b9e-bead-4a9f0c3fed22
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-08-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### Concise Problem Details For CoAP APIs
+   
+   * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-08/materials/slides-interim-2022-core-08-sessa-carstens-slides-00.pdf
+
+In IETF Last Call; got AD review and OPSDIR review.
+
+CB presenting (p2): merged issues from review.
+
+CB (p3): Remaining questions. What does "vary across instances" mean? Concept fits in RFC 7807 but not here. Possible approach: "a short, human-readable summary of the problem shape". Or be more radical and get rid of it?
+TF: It's optional already, right? "Should not try to summarize" doesn't clarify much for implementer, would go with "short summary".
+CB: We could still add something like "without describing the problem in detail" / "the specific instance in detail".
+TF: "shouldn't try to duplicate information available somewhere else" but not do away with it.
+CA: "Should not duplicate anything" would be another way of saying "don't use it" because the information is already in the shape.
+CB: But it's presenting it in a human readable way.
+TF: Thinking of scrolling through a log ... I would want to have that kind of thing, something you can grasp with your eyes. Then one can go into details. It seems useful to me. There are human eyes around in a log pipeline.
+CA: I don't ask to drop the human readable, just that "don't duplicate" entails dropping it (so we might want to be careful phrasing it that way).
+TF: ... "short and human-readable", what more do we need?
+CB: Someone new to this would, reading that, put amount of money on account in there. We could include that.
+TF: Do that instead of normative language.
+
+CB: Going into word smithing here ... I think I got the gist.
+
+MT: On "The title ... SHOULD NOT change from occurrence to occurrence of the same problem shape", people will also ask around when "SHOULD NOT" might be OK to violate. To also clarify the sentence altogether, you can give an additional example of a same problem shape, but changing the 'title' and explaining why.
+CB: Ok, will do.
+
+CB (p4) continuing with open issues: Provide both unadorned and language tagged string. Why both? Unadorned will rarely make sense. Different options are possible (see slides).
+CB: Example of design decision we'll face often in further protocols, we should get it right here and set a precedent. (End-user human readable, [...] developer human readable)
+CA: We are still not having any language negotiation available.
+CB: Right, so maybe avoid option 2?
+CA: This might lead into defining a way to understand what the context is.
+MT: Option 3 means unavoidable overhead. Go for option 1?
+CA: Even with option 2, there could be situations of not having context, so we could avoid hardcoding the bias by deferring to a yet-to-be-specified context (failing which, one probably takes the legacy route of assuming en_US)
+MT: So, it's kind of: "In the absence of clear context, go for option 1".
+TF: What is the minimal overhead for option 3?
+CB: 6 bytes.
+
+CB: The most workable input I've heard is using option 2, and 1 in the absence of context.
+CB: And we can still get feedback form ADs and I18N directorate on this.
+
+CB (p5) continuing with open issues: WONTFIX because we have defined details, and the example people use without registration is detrimental.
+CA (on chat): there may be other options but WONTFIX is good.
+
+CB (p6) on handling unknown: SHOULD retain exceptions when difficult or forwarder's role is filtering.
+CA: Nice, thinking of future CoRAL conversion.
+MT: Looks good.
+
+CB summarizing (p7): Not sure if we can make it to the 2022-06-16 IESG telechat. Reviews that ADs want are initiated. 3 being are requested and should be processed before then. Publicatino approval in June is still possible, if everything goes as planned.
+
+CB: Informal communication on I18N side is roughly "it's difficult, I18NDIR won't make this the document that needs to get everything right once and for all".
+
+### Constrained Resource Identifiers (HREF)
+   
+   * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+Presented slides (from p8): https://datatracker.ietf.org/meeting/interim-2022-core-08/materials/slides-interim-2022-core-08-sessa-carstens-slides-00.pdf
+
+CB presenting (p8).
+
+CB (p9): The CBOR-packed environment changed. Previously only concatenation, but CURIEs would need more.
+CB (p10): We could now do a function tag.
+CB (p11): There are weird cases.
+CB (p12-14): Converting back and forth between URI and CRI would be general but not useful. Sticking to CRI makes more sense but it can also get tricky. It's good to possibly address a subset of the general problem, there's a lot of "sane" CURIEs that can be handled.
+CB (p15): Lexical solutions are known to be tricky. Could we do "structural", and backport that onto URI space?
+CB: Maybe spin this off into a separate problem, not do in CRI.
+MT: Agreeing it should be separate from CRI. Anything to fix or warn about in HREF already?
+CB: If the HREF spec had a problem I would try to fix it, I don't see one. The function-tag approach is powerful enough.
+MT: Should HREF say upfront that this is out of scope for now?
+CB: Something like "is left for future study" is said often.
+MT: That's a good one to use.
+TF: Agree with MT on scoping.
+
+CA: What use for? Units from registrations. CoRAL when there are really many terms in an ontology that should be extensible faster than its dictionary. Others? And isn't fixing the update cycle of the dictionaries the better approach?
+CB: People think prefixes are semantic. That's a big problem, but it can be rather useful mechanism in implementation.
+CA: How would that help an implementation?
+CB: If a big implementation works best if you offer URIs in particular form, the prefix becomes semantic. Maybe a form of soupification(?), but I've seen that.
+CA: Isn't that a reason *not* to do them?
+
+MT: You already think of doing this in CoRAL?
+CA: One use case known (units referenced through IANA registry URN), but I prefer to do it through good pack management.
+CB: We won't get away with some corpus work. We can always define function tag in right way.
+
+CA (just thinking of options): "extend last string" is widely compatible (probably all sane cases); "is also relative references" removes fragment CURIEs but it might be OK.
+
+### AOB
+
+MT: We will have a 2-hour session at IETF 114. I will attend on site.
+CB: I will attend online.
+
+CB: [RFC 9193](https://www.rfc-editor.org/rfc/rfc9193.html) published! Some of the blockage was in kramdown index references. It's there, we now have defined terms for media-types etc., and ABNF.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch

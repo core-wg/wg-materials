@@ -1,0 +1,29 @@
+CoRE Virtual interim - 2022-06-08 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Concise Problem Details For CoAP APIs
+    * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+
+* Constrained Resource Identifiers (HREF)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+ 
+* AOB
+
+
+
+=== Meeting Information ===
+
+Meeting Material: https://datatracker.ietf.org/meeting/interim-2022-core-08/session/core
+
+Meeting link: https://meetings.conf.meetecho.com/interim/?short=08a866db-d268-4b9e-bead-4a9f0c3fed22
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-08-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
