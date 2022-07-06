@@ -1,0 +1,29 @@
+CoRE Virtual interim - 2022-07-06 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Parametrized Content-Format for CoAP
+    * https://datatracker.ietf.org/doc/draft-fossati-core-parametrized-cf/
+ 
+* Concise Problem Details For CoAP APIs
+    * https://datatracker.ietf.org/doc/draft-ietf-core-problem-details/
+ 
+* AOB
+
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-10/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1d90ca08-560f-464b-9322-4ce82574b748
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-10-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

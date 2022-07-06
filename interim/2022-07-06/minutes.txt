@@ -1,0 +1,156 @@
+# CoRE Virtual interim - 2022-07-06 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-10/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1d90ca08-560f-464b-9322-4ce82574b748
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-10-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca, Carsten Bormann, Christian Amsüss
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### Parametrized Content-Format for CoAP
+
+   * https://datatracker.ietf.org/doc/draft-fossati-core-parametrized-cf/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-10/materials/slides-interim-2022-core-10-sessa-pramtrzd-pramtrzd-content-format-for-coap-03-00.pdf
+
+TF presenting
+
+TF (p2): The whole point is that using a Content-Format is efficient but it sacrifices flexibility, if many variations start with media-type parameters and their values (use case from RATS).
+TF (p3): Extensibility provided through the main original Content-Format together with a list of parameter name&value. The whole Parameterized Content-Format (PCF) is wrapped in an array.
+TF (p7-10): Useful for possible Content-Format negotiation through a parameterized version of the Accept option (pAccept). Same properties of Accept, so no soft-fail is possible. Failure can be followed by using Accept.
+TF (p11-p15): Surveying prior art, i.e., RFC 9193; OCF content-format; AcceptAny https://datatracker.ietf.org/doc/draft-amsuess-core-accept-any/)
+TF (p16): Example of translation from OCF-CF into PCF.
+TF (p17): Any interest? Good starting point?
+
+CB: Do we have use cases that can guide us? That helps to better shape things as features. Need examples for further developments.
+CB: How do we get from the textual syntax defined for a Media-Type to the CBOR "any"? Not sufficient to just point to a Media-Type registration, but rather have to define an explicit mapping to a CBOR type.
+CB: Could a parameter given in pCF override that defined for a Content-Format (e.g., CF=0 has one parameter [which one never wants to change, so that is a bad example])?  (Parameter could be required!)
+CB: How do Accept and pAccept, CF and pCF combine? Worth thinking about it, although applicability might be limited.
+CB: pCF depends on media type and content coding to be defined in C-F registry, pCF only allows changing parameters
+
+TF: Use cases in RATS, e.g., CORIM; profiles in ARM
+
+CA (on chat): multi-accept based on existing opts could be [params, \*(ct, params)]
+CB: The Accept option would indicate a first Content-Format, while the additional parameters for it are in the first element of the array above within the pAccept option. The second element of that array in the pAccept option includes more Content-Format with possible additional parameters.
+
+CA (on chat): use cases: gemini's languages; coral profiles
+CA (providing details on what he tried to say in audio here in minutes):
+* gemini as defined in https://gemini.circumlunar.space/docs/specification.html uses "text/gemini; lang=fr" a lot
+* CoRAL profiles will be a topic of "Accept" headers.
+* One suggestion to consider (maybe even just as a mental exercise around the "string-typing" issue): have one way of expressing full content types (maybe even with the @ for content-coding) on the one hand, and allow particular types to have their defined parameter structure (may be dict, may be just a single scalar as F) on the other hand. Then find whether having a (param, value) dict is the right middle ground.
+
+MT: On Section 4 "Parametrized Content-Format Option". I suggest to add a note. If it is about signaling only the original Content-Format with no additional parameters, then just use the original Content-Format option with value an integer, rather than this new option with value an array including only an integer. The latter would be semantically correct, but less efficient and the recipient endpoint might not support the new option in the first place. This can even be formulated as a normative SHOULD.
+
+MT: On Section 5 "Parametrized Multi-Valued Accept Option". Suppose you want to indicate a set of acceptable content-formats, but with no additional parameters compared to their original definitions. Building on
+
+```
+one-or-more<T> = T / [ 2* T ]
+```
+you would have
+
+```
+[ [CT1], [CT2], ..., [CTN] ]
+```
+
+while it would be better to have
+
+```
+[ CT1, CT2, ..., CTN ]
+```
+
+This becomes possible if the CBOR data item in Section 3 is extended to be
+
+```
+parametrized-content-format =
+
+   content-format /
+   [
+     content-format,
+     * [ parameter-name, parameter-value ]
+   ]
+```
+
+Then a note is good here too. If you want to signal the support of only one Content-Format with no additional parameters, just use the original Accept option. This can even be formulated as a normative SHOULD.
+
+CB: Call for use cases: Please send messages to the mailing list, with one use case each...
+
+MT (chair hat off): I think that this is a good starting point.
+
+### draft-ietf-core-problem-details-07
+
+Finalize paragraph (see https://github.com/core-wg/core-problem-details/pull/43/files, https://mailarchive.ietf.org/arch/msg/last-call/MXx6AcI56DWHhDy-9EikK4VUIsw/ and following)
+
+FP: Sent last call for comments on -07, there was rough consensus on keeping parts together, but rough consensus for adding the paragraph, no objection to the PR.
+FP: Maybe add a note on deprecated tag 35 in -cbor-notable-tags.
+CB: That's fine, on it already for tag 38.
+CB: Broader problem on tag evolution in CBOR, but not related to this document.
+FP: Often raised that tag 38 is defined well enough for this document but not for any possible application needing something like that.
+CB: -cbor-notable-tags is more specific about this, where more can be discussed.
+FP: For tag 38, we may want a link from the IANA registry to -cbor-notable-tags.
+FP: Tag 35 is mentioned in RFC 8949, which is however not linked by the IANA registry specifically for tag 35.
+
+FP: on -core-problem-details, reached consensus on the added text. Comments about not using this mindlessly, not super general solution.
+TF: Add a pointer to -cbor-notable-tags?
+CB: Better to have it adopted in CBOR first.
+
+CB: Plan to merge PR 43 and submit v -08.
+TF: Fine to not add a pointer to -cbor-notable-tags now.
+CB: Still clear indications for improvements of -cbor-notable-tags in CBOR.
+
+FP: No recent comments from the IESG following the updates since their original review; this very last update in the PR wouldn't need additional IESG review. The new version should be good to move forward.
+
+### AOB
+
+CB: Overview of agenda for IETF 114?
+MT: Started to think, let's talk about it right after the cut-off.
+
+FP: Will be going on leave end of next week; core-sid is still on list there. This was not prioritized (more urgent drafts were). Do you have any tentative update for whoever will take that over?
+CB: Still optimistic to make the ID deadline, but these then need to be checked by people around agreement about YANG catalog -- so will likely need another version after that.
+CB: Could Eric Vyncke look after the CoRE SID draft? He is most informed about the mechanics that have to work right.
+FP: I can ask him. Normally, with only one DISCUSS, it should not need much more shepherding -- just making sure that Rob is in agreement and clears his DISCUSS. Not sure how many changes were there, it might need to go back to Last Call. I will write it down for whoever takes over.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+
+ 
