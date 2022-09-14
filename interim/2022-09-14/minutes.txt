@@ -1,0 +1,197 @@
+# CoRE Virtual interim - 2022-09-14 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-12/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=4b3c6ec5-661d-4f92-befa-290e08796f7c
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-12-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca, Christian Amsüss
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+MT doing introductions.
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+MT: Two items as below, CB will be presenting from a single slide set.
+
+### Resource Directory: Use for non-resource discovery
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-12/materials/slides-interim-2022-core-12-sessa-rd-cri-00.pdf
+
+CB: It's more a discussion point but something that needs many slides. It has been going on for some months.
+CB (p2): This is about draft-ietf-anima-constrained-join-proxy which is completed in ANIMA, so we should make up our mind quickly. It's providing a "join proxy" mechanism. One discovery mechanism is RD / multicast to `.well-known/core`, using the query mechanism from there. It's asking specifically for a join proxy (of different kinds, details don't matter here). But JP is not a resource, it's a protocol you can use to talk to a server, and then you use the server as a very special proxy. So we don't need a resource, we need a transport address. IP will often be implied, so what they want to communicate is the port number. Slide shows example. The `rt=` value is what got CoRE involved -- the fact that goes through expert review triggered this.
+CB: What we have here is a link to something that's not a resource. That's not new (cf. `tcp:`), but we still need to think whether it's right. I think it's a good idea to use RD/.wk/c to find this (don't want to create road blocks), but I'd want to do this to fit in the whole architecture.
+
+Ziyang: Does that work with QUIC just as with TCP?
+CB: `tcp:` is just an example here.
+Ziyang: So do you compare with URL such as TCP ones?
+CB: Yes, other people did something similar. It's not used here.
+
+CB: If we go for this, by using fake/fantasy URI schemes, what should the client be searching for? Is it really `rt=`, or another target attribute?
+
+Ziyang: Does this work with IPv6?
+CB: Don't know, CoRE does not care of IPv4 or IPv6. Not really relevant for this topic either.
+
+CA: It's useful to have this info in URIs. We might have to mentally split about what statement is on a resource and what is on how to reach the resource. Something from the transport-related concepts can be reused.
+CA: "Transport implied by the address" is the term from transport-indication, but then `rt=` is the wrong attribute.
+CB: The resource here is not the one addressed via the join proxy protocol (which uses coaps later on). We may provide URIs to the place to be reached using the join proxy protocol. Giving information about the URI of the join resource with attributes to find the proxy is an interesting design, but not what the authors had in mind.
+
+JJ: Is the problem that CoRE does not allow to define the proper resource? Or is the URI the actual problem?
+CB: The issue is that there is no proper resource here. When the JP protocol is used, there is a proper resource, but that's offered by someone else.
+JJ: So that URI does not resolve to a specific resource?
+CB: It's a means to provide parameters to be used later.
+JJ: Would it help to have a default resource (like index.html) for the jpy protocol?
+CB: It's not a resource, but a protocol, so you need a way to indicate a port.
+
+CA: The way to go should be covering the actual resources to target. Then those attributes would make sense.
+
+JJ: When talking about metadata, is this about link attributes?
+CA: Target attributes, yes.
+
+MT: Building on covering the actual resources, then rt= becomes the right target attribute to use, right?
+CA: Yes, only not with that value. (i.e., brski.jp/brski.rjp)
+CA: They have one value that would work, I just didn't find from their document which of the rts is the one they access through the jpy.
+CB: The client doesn't get the information related to whom they are speaking to.
+
+JJ: So the protocol is not CoAP but JPY. Why is `coaps+jpy` used here?
+CB: That's just a fantasy scheme to store address, port etc.
+JJ: So could it be `jpy://` and that's it?
+CB: The name is orthogonal issue. I must admit that coaps+jpy was my suggestion.
+
+MT: When pointing to the real resource and using the Resource Directory -- the join proxy would register itself as an endpoint and then its resource, right?
+CA: Not sure, the URI would refer to just another port around the join resource.
+CB: No, you would really be looking for the join proxy. If the "pledge" finds a join server (name?), then it's all set. But if it doesn't, then it has to look for a join proxy. And the join proxy knows the join server, and once you find the proxy you use it to talk to the join server.
+
+CA: I thought the pledge discovers the join proxy link locally, then the proxy is either stateful or not (in which case the URI helps out).
+CB: We'll need a better example. We'll have to re-read the document.
+
+JJ: You may have "hosted by"-relation on the same host.
+CA: The "host" relation is implicit in that statement. Not useful here the way it's done now.
+
+MT: When doing examples with Resource Directory, it'll be helpful to have also the registration phase included, not only the discovery phase that has been mostly the focus of the discussion.
+CB: Agree, in an example we need the whole workflow.
+CB: We need to write something down and have a joint meeting with people from CoRE and ANIMA.
+CB: We can find the right time for that offline -- unless anything more is added now, we have what we need.
+
+#### Background provided before the meeting
+
+draft-ietf-anima-constrained-join-proxy registers two new rt= values, brski.jp and brski.rjp.
+The description makes clear that these are not really used to mark web resources, but "links" that will be used to provide parameters to some protocol operation.
+
+    The join-port of the Join Proxy is discovered by sending a GET
+    request to "/.well-known/core" including a resource type (rt)
+    parameter with the value "brski.jp" [RFC6690].  Upon success, the
+    return payload will contain the join-port.
+
+...
+
+    The stateless Join Proxy can discover the join-port of the Registrar
+    by sending a GET request to "/.well-known/core" including a resource
+    type (rt) parameter with the value "brski.rjp" [RFC6690].  Upon
+    success, the return payload will contain the join-port of the
+    Registrar.
+
+     REQ: GET /.well-known/core?rt=brski.rjp
+
+     RES: 2.05 Content
+     <coaps+jpy://[IP_address]:join-port>;rt=brski.rjp
+
+Generally, enabling the RD (and /.well-known/core in general) to supply this information is highly desirable.  However, it is not clear that this should be done via something that could be called "fake resources".
+
+### CRI (href): Open Issues
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+https://github.com/core-wg/href/issues
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-12/materials/slides-interim-2022-core-12-sessa-rd-cri-00.pdf
+
+CB (p4): some unreserved characters are normalized to be non percent-encoded; we had to do some normalization. Showing the normalization algorithm.
+CA (on chat): DC47 I would have put as h'DC', "\u0047"
+CA: I'm happy; just wanted to mention that if you ignore that CoAP statement, you may start pushing CoAP into ignoring that requirement, or you just end up in not being able to fulfill it anyway.
+
+Ziyang: Are there ways to delete BOMs?
+CB: Not sure there is a way for URI. Not sure we have a reason for doing that either.
+Ziyang: What if there is no BOM?
+CB: Then we are fine. Here we handle the case where some evil party includes a BOM in the URI, considering the way CoAP would deal with it.
+
+* 43, 44: PET
+* 46: "a:" is ["a"] or ["a", true]?
+
+CB (p5): corner case with no path: i) no path component; or ii) no leading slash and no path component? Either would work, but sensitive examples came up (see above).
+CB: The resolution hint is a weak indication, we could still toss a coin to decide what to do. My proposal is to declare the coin tossed this way, and outlaw `["a", true]`, so that `a:` is unique.
+
+CA: Either is good, I will look at the issue. I have no strong opinion.
+
+* 50: misc
+
+CB (p6): It is not useful to have `[]`, so the plan is to just disallow it; we also plan to disallow `null` when `[]` can be used instead.
+CB: The alternative is change to suppress trailing nulls, but I am not sure if this even works.
+
+CB: Opinions?
+MT: Is it possible to define a simple sanity check? Is "no null at the end" sufficient?
+CB: Good requirement; I haven't implemented this yet, no strong feeling yet. Ideally, this would be said in CDDL, but it's so context-sensitive that CDDL is not strong enough. I have no good answer, but a simple sanity check would be good.
+MT: Not necessarily semantics definition, more guidelines for implementors.
+
+CB: (on array weirdness). Agree it's weird, not sure there is much we can do without introducing more bytes.
+
+```
+authority = [?userinfo, host, ?port]
+host = (host-ip // host-name)
+host-name = (*text) ; lowercase, NFC labels
+```
+
+CB: Hearing no more comments, watch the HREF Github repo for pull requests. Then the next version of the draft should be closed to WG Last Call.
+
+MT: on test vectors, there should also be an open Github issue about some to include as an appendix. Not really for discussion, more as a pending action.
+CB: Assuming we want test vectors, we can put a set into the RFC and/or have a more complete set in some repo. I think we should have a reference from RFC to that repo. It's a bit of a weird thing for a perpetual thing to point into a github repo, but IESG has warmed up to it, so we could do that.
+
+MT: So, about those to include in the RFC, that would be a few not too difficult ones but very important to understand, and then some few hard ones about importnat corner cases.
+CB: We have small print on these, but shouldn't try to be exhaustive.
+
+MT: Can we have the next version of the draft by IETF 115?
+CB: Yes.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+

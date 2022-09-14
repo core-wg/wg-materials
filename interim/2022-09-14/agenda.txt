@@ -1,0 +1,27 @@
+CoRE Virtual interim - 2022-09-14 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Resource Directory: Use for non-resource discovery
+
+* CRI (href): Open Issues
+
+* AOB
+
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-12/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=4b3c6ec5-661d-4f92-befa-290e08796f7c
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-12-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
