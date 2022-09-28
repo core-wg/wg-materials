@@ -1,0 +1,224 @@
+# CoRE Virtual interim - 2022-09-28 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-13/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=e0490177-3413-49d6-9b25-58d3307b244d
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-13-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca, Rikard Höglund, Christian Amsüss
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://datatracker.ietf.org/submit/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+MT doing introductions
+
+### KUDOS
+
+https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-13/materials/slides-interim-2022-core-13-sessa-key-update-for-oscore-kudos-00.pdf
+
+RH presenting
+
+RH (p2-3): recap of the document, covering 2 parts: key usage limits and actual key update with KUDOS
+RH (p4): focus of today on some open points to discuss.
+
+RH (p5): on the OSCORE flag bits. Bit 15 has been registered to signal KUDOS itself. What bit should we register for extending to a second flag byte? Bit 1 has been the choice so far. Discussions on the mailing list suggests that bit 0 would be more appropriate, while bit 1 can become "Unassigned".
+CB (on chat): +1. Like SDNV coding (except that we don't compute a number from the 7-bit segments).
+GS: Good proposal, no need to allocate in advance bits 8/16/24/...
+CB (on chat): I'd prefer to earmark n\*8.
+GS: Also fine, no strong view.
+CA (on chat): On registrations for 16, 24, 32 etc: Please do them now. The mandate for the document first needing a bit >= 8 was to define how this would be extended; let's not do this piecewise.
+
+RH (p6): Can we switch to single method in updateCtx() for actual key derivation? The only method to keep (based on HKDF-Expand()) would be independent of EDHOC support/use and the current validity of an EDHOC session, so it would always be fine to use, with less alternatives to juggle with.
+CB: How do we check we don't lose security properties?
+RH: From IETF 114, it seemed like EDHOC-KeyUpdate() actually does not provide anything additional in the first place. So there should be no drawback.
+MT: The approach proposed to keep mimicks the construction of KeyUpdate of TLS.
+GS: EDHOC-KeyUpdate() iterates with hash functions. I don't see any fundamental difference in the other approach to keep, as it fundamentally builds on the same steps.
+GS: The only thing is if OSCORE is used with something different than HKDF, so this is losing a bit of agility. But we can stick with this for now, since HKDF is the default in OSCORE.
+
+RH (p7): on allowing or not "negotiation" on FS or no-FS mode. An agreed fallback to no-FS mode is in the interest of constrained devices not capable to write in persistent memory, when the other (capable) peer is not aware of that from the start and can instead learn and adapt at runtime.
+RH: Is this information on the other peer in the Security Context? Maybe, but hard to be known for sure. If we mandate that information to be present as a requirement, that might be a too hard requirement difficult to always fulfill (e.g., in the OSCORE profile of ACE).
+CA: In the OSCORE profile that information would be available, since the AS provides it out of its knowledge from registration.
+RH: It can provide that info easily to the ACE Client (about the ACE RS), but not that easily to the ACE RS (about the ACE Client). That would require to extend the access token.
+CA: Then how could they know that they can run KUDOS in the first place?
+RH: The strength now is that they don't necessarily know; at runtime, they find out what the best available thing is for both, or if the other peer can run KUDOS at all.
+CA: Ok, if it's fully opportunistic and it's about an agreed downgrade, then it's not too bad. **OK from me, then**.
+RH: Yes, if there is pre-knowledge, no "negotiation" would happen at all.
+GS: I think the trial and error is good enough and we can't necessarily expect pre-knowledge. It's important that the negotiation is secured.
+RH: It is, the signaling happens through the bit 'p', that is fed into key derivation, hence integrity-protected.
+GS: It's good if we do NOT add more things that have to be known in advance.
+CB: General deployability point: requiring components to move with you makes it harder to use KUDOS. Agree with Göran, we need to reduce interaction dependencies to ensure that KUDOS is started to be used soon.
+CB: KUDOS is aborted if peers don't agree. But are there more cases where KUDOS cannot go on right?
+RH: If you exclude not supporting KUDOS at all, this non-matching of FS and no-FS modes is the only reason to possibly abort so far.
+CB: So who wants to use the code pays for it. That's a good pattern.
+
+RH (p8): Splitting OSCORE ID change procedure from KUDOS?
+RH: It has other benefits, e.g., privacy.
+GS: I stated my point at IETF 114, I am in favor of splitting out.
+CA: No strong preferences, whatever works best for the authors.
+CB: Split if you want different reviewers for different parts, that'd be a strong argument. Not sure if it is the case here.
+RH: Not necessarily different people -- similar groups.
+GS: The matter was in terms of size of specification.
+CB: How big content are we talking about?
+RH: ~6 pages, with small examples to be extended.
+CB: I don't see benefit from carving out 6 pages, but it'd be large enough to be standalone, so no strong preference.
+GS: The main point on size was related to the part on key limits. So the three parts are key limits, KUDOS and update of identifiers. My proposal was to take out *everything* else than KUDOS.
+
+RH (p9): on defining an EDHOC EAD item so that two peers can learn about each other support for KUDOS (and of which modes) while running EDHOC.
+RH: Since KUDOS peers can opt-in, this is not strictly necessary, and the two KUDOS peers can still rely on trial and error. But if learning happens early (here while running EDHOC), that's a way to have knowledge of each other.
+GS: An EAD item could also have said about EDHOC-KeyUpdate, but that's being taken out.
+GS: How are we going to invoke EDHOC-KeyUpdate? More of an EDHOC problem.
+RH: Right, it was the example for using EDHOC-KeyUpdate.
+MT: The reason we thought about removing Method 1 was that it isn't sufficient to agree about supporting EDHOC-KeyUpdate(), but you also need that the EDHOC session is still valid. Since that might not be the case at some point, the two peers would also need to have a dynamic agreed fallback to switch to Method 2. But since Method 2 is not worse and only works, then why not having only Method 2 in the first place?
+
+RH (p10): Parts are KUDOS, key limits, ID update. (Options on slide)
+GS: My preference is to have 3 drafts. But perhaps we can wait.
+CB: Which part has the agility here? The limits part talk about specific algorithms, so you would need to update every time new algorithms come up; it's a different kind of document and it makes sense to separate it.
+GS: And the limits discussion in CFRG is not concluded and we're not sure where that will go. This is one more reason to separate that part.
+CB: So the KUDOS document can informatively refer to the document on limits.
+
+### ANIMA Constrained Join Proxy and rt= value brski.rjp
+
+https://datatracker.ietf.org/doc/draft-ietf-anima-constrained-join-proxy/
+
+* Discussion thread on the mailing list
+    * https://mailarchive.ietf.org/arch/msg/core/GdjbU60kMFVsa1eRKtHPVc85rN8/
+
+* From the 2022-09-14 CoRE interim meeting
+    * https://notes.ietf.org/notes-ietf-interim-2022-core-12-core
+    * https://datatracker.ietf.org/meeting/interim-2022-core-12/materials/slides-interim-2022-core-12-sessa-rd-cri-00.pdf
+
+CA: Nothing to add to the mail thread.
+CB: The discussion was useful, it doesn't look like completed. I just don't want that we are holding up the ANIMA document.
+
+MT: Perhaps we can have a dedicated design team meeting?
+CB: That would be good, I was hoping for a discussion today.
+
+MCR (on chat): we just need some CoRE person to express a specific view on how to deal, and ANIMA will do whatever you say is best. I'm good with having a design team meeting.
+CA: Let's continue on the mailing list for now, I'll try to propose something, then we see if we need a design team meeting.
+MT: The mail thread is linked above in the notes.
+
+### OSCORE-capable Proxies
+
+https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-13/materials/slides-interim-2022-core-13-sessa-oscore-capable-proxies-00.pdf
+
+MT presenting
+
+MT: Update regarding OSCORE capable proxies, a lot of things happened since last presentation in November 2021 at IETF 112.
+MT (p2): Might need security association Client-Proxy (C-P). Good to be able to use OSCORE for that and in general with a proxy. Currently forbidden in the OSCORE RFC. Agreed that this content fits for a separate document.
+MT (p3-4): Use case patterns (more in drafts). 1. CoAP Group Communication with Proxies 2. CoAP Observe Notifications over Multicast 3. LwM2M Client and external Application Server.
+(p5) The contribution is twofold, one part is updating the OSCORE RFC to allow OSCORE to be used by intermediares. The second one is about allowing "nested" OSCORE protection of messages. This opens for an onion-forwarding functionality built on OSCORE. Same things apply to Group OSCORE just as well.
+MT (p6): New use case from David Navarro was added, related to a LwM2M gateway practically acting as a reverse-proxy.
+MT (p7): Revised terminology definition of "proxy-related options". Now it covers well also possible reverse-proxies.
+MT (p8): Improved definition of which CoAP options that are natively of class U or I, but should be handled as class E depending on the OSCORE endpoint you are communicating to. These rules have been elaborated on and improved.
+MT (p9): Revisited message processing for incoming requests. This included simplifications, and additions to cover reverse-proxying. Now it's about three steps, including jumping forward and looping back: i) understand if it's about proxying; ii) if it's about proxying forward and stop; iii) if it's not about proxying, it's either about delivering to the application, or decrypting and going back to the first step. Processing of other messages is easier and has not changed for a long while.
+MT (p10): Will add a figure showing the logic for how to handle an incoming request. (Figure shown in slides.)
+CA: One important aspect is to check whether the sender is authorized to be proxied when reaching the "forward" node. This check can be based on the message having been decrypted using a specific OSCORE Security Context; requests coming from "the left" are typically not, originally.
+MT: Yes, this was implicitly asumed and the basis for the use cases that started this document; it should be added explicitly.
+MT (p11): Added multiple examples in Appendix A. OSCORE on different legs, and one example with EDHOC to establish OSCORE Security Contexts at runtime.
+MT (p12): Added section on cachability of OSCORE-protected responses and and appendix on "OSCORE-protected onion forwarding" (kind of mimicking Tor but with OSCORE). This latter part could be extracted to a separate Experimental document.
+MT (p13): Multiple next steps. Among others: more examples, corner cases, incoming response processing, CoAP header compression (building on RFC 8824). The core mechanics are stable and the document is in a good shape for review. Thanks to Göran, Christian and David for the feedback.
+GS: What is the status on the onion work? (Related to Christian)
+CA: By having proxying and ability to protect for proxies using onion OSCORE, we get many properties that Tor works hard for, practically for free. It is still related to an origin client hiding itself with proxies, but exploring how to take things further than that.
+GS: So this is taking that experiment further, not repeating it.
+CA: Yes, this is new and experimental.
+
+### COAP over GATT
+
+https://datatracker.ietf.org/doc/draft-amsuess-core-coap-over-gatt/
+
+- brief introduction
+- custom message sub-layer?
+    - (and what does a message sublayer generally need to do?)
+- value of application level hosts (connected to via proxies)
+
+#### Christian's ad-hoc slides
+
+CA: The motivation builds on how applications in a web browser are isolated from the CoRE network (and then go for WebSocket and the like).
+CA: Going through GATT is a way for consumer devices where GATT may be the only way to communicate, if not through the normal Internet. Applications on a cell phone can connect to a device, using all your security contexts (e.g., OSCORE and EDHOC).
+
+CoAP over UDP: base is unordered, repeated, no state, no reliability, the protocol is guessed.
+
+CA: Going over content of CoAP header. With GATT things are vastly different in terms of properties. (See next text and figure)
+
+~~~
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |Ver| T |  TKL  |      Code     |          Message ID           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Token (if any, TKL bytes) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Options (if any) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |1 1 1 1 1 1 1 1|    Payload (if any) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~
+
+GATT: base is ordered, not repeated, connected, and reliability is in one direction only (the GATT server doesn't know if responses arrive), the protocol is clear.
+
+CA: The published version -02 uses a simplification, excluding Message ID. This would not work for instance if a constrained device is used as multicast proxy (which can be a realistic use case).
+CA: Version -03 will include Tokens and an unused nibble for Message ID (instead of 16 bits, there's a 1 bit MID). Happy to hear feedback from the group.
+
+~~~
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   | sync  |  TKL  |      Code     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Token (if any, TKL bytes) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Options (if any) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |1 1 1 1 1 1 1 1|    Payload (if any) ...
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+~~~   
+   
+GS: I'm curious about the discussions with Marek and their deployment. Can we learn from that, or they from us?
+CA: I have used some feedback from Marek (from Assa Abloy), but not sure precisely what they are using. Assa Abloy and EDF are interested in this work.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[JM]: John Mattsson
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+
+ 

@@ -1,0 +1,41 @@
+CoRE Virtual interim - 2022-09-28 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* KUDOS
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+
+* ANIMA Constrained Join Proxy and rt= value brski.rjp
+
+   * https://datatracker.ietf.org/doc/draft-ietf-anima-constrained-join-proxy/
+   
+   * https://mailarchive.ietf.org/arch/msg/core/GdjbU60kMFVsa1eRKtHPVc85rN8/
+
+* OSCORE-capable Proxies
+
+   * https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+
+* COAP over GATT
+
+   * https://datatracker.ietf.org/doc/draft-amsuess-core-coap-over-gatt/
+
+* AOB
+
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-13/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=e0490177-3413-49d6-9b25-58d3307b244d
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-13-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
