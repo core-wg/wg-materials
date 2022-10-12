@@ -1,0 +1,135 @@
+# CoRE Virtual interim - 2022-10-12 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-14/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=29f29f06-97bd-4d54-9ebd-0c750a6eeab9
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-14-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Rikard Höglund, Marco Tiloca (helping)
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### HREF
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* Discuss two possible additions:
+    * Section 5.1 - Add additional, well-known URI schemes to the set of those possible to encode with a negative integer.
+    * Section 10 - Define a new IANA registry, where it is possible to register the negative integers associated with a URI scheme.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-14/materials/slides-interim-2022-core-14-sessa-20221012-core-href-00.pdf
+
+MT presenting.
+
+MT (p2): good to have extensibility for URI schemes in CRIs.
+MT (p3): Besides general extensibility, work on other documents considering CRIs motivated thinking about this. In draft-ietf-core-observe-multicast-notifications, a registry (for details) would be simpler with using CRIs. See https://github.com/core-wg/observe-multicast-notifications/pull/13 for details.
+MT (p4): Two proposed changes: one to extend list of early well-known URI schemes for which we want a negative integer; (p5) two to define the registry for those negative integers.
+MT (p6): Then what negative integers pre-register? For a scheme defined in the future, limit registration of its negative integer only to just-when-defining-the-scheme?
+
+CB: Originally not extensible because existing schemes would make it hard for the encoder to know whether or not it is understood. Senders are forced to continue using the text string form, because the recipient can not know.
+CB: If we want the ability to register new negative integers, this can only be interoperable when registered at birth of new URI scheme. That's difficult to make sure it's done.
+CB: That's even more tricky if the scheme has been in use before its registration. (An Internet Draft may live for years before the scheme registration gets through. It would need to be an as-early-as-possible early allocation).
+CB: Essentially we're adding a column to the Uniform Resource Identifier (URI) Schemes” registry (but I am not sure we can phrase it that way). We should discuss with URI schemes people over at that list.
+
+ED: On the negative integers, why only negative?
+MT: They'd collide with other meanings of positive integers in the CRI syntax.
+ED: About policy for registration of negative integers of future URI schemes ...
+(CB explained well.)
+CB: We could have the same problem if the scheme is registered at birth (because a newer device sends to an older device). That device couldn't convert -- but in any case the recipient wouldn't able to process it. The translation still has the same problem.
+
+CA: On convertibility, you can call them 2nd class citizens. CRIs are optimized to be processed as they are.
+CA: It would be a good compromise to have this kind of extensibility, at least it would be non ambiguous.
+ED: Agree.
+
+CB: There's also the question of comparing; you can't compare them if you have negative integerss. May one use the tex string form when the negative integer is registered?
+CA: The comparing problem should not be that hard. You should not anyway if the scheme-specific normalization was used. It should only be sintactic normalization. Knowing the scheme means knowing the number. It's a small syntax-based normalization issue, but it's feasible to handle. What good is identity comparison to a party that can not be sure whether there are scheme specific normalizations to consider? Without knowing the scheme, it can't be sure anyway.
+CB: Not always clear if one has to be aware of the used URI scheme when converting from URI to CRI.
+
+MT: Is it worth adding text regarding this in the draft?
+CB: Yes, very much so. 
+CA (in chat): +1 on exploring extensibility, with as-tight-as-necessary constraints
+MT: Do you think proposal 1 is fine to add?
+CB: Yes, but we should do the task of looking at scheme registrations and coming up with likely schemes to add in.
+MT: Can we expect text for next submission?
+CB: I know text for proposal 2; proposal 1 requires going through the URI schemes out there. We should set up a Wiki to collect material on this before having a Pull Request. (See https://github.com/core-wg/href/wiki/uri-schemes-that-we-want-numbers-for)
+
+ED: There are some schemes likely to be useful. We could just take the entire list of schemes and assign numbers (maybe big ones). Maybe not used ever, but no real problem. Whether that's useful, I don't know.
+CA: It would make URI->CRI conversion hard.
+ED: I don't imagine a converter to need the full list.
+CA: In constrained devices, the converter would be limited to schemes they understand.
+ED: Thinking of URI-CRI web page, that'd just carry the whole list.
+
+ED: What does the headers in the Wiki mean?
+CB: I put 3 categories, 1+0 bytes (values -1..-24, short representation), 1+1 bytes (values -25 to -256), and finally 1+2 bytes category. Probably don't need 1+4 bytes category.
+
+CA: This kind of exercise happened already for Bluetooth. Schemes were mapped against something of fixed size.
+CB: That will be hard to enforce, but it seems useful that someone did the work. Is there a pointer?
+CA: https://btprodspecificationrefs.blob.core.windows.net/assigned-numbers/Assigned%20Number%20Types/URI%20Scheme%20Name%20String%20Mapping.pdf
+
+
+### CoRE Resource Type (rt) assignment for draft-ietf-anima-constrained-join-proxy
+
+https://datatracker.ietf.org/doc/draft-ietf-anima-constrained-join-proxy/
+
+* Discussion thread on the mailing list:
+   https://mailarchive.ietf.org/arch/msg/core/GdjbU60kMFVsa1eRKtHPVc85rN8/
+
+* From the 2022-09-14 CoRE interim meeting:
+   https://notes.ietf.org/notes-ietf-interim-2022-core-12-core
+   https://datatracker.ietf.org/meeting/interim-2022-core-12/materials/slides-interim-2022-core-12-sessa-rd-cri-00.pdf
+
+See https://datatracker.ietf.org/doc/html/draft-ietf-anima-constrained-join-proxy#section-9.1 .
+
+It would be good to check current status and open questions related to this request.
+
+CB: Shall we break now and resume in IOTOPS?
+
+(No early discussion here; moved to IOTOPS at 15:00 UTC)
+
+### AOB
+
+---
+Moving over to IOTOPS meeting at 1500Z
+---
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+ 
