@@ -1,0 +1,139 @@
+# CoRE Virtual interim - 2022-11-23 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-16/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=737345ad-76fb-4cb9-8795-651b2cef06e3
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-16-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### CoRE Target Attribute Registry
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-target-attr/
+
+MT: Adopted today as WG document.
+
+CB: It is in a pretty good shape already. It's about being sure that we collect target attributes already around, and that we have a good registration policy.
+
+RH: Can you automate the extraction of target attributes?
+CB: It might require natural language processing.
+
+CB: I haven't formally checked for its consistency with the CoRE charter, but it's pretty clear that it acts as maintenance of RFC 6690, based on a direction now coming from RFC 8288.
+(no objections heard)
+
+CB: Timeline for this draft?
+MT: Complete on Q1 2023?
+CB: If possible, we can even try for WGLC this year, at least starting it.
+
+MJK: I agree with Carsten, this can go quickly. This document can encode a lot of policies. It has to be correct as to registration and good maintainance of the registry.
+
+MT: For information, we'll soon submit a revision of -core-oscore-edhoc, where some target attributes will be renamed to correctly use "-" instead of the underscore character. Then -core-target-attr can be updated accordingly.
+MT: Also related to attributes from -core-oscore-edhoc, I'd expect some bikeshadding around their names, to have an EDHOC-related prefix and to see if it's possible to shorten them. That would probably happen during WGLC of -core-oscore-edhoc and spans over both documents.
+
+MT: Ari also had a comment during the adoption call, on having the definition of target attributes more specific, especially those from -core-oscore-discovery. However, especially those have a general meaning that holds in contexts different than OSCORE groups.
+CB: We have to find a balance on the level of specificity.
+MT: Yes, I am ust trying to avoid a sort of "point squatting", where two attributes are registered, and they mean the same thing but just in different contexts.
+CB: At the same time, we can't really prevent people from misusing (registered) attributes.
+
+### HREF
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+* https://github.com/core-wg/href/wiki/uri-schemes-that-we-want-numbers-for
+
+CB: There is a new PR for one of the open issues now. See https://github.com/core-wg/href/pull/58 . This addresses the issue on rootless no-authority CRIs without path.
+MT: It looks good at a first glance. You can ask Thomas and Christian for a review.
+CB: Will do.
+
+MT: It was discussed how to address the remaining issues. Do you plan a PR for those?
+CB: Yes.
+MT: An exception is the issue about test vectors. Do you plan more interop/comparison at least with Thomas?
+CB: Yes.
+
+MT: We also have the wiki (see link above) where to collect the negative integers to pre-register as abbreviations of URI schemes.
+MT: The idea was to first extend the minimal set of usual suspects in the CDDL definition of a CRI (including also coap+, coaps+, ...), and then take this minimal set as starting point for the registration in this document.
+CB: We may want to include also MQTT.
+MT: Then it's about what we want to further pick up from other existing URI schemes.
+CB: Another problem is that some URI registrations are not permanent yet.
+MT: That's one more thing to factor in the definition of a good registration policy. It's not going to be easy.
+CB: We need to find a balance in terms of flexibility, while still giving clear criteria to the Designated Expert.
+
+MT: Timeline for this draft?
+CB: We might be able to start a WGLC this year.
+
+### Errata resolution for CoRE documents
+
+See https://mailarchive.ietf.org/arch/msg/core/0VM6waLVW1v3B9ghF0EmUBeZZ3E/
+
+MT: I went through them. On 7 of them, I just agree with the proposal from Francesca. I have comments on the other 3 ones.
+
+MT: On https://www.rfc-editor.org/errata/eid4895 , can't this also be verified instead of hold for doc update?
+FP: I think it requires more work, has implications for IANA, and feels cleaner in a separate document updating RFC 7252.
+CB: Yes, and that document can be -corrclar, see https://github.com/core-wg/corrclar
+
+MT: On https://www.rfc-editor.org/errata/eid4948 , I double-checked and think that the content is correct. Like Francesca said, it's probably not possible to use the notation [...] and we may have to re-include a lot of unchanged text too.
+FP: That's maybe something to check with the RFC Editor.
+CB: I can do that.
+
+MT: On https://www.rfc-editor.org/errata/eid4954 , I was leaning towards verifying this one, but like for the first discussed errata, it's better to have it hold for an update, due to the IANA implications.
+CB: And again the updating document can be -corrclar.
+MT: Also, probably other documents made the some mistake that this errata is trying to fix in RFC 7252.
+CB: -corrclar can update those documents too; let's just hope they're not too many.
+MT: At least they're clearly identifiable from the "CoAP Content-Formats" registry.
+
+CB: On https://www.rfc-editor.org/errata/eid5429 , I agree that it should be rejected. When updating RFC 7252, -corrclar can clarify on this point too, providing the rationale behind the contested design, also supported by the LWIG document https://datatracker.ietf.org/doc/draft-ietf-lwig-coap/
+FP: Please provide a pointer in a reply to the thread in the mailing list.
+CB: Will do.
+(see https://mailarchive.ietf.org/arch/msg/core/xNnPJKCQJnFDj64H13d_AljuB50/ )
+
+MT: A good place for collecting these points is the "CoAP FAQ" in the CoRE WG Wiki, see https://github.com/core-wg/wiki/wiki/CoAP-FAQ . Most of the current entries are potential material for -corrclar.
+
+CB: Based on a quick look on the list of erratas, I agree with the proposed resolution.
+
+MT: Let's confirm at the next interim meeting in two weeks.
+
+### AOB
+
+MT: Next interim meetings in 2 weeks is planned to be about -core-sid and on confirming the resolution of the erratas.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch

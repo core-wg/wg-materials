@@ -1,0 +1,35 @@
+CoRE Virtual interim - 2022-11-23 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CoRE Target Attribute Registry
+
+   * https://datatracker.ietf.org/doc/draft-bormann-core-target-attr/
+   
+* HREF
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+   * https://github.com/core-wg/href/wiki/uri-schemes-that-we-want-numbers-for
+
+* Errata resolution for CoRE documents
+
+   * https://mailarchive.ietf.org/arch/msg/core/0VM6waLVW1v3B9ghF0EmUBeZZ3E/
+   
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-16/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=737345ad-76fb-4cb9-8795-651b2cef06e3
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-16-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
