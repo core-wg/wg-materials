@@ -1,0 +1,201 @@
+# CoRE Virtual interim - 2022-12-07 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-17/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=793543e4-2a64-4dd8-9dda-2cb363d4b163
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-17-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca, Rikard Höglund
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### YANG Schema Item iDentifier (YANG SID) (and the whole CORECONF cluster)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+MCR: Conflicting meeting today, but I have questions on -sid.
+CB: Let's have a design team meeting. We need Alex to join. We'll set a Doodle?
+MT: I'll set a Doodle with options for the next two weeks.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-17/materials/slides-interim-2022-core-17-sessa-coreconf-et-al-00.pdf
+
+CB: Going through the status of the CORECONF cluster. 4 documents: RC9254, CORE-SID, CORE-COMI & CORE-YANG-LIBRARY.
+CB: Still a DISCUSS from Rob Wilton on CORE-SID to handle , the remaining issue is documenting the objectives of SID management. Version -19 addressed this (PR #146). Everyone please read this new section.
+CB: Another issue is the requirement for a "stable" field in a SID file (see PR #141). Currently not supported by PYANG. A stable field was defined. Need someone to add support for this in PYANG.
+CB: We may need a second WGLC. Up to (other) chairs to determine, but it's a good thing if it hopefully happens fast.
+CB: New SID file with a leaf example. Showing slide with structure.
+CB: A number of PRs pending to be made. Editorial round needed after this.
+CB: Good to clear the DISCUSS before other round of WGLC.
+
+MT: This requires not only a WGLC but also an IETF last call after that, right?
+CB: Yes, may be needed, up to chairs to decide. It's basically about taking two steps back.
+MT: Next revision should be the last?
+CB: Yes.
+FP (in chat): Do you need me to get to Rob?
+CB: Yes, it would be nice.
+FP (in chat): I nudge him tomorrow.
+FP (in chat): We might end up needing a new IESG review as the follow-up to the last calls
+MT: If the design team meeting goes smooth, we may have new revision in January, right?
+CB: Yes.
+
+CB: Going into CORE-COMI
+CB: This work was waiting for yang-cbor to be done, so it can progress now. Editorial nits and technical issue remain. The technical issue is about the 'k' query parameter, how are keys represented in GET URIs? Many YANG datatypes exist, complex and with surprising differences. The proposal is to always use urlSafeBase64(CBOR); it's uniform but it can sometimes be longer. Trades complexity for slight length increase (but using FETCH is an option if size is critical). Do we want an optimization for frequent string cases?
+KZ (in chat): If I remember correctly the exact encoding proposed is to use the urlSafeBase64 of a CBOR sequence containing all k params
+CB: Let's discuss the exact wording offline.
+KZ: Implementing GET as described with the different encodings is mostly adding complexity, but not a huge increase for code size. There is a potential issue with having commas in the string key, since comma is used as separator between 'k' parameters. Going with base64 seems to be the safe way.
+CB: We'll move in that direction, and we'll have a PR, to be referred to on the mailing list later on.
+
+### CoRE Target Attribute Registry
+
+https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-17/materials/slides-interim-2022-core-17-sessa-coreconf-et-al-00.pdf
+
+CB: It has been adopted. We want to do -01 with updated prefill table.
+CB: Issue #7: Useful to limit lengths of target attributes? Continue discussion in Github issue. After -01 next step is WGLC.
+MT: Sounds good. Also, a length limit is a good idea.
+
+### corr-clar
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2022-core-17/materials/slides-interim-2022-core-17-sessa-coreconf-et-al-00.pdf
+
+https://github.com/core-wg/corrclar
+
+CB: Want to revive this document. More text about errata to be added (e.g., PR #26). Other resources are the [CoAP FAQ](https://github.com/core-wg/wiki/wiki/CoAP-FAQ) and [LWIG-CoAP](https://datatracker.ietf.org/doc/draft-ietf-lwig-coap/). Do we just reference those, or pull in text from those?
+CB: What should be the intended status of the document? Standards Track or Informational? Informational parts could be put in an Appendix. I lean to somehow putting both in the same document.
+MT: So, corrections would update the protocol and affect implementations. It feels like that deserves Standards Track.
+MT: Informational parts are the clarifications?
+CB: Some things are different from correction/clarification, more like updates. 
+MT: About informational content in the appendix, perhaps the most opinionated points can be put there, but keep important info to highlight in the main body.
+MT: Is there a draft or only Github repo?
+CB: There is a draft from 2018.
+MT: So it's mostly about what/how to pick from external sources and add that content when reviving the draft.
+CB: Yes, and also what we want to write in the document.
+MT: Corrclar document is also good for handling errata that is held for update.
+
+### Errata resolution for CoRE documents
+
+See https://mailarchive.ietf.org/arch/msg/core/0VM6waLVW1v3B9ghF0EmUBeZZ3E/
+
+
+| Errata | Issue | Proposed Resolution | KH |
+|:-|:-|:-|:-:|
+| [4895](https://www.rfc-editor.org/errata/eid4895) | | Hold for doc update | &check; |
+| [4946](https://www.rfc-editor.org/errata/eid4946) | [#1](https://github.com/core-wg/corrclar/issues/1) | verified | &cross;[^1] |
+| [4947](https://www.rfc-editor.org/errata/eid4947) | [#1](https://github.com/core-wg/corrclar/issues/1) | verified | &cross;[^1] |
+| [4948](https://www.rfc-editor.org/errata/eid4948) | [#2](https://github.com/core-wg/corrclar/issues/2) | verified (to double check) | &check;[^2] |
+| [4949](https://www.rfc-editor.org/errata/eid4949) | [#3](https://github.com/core-wg/corrclar/issues/3) | verified | &check; |
+| [4954](https://www.rfc-editor.org/errata/eid4954) | | Hold for doc update? (or verified) | &cross; [^3] |
+| [5078](https://www.rfc-editor.org/errata/eid5078) | [#4](https://github.com/core-wg/corrclar/issues/4) | verified | [#26](https://github.com/core-wg/corrclar/pull/26) lgtm |
+| [5254](https://www.rfc-editor.org/errata/eid5254) | | rejected (changes the RFC original intention) | &cross;[^4] |
+| [5284](https://www.rfc-editor.org/errata/eid5284) | [#5](https://github.com/core-wg/corrclar/issues/5) | verified | &cross; [^5] |
+| [5429](https://www.rfc-editor.org/errata/eid5429) | [#6](https://github.com/core-wg/corrclar/issues/6) | rejected (changes the RFC original intention) | &check; |
+
+[^1]: See https://www.rfc-editor.org/errata/eid4251 that does the opposite for http://.
+[^2]: This is a rather substantial protocol change, though.
+[^3]: The column headings should actually be "Content type", "Content coding", "ID", and "Reference".
+[^4]: At first glance, this looks like a valid concern and a good fix to me.
+[^5]: Among the set of tokens in use with a given source/destination endpoint pair, each token must uniquely identify one request. So the original text is correct.
+
+MT: Got input today, see notes above from Klaus and a mail on the list from Esko.
+
+MT **4946 and 4947**: Comment today that HTTP did the opposite than what the two errata suggest (see also RFC 9110, Sections 4.2.1 and 4.2.2). Esko stated that introducing the fragment component introduces confusion. Shall we then reject this errata pair?
+CB: Klaus found and wrote up this errata. But we found out HTTP had same problem and fixed it in the opposite way. We should probably not go against what they did there.
+MT: **So we reject it?** If need be, corrclar can clarify further why things are the way they are.
+FP (in chat): I think this should be a called back errata (if that existed).
+
+MT: **4948**: Note from Klaus that this is a substantial change.
+CB: Clarification for me, since it was the original intent. But text is not clear on that.
+MT: **Take as verified then**.
+
+MT: **4954**: **To be edited by the verifier (FP) and then verified**
+CB: Yes
+FP (in chat): Yes I believe I can change it
+MT: The editing to the new proposed text would be as suggested above by Klaus, i.e., s/Media Type/Content Type
+MT: Check documents that registered a content-format as indicated by the old text. Separate errata ca be open for those, corrclar can update and fix those documents too.
+CB: I'd go for corrclar.
+MT: Yes, let's mess and less tasks for the AD.
+
+MT: **5254**: This is about RFC 6690. About updating the format to rule out error-prone variant with corner-case URIs. The initial proposal was to reject the errata as it changes link format. Klaus states in his comment that it is a good fix for a valid concern. But does it not change the original, agreed intent of link format?
+CB: Yes we invalidate many cases with innocuous non-quoted instances. Would be a change, but good change. Real problem is that ABNF tells you the syntax, but not the meaning. This change would move quoting from syntax-related to something with semantic consequences. That direction I am against.
+MT: **Keep reject?** Francesca to make final call
+
+MT: **5284**: The original proposal was to accept the errata as verified. It is about adding text on Token generation in CoAP, clarifying uniqueness per request. Klaus' point is that it is redundant, and the original text is correct already.
+CB: Saying something is unique does not matter before the domain which it is unique within is defined. Adding "per request" as in the proposal does not help, I understand it better without that addition.
+MT: So, hearing Carsten and Klaus, that means **reject**? Clarifications on that sentence and its meaning can still be done in corrclar anyway. So reject, if Francesca agrees.
+
+MT: For all the non discussed errata, the original resolution proposal in the table can stand.
+
+**Summary of consolidated proposal for errata resolution**
+
+* https://www.rfc-editor.org/errata/eid4895 ==> Hold for doc update
+
+* https://www.rfc-editor.org/errata/eid4946 ==> Reject
+    - To remain aligned with HTTP, see RFC 9110, Section 4.2.1
+
+* https://www.rfc-editor.org/errata/eid4947 ==> Reject
+    - To remain aligned with HTTP, see RFC 9110, Section 4.2.2
+
+* https://www.rfc-editor.org/errata/eid4948 ==> Verified
+
+* https://www.rfc-editor.org/errata/eid4949 ==> Verified
+
+* https://www.rfc-editor.org/errata/eid4954 ==> Verified after editing the proposed new text: s/Media Type/Content Type
+    - That is, the new text should indicate the column names "Content type", "Content coding", "ID", and "Reference"
+
+* https://www.rfc-editor.org/errata/eid5078 ==> Verified
+
+* https://www.rfc-editor.org/errata/eid5254 ==> Rejected
+    - The change would move quoting from syntax-related to something with semantic consequences
+
+* https://www.rfc-editor.org/errata/eid5284 ==> Rejected
+    - The proposed addition is redundant and does not help
+
+* https://www.rfc-editor.org/errata/eid5429 ==> Rejected
+    - It changes the RFC original intention
+
+### AOB
+
+MT: We resume with interim meetings on 2023-01-18.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg

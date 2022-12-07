@@ -1,0 +1,30 @@
+CoRE Virtual interim - 2022-12-07 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* YANG Schema Item iDentifier (YANG SID)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* Errata resolution for CoRE documents
+
+   * https://mailarchive.ietf.org/arch/msg/core/0VM6waLVW1v3B9ghF0EmUBeZZ3E/
+   
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2022-core-17/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=793543e4-2a64-4dd8-9dda-2cb363d4b163
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2022-core-17-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
