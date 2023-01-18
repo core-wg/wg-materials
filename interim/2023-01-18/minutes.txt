@@ -1,0 +1,189 @@
+# CoRE Virtual interim - 2023-01-18 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-01/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=509bc966-8b03-4e44-b324-76ee7ba31b1f
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-01-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca, Rikard Höglund
+Jabber scribes:
+
+## Agenda
+
+### Note Well
+
+MT doing introductions.
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+MT: Thanks Francesca for wrapping up the pending errata!
+
+### Conditional Attributes for Constrained RESTful Environments
+
+https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-01/materials/slides-interim-2023-core-01-sessa-conditional-attributes-for-constrained-restful-environments-01.pdf
+
+BS presenting updates since last time IETF meeting.
+
+BS: Since IETF 115, issues addressed based on a review from Marco and requested an IoT-Directorate review. Submitted new v -06, with pseudocode moved to an Appendix and revisited.
+BS: Early review from IoT-Dir was accepted, Ines is on it.
+
+BS (p6): pmax was recognized as an attribute that can contribute to amplification issues by setting very small timeouts. See: https://mailarchive.ietf.org/arch/msg/core/MPp2CS_W696GomNwpAsxww_SqaA/
+BS: ToDo: Work on security considerations (not only pmax, also epmax).
+
+BS (p7): Got another review more about how this draft deviates from the original intention of observe in RFC 7641, suggesting to present things differently to achieve the same effect, especially defining how the server updates resource state instead of notification sending, and how the client influences it. See: https://mailarchive.ietf.org/arch/msg/core/O8ZTPOAve3xljuZ6HwXR0yKZ8R8/
+BS: "it's not the latest state" is justified by the query applying a filter on the resource. MJK, what do you think?
+MJK: Got other comments first. Considered position...
+CB: I'd like to simplify the statement in the review as "Don't fork CoAP". What we do should allow implementations that are around and don't know this specification to keep working. If a CoAP implementation would need to change its behavior, we messed up. If server gets new semantics, it's fine.
+CA: Agreed with the sentiment from the slide. We're not altering the properties of RFC 7641, just viewing an altered resource. On CB's: This is not a fork, as long as nobody expects to use these parameters on resources that don't advertise supporting it.
+MJK: My main point was what CA said, that's why I deferred. And you don't have to use query parameters; when they're used, the query parameters create a new resource (as Klaus proposes). We create a new resource state that gets observed. So it doesn't break anything, but it deserves further consideration thinking of scenarios we could come up with where things do get broken. We went over this with Klaus in Montreal some time ago, maybe we can recover the diagram from back then.
+
+MJK: On the recommendation about amplification attacks, it's hard to be normative there. I don't think we can tell for instance to operators of an industrial control systems what to do, and it should be clear that times need to be considered in the network context, and that pmax should be bound adequately.
+CA: It shoudn't be up to this document to say anything other than generally reminding about what is stated by RFC 7641 about amplification/congestion. If that was not sufficient, it would require an actual update. We have a protocol for that, which should provide adequate measures.
+BS: The view aspect also comes in here.
+MJK: The actual value of the number doesn't need to change for the resource state to be changed. These things are all hints. The server should never be prohibited from sending an extra notification even when the state didn't change -- prohibiting that would be assuming too much authority over how people use this.
+
+MT: On epmax, do you plan considerations along the lines of "The server should think about what it's best for itself when accepting epmax"?
+BS: I think this has always been the case already, we don't mandate things (other than maybe with pmax), so the server is free to decide what it wants to apply.
+MT: It's still considerations, after all.
+
+MT: Another comment in the second review was about pmax to be better as a new CoAP option rather than a query parameter, since it's extending the Observe behavior: the server might end up sending a notification even when it would not otherwise because the resource representation has not changed. And extensions are done by means of options.
+MK: So adding a CoAP option to modify pmax behavior?
+MT: I read the review comment that way. But it also relates to the previous comment from MJK: prohibiting extra notifications would be assuming too much authority.
+CA: Using a CoAP option sounds like that we would re-introduce a lot of the cache-control material that we deliberately left out of CoAP compared to HTTP. I like keeping the caching model simple.
+CB: We need to hone our understanding of what "changing resource state" means. If I have a new temperature reading with the same value than the old one, the new reading may have a different lifetime. That's useful state for the lifetime to have. We encode that in Max-Age, which may not even change, but it has a new meaning when expressed at a later time. Also, a server may want to tell the client that "actually I don't have a new measurement, I'm surprised, so here is the old measurement with the smaller current max-age" (so in terms of expiry, the state didn't change but the information is new because the server authoritatively said it's still so). This we need to understand better. I don't have a clear opinion on what is the best way, but "Only change in the payload creates new notifications" may come up short.
+MJK: I would like to be able to think about it for each resource state. So each resource state has a finite lifetime, so, when the same value is communicated again, the server is communicating a new value with a new end-time. There is no reason to prevent that, unless someone can define what it breaks. Maybe we can broaden our notion of resource state? We may also encode "I'm expecting it to be updated".
+
+BS: MJK, do you think we could include some of that in the justification of pmax?
+MJK: That is a good idea, we may need more discussion on the definition of "resource state".
+MT: These clarifications will be good to have anyway, both in terms of "not extending observe, not forking CoAP" and on the effects of using pmax.
+BS: What I took from the comments is that there is little guidance on how query parameters can interfere with the correct operation of observe, specifically making sure that the client receives a consistent state of the server. It might be nice to consider that as a broader work. If you, today, have a CoAP implementation that has Observe, and set a query parameter, what does it change? Clarify in T2TRG? It's not in the Observe RFC.
+CA: I think the information is there but hidden behind the definition of "a resource", so it may need clarification.
+MT: Good to phrase out that observation is already of a "special" representation of the resource. It will come back again otherwise, and it also helps again to support that no update/fork is happening.
+
+MJK, summarizing: Our work item is to update the draft with a prototype discussion along these lines, but also to take the discussion broader (which may get in the way of updating the draft).
+
+CB: What also needs to be in the discussion is how proxies on the way do the right thing. A proxy needs to know what's going on without interpreting the query parameters.
+CA: Is there a question on the right behaviour, or is it about how we phrase it? My understanding is that the proxies's role is pretty clear. From its point of view, what is going on is just about a lot of resources. The only potential open question is: can the proxy rely on what it has seen in the traffic passing through itself (that the resource adheres to the specification), and apply the specification itself?
+CB: The worst case is if there's a client observing a resource through two proxies, in between of which you can't use observe. How do we interact with it?
+CA: Should we not describe that case for proxies in general? Because otherwise it will be missing for proxies in general, like those not implementing this specification.
+CB: Yes, it's a problem to be solved in a general way.
+CB: The view we had is that we did solve the problem, and new stuff coming up warrants revisiting whether we did it right.
+MJK: For a reverse proxy, it's clear that the parameters are meant for the endpoint, for forward proxies it is not the case.
+CA: The forward proxy just has to transparently forward, it's not an authority.
+MJK: That is the perception right now.
+MT: How much can be said in this document? Anything at all?
+BS: We identified many fundamental issues about resource retrieval and updates.
+MJK: There can be a special section on this in the document.
+MT: Note that the document has always been informational.
+BS: We had a section about proxies, I know. There's also the last paragraph in Implementation considerations, but we may need an actual "Proxy considerations" section.
+MJK: Yes, part of that diagram with Klaus was about chained proxies. We don't have showstoppers here, we just have to make it clear how it could work.
+
+CB: Another thing to consider is that the local cache in the client has very similar considerations. What fixes the proxy also ensures that the local cache won't create problems.
+BS: We will try to document that too.
+
+CA: Just one more note: if there's a leg without observe, the notification sending might degrade. That's ok, it can just happen. It's fine if eventual consistency is there, which probably still is.
+(CB on chat: +1)
+
+### CORECONF
+
+Presented slides:
+https://datatracker.ietf.org/meeting/interim-2023-core-01/materials/slides-interim-2023-core-01-sessa-coreconf-00.pdf
+
+CB presenting the deck about two documents
+
+CB (p1): RFC 9254 is done. Working on CORE-SID, with comments from Rob Wilton. COMI was blocked by YANG-CBOR/CORE-SID issues. YANG-LIBRARY may need to be revisited because YANG moved so fast (but this is not for this meeting)
+
+#### YANG Schema Item iDentifier (YANG SID)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Latest mails from Rob Wilton
+* https://mailarchive.ietf.org/arch/msg/core/ZYmn_2t4mZ7XgJ9W77iSxAKU0QU/
+* https://mailarchive.ietf.org/arch/msg/core/xB6VU731H7mJODlUCIjEvReyepY/
+
+CB (p2): #146 about documents objectives is mostly done and could be merged. #141 is about communication between module authors and users, but *also* for communication among module authors. Assumptions about who has control there don't work in general situations, this is why the SID file issues came up. A recent comment by MCR on the PR addresses this well.
+MCR (p4): I can quickly render a patch to YANG to be able to read the new field and save it with whatever value it had before, it should be easy to do, whether it's this version or another. The real questions is how we mark this as stable, and who does it. Like what options on the command line, and who puts that option and when. And that's a process issue. Regardless what we put in the JSON, we can make YANG mostly work. We need to decide what must be done.
+CB: Encoding "who" made that statement has the problem that other questions come (why, when); be careful to not create a god variable that encodes the history of the universe. We have to go through the SID mechanics, ensuring the types of communication we want are open. A client (user of the module) cares about none of that; actors modifying the module need to communicate clearly.
+CB (p3): Rob gave feedback recently, which was very useful and detailed. It will take some days to process. One point from him was that we need a way to record Obsolete SID assignments. If you want to encode that you don't want to use it to avoid confusing older implementations, there is a need to encode this in the SID files. Perhaps by encoding "high-water marks" in the ranges, but that gets complicated. Having a status of "obsolete" is useful; the interesting thing is that you don't care about the YANG path, only about the SID number.
+CB: We need to define who determined if something is stable, and what unstable actually means. We may need to convene a design team meeting for this. The plan is to process Rob's feedback (going into next week). There are also some new issues that require thinking, and issues left open from before that need work. We will have one or more design team meetings, edit the document, and then generate a version -20 covering these issues.
+
+#### CoAP Management Interface (COMI)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+CB (p6): This document has been in a frozen state for a while; after thawing, we found an issue with "k". The issue is that we're trying for HTTP compatibility with GET, but the native way is FETCH.
+CB (p7): The current definition of setting up the k-parameter is very complicated. We need to look at the parameters and set up different encodings, which produce either decimal or base64 digits. But for strings, the current definition tries to be "transparent", which is good but causes problems. The current proposal doesn't optimize for strings. We might need to have expansion with 3-4 cases.
+CB (p8): Comma separation is ambiguous vs. plain strings (the previous draft does not work). We could simplify to say "everything is base64", or turn it into using a CBOR sequence.
+CA: The whole point of this is to be a bit more compatible with HTTP, right? If we end up doing custom things anyway, can't we just make FETCH happen and use it?
+CB: From my point of view, yes! The decision to have both was taken 3-4 years ago when there were CoAP implementations out there that couldn't. We might decide that this was overtaken by events. But not all requests require a key, and just sending a SID might be nice. Interesting suggestion.
+
+CA: FETCH is now around and established; that's also what was given to the DNS over CoAP authors.
+CB: The question remains of how much stuff of COMI is deployed where it can't be updated to FETCH. But yes, a component that is not present has the smallest amount of bugs.
+CB: So the question is: now in 2023, do we still need to cater to non-FETCH supporting implementations?
+CB: The plan is to get k-simplification done, and moving the draft forward. We need to find out who can push it forward. The authors are currently not focusing on this work. We need work and feedback to finish it. The next step is a design team meeting, to decide about the updates towards version -12.
+
+### Constrained Resource Identifiers (HREF)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-01/materials/slides-interim-2023-core-01-sessa-constrained-resource-identifiers-00.pdf
+
+MT presenting, not being an author, following up on discussions started in October 2022.
+
+MT (p2): In CRIs, a URI Scheme can be indicated as text string or negative integer, which has been the case from the start. October discussion: How to make this extensible? More schemes with an integer ID defined upfront, and a new registry to enable future registrations.
+MT (p3): Good in general, but also concrete motivational cases: -observe-multicast-notifications uses this and has open PR to change to use CRIs, which in turn would use the negative integers; -core-groupcomm-proxy would also use part of it for the value of a CoAP option.
+MT (p4): PR [#57](https://github.com/core-wg/href/pull/57) is still open, one open point still deserving attention is pending.
+MT (p5): Added more URI Schemes for which the draft defines an integer ID upfront. Also added a wiki for collecting URI schemes, see [Wiki page](https://github.com/core-wg/href/wiki/uri-schemes-that-we-want-numbers-for). That part was uncontroversial.
+MT (p6): The main thing was to create the new IANA registry and define the registration guidelines. The registry has been added to the PR, with "Expert Review" as registration policy. We need to be careful with registrations in 1+0 and 1+1 space (due to those having lower overhead and being few in number). As to provisionally registered URI Schemes, they would get a 1+2 integer ID, unless believed otherwise by the Designated Expert of the new registry.
+MT (p5): We also need to ensure awareness of the registry existence (and CRIs existence altogether). To do this, the text will ask IANA to add a note ni the "URI Schemes" registry, highlighting the existence of this new registry and the possibility of registrations of IDs.
+MT (p7): Big open point -- When should an ID registration happen? We want to avoid that a new URI scheme is registered, while an ID is not right away but it is in the future. Then implementations using CRIs might be getting stuck and worsen interoperability, being the text form confidently used for a long while.
+MT (p7): One proposal, in the current PR text, is to do pre-registrations from the -href draft, but then allow the registration of an ID only upon registration of the new URI Scheme itself, at the discretion of the authors of the URI scheme. But this leaves open the issue that authors of the URI Scheme may just not care (yet) and/or the need/convenience for an ID is not clear at that moment. That might change later on, when it would be too late for registering an ID. So maybe it's too strict.
+MT (p7): The alternative is to have the -href draft pre-register all existing URI schemes, and then any newly registered URI-scheme in the future will trigger an (ideally automatic) ID registration too. This solves both problems. Input is welcome, further discussions will happen on Friday's Coral/HREF design team meeting.
+CB: This is the "x-dash" problem coming up again. Once an official name is out, new users won't pick it up for interoperability. We'd like to reap the benefits of numeric identifiers and not get stuck.
+MT: Any input? (seems none for now). Otherwise we get back to it on Friday.
+
+MT: There are also some Github issues still around, and some still to be possible to close already. Some cleanup should be possible to do on Friday.
+
+### AOB
+
+None. See you in two weeks.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+

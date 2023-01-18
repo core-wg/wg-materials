@@ -1,0 +1,34 @@
+CoRE Virtual interim - 2023-01-18 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Conditional Attributes for Constrained RESTful Environments
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+* YANG Schema Item iDentifier (YANG SID)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* Constrained Resource Identifiers (HREF)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-01/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=509bc966-8b03-4e44-b324-76ee7ba31b1f
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-01-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
