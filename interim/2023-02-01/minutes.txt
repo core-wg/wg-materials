@@ -1,0 +1,139 @@
+# CoRE Virtual interim - 2023-02-01 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-02/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=ee8e97a8-ca02-49bc-9580-2149fee246dd
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-02-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Rikard Höglund, Marco Tiloca (helping)
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+MT introducing
+
+### Jabber & Minutes / Agenda bashing
+
+No changes to the agenda
+
+### YANG Schema Item iDentifier (YANG SID)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+CB presenting results from Design Team meeting 2023-01-26
+
+CB: Discussed ways forward; in particular:
+
+* per-item status: unstable ➔ stable ➔ obsolete
+
+CB: what should be in item status field? Decision: Could put lots of information in there, but unclear how actionable that'd be. Instead, revert to simpler state but add "obsolete" status.
+
+* per-sidfile status: unpublished (workfile) ➔ published (definitive)
+    * published sidfiles can only contain stable/obsolete items
+
+CB: If all entries are stable, apparently the file is stable. But better to be explicit and indicate a published, definitive file. Tools should never make decision on publication unless explicitly requested. Discussed whether that should be reflected in file extension -- but that'd cause tools issues, hence not pursued further.
+
+*  #147 and #144
+
+CB: out of scope now; they can be taken on in one or more further documents, especially the whole annotation support. The map keys in JSON can turn out having different meaning, but we don't want to do this here for -sid.
+
+To do:
+
+CB: I will supply an updated response note to Rob to look at
+CB: We will cover #139, #66 and #88 as needed and publish version -20
+
+MT: Will version -20 also including Rob's comments?
+CB: -20 will be base for Rob's next comments. If more input comes, we would produce version -21.
+MT: So we can expect updates in 2 weeks?
+CB: Yes.
+
+### Link to RFC 7252 Errata in IANA registries
+
+https://mailarchive.ietf.org/arch/msg/core/ClSnTD4UQCqylzDsts2ho1WM6VE/
+
+Should a link to any of these
+
+* https://www.rfc-editor.org/errata/eid4949
+    * Location-* CoAP options are only in responses
+    * MT: Would be easy to do, but just more context.
+* https://www.rfc-editor.org/errata/eid4948
+    * A request payload, if present, is part of the cache key
+
+be added in any of these registries that refer to RFC 7252?
+
+* https://www.iana.org/assignments/core-parameters
+* https://www.iana.org/assignments/ipv6-multicast-addresses
+* https://www.iana.org/assignments/multicast-addresses
+* https://www.iana.org/assignments/service-names-port-numbers
+* https://www.iana.org/assignments/uri-schemes
+
+MT: IANA wrote a mail regarding errata for CoAP. Should any of these be linked in related registries (see below)?
+MT: My take: None is really needed, one would not hurt (errata 4949 linked in the CoAP Option Numbers registry, just thinking of the placeholders for future Location-* options; it would just give more context).
+
+CB: It would be difficult for people to understand why we are linking. Extra explanation is needed, but where to put it (corr-clar document)?
+MT: So, in case, it can come in corr-clar?
+CB: Yeah.
+
+CA: I agree we do not need to do this, it doesn't add to the registry.
+MT: Yes. Other than this one, any other addition does not seem relevant at all anyway.
+CB: Except errata 4954, which changed the registry, but that has been taken care of.
+MT: I will reply to IANA that no link is needed to be added to the registries.
+
+### CoRE Target Attribute Registry
+
+https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+CB: Planned submission before this meeting, but xml2rfc didn't cooperate.
+MT: Should come soon then; will be ready for WGLC?
+CB: Yes, target-attr and the -core-oscore-edhoc should have synchronized WGLC. Then both documents may have an updated version ready for the Yokohama meeting.
+MT: So we can start WGLC during next interim meeting?
+CB: Yes, or right now (new version can be here today).
+MT: Should the two of us handle each other's document? Or Jaime handles both?
+CB: Best if Jaime handles both documents.
+
+### AOB
+
+* Next interim meeting on 2023-02-15
+    * Planned presentation of IPPM mechanics used in https://datatracker.ietf.org/doc/draft-fz-core-coap-pm/ -- pedagogical overview of building blocks.
+
+    CB: As a recap, this draft brings together IPPM mechanics with CoRE. Both parties do not understand each other's material. So we will have an introduction to IPPM, then consider working group adoption.
+    CA (on chat): Looking forward to the PM presentation
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
