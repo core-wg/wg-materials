@@ -1,0 +1,39 @@
+CoRE Virtual interim - 2023-02-15 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Document status
+
+   * YANG Schema Item iDentifier (YANG SID)
+      * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+   * Profiling EDHOC for CoAP and OSCORE
+      * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+   * CoRE Target Attribute Registry
+    * https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+* Constrained Application Protocol (CoAP) Performance Measurement Option
+
+   * https://datatracker.ietf.org/doc/draft-fz-core-coap-pm/
+
+   Presentation of IPPM mechanics and building blocks.
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-03/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=f9747eb3-53a4-41a7-8e40-f9986139e7d3
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-03-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

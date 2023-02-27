@@ -1,0 +1,266 @@
+# CoRE Virtual interim - 2023-02-15 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-03/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=f9747eb3-53a4-41a7-8e40-f9986139e7d3
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-03-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+MT doing introductions.
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### Document status
+
+* YANG Schema Item iDentifier (YANG SID)
+    * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+    MT: Had several design team meetings, will have one more round of feedback: get revision before cut-off, and will go to WGLC then, whose outcome is to be processed at IETF 116
+
+* Profiling EDHOC for CoAP and OSCORE
+    * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+    MT: WGLC started.
+
+* CoRE Target Attribute Registry
+    * https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+    MT: WGLC started.
+
+    MT: On both, please provide feedback on the mailing list, or on GitHub (especially for nits and editorial changes)
+
+### Constrained Application Protocol (CoAP) Performance Measurement Option
+
+https://datatracker.ietf.org/doc/draft-fz-core-coap-pm/
+
+Presentation of IPPM mechanics and building blocks.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-03/materials/slides-interim-2023-core-03-sessa-coap-performance-measurement-option-draft-fz-core-coap-pm-03-00.pdf
+
+GF presenting.
+
+GF: Telecom Italia has a field implementation of this.
+GF (p2 Motivation): It's resource consuming to read sequence numbers or store them. IPPM, QUIC and TCP use Explicit Flow Measurement by sending marker bits. This is described in -ippm-explicit-flow-measurements, now submitted to the IESG.
+GF: The background is that in QUIC the header is encrypted, so an on-path observer cannot assess performance.
+GF: We thought of doing the same for CoAP.
+CA: In QUIC, the endpoints cooperate. Are clients widely opting in for this? (For example, will Firefox collaborate?)
+GF: In the draft, several methodologies are described. In QUIC, only 1 bit of the bits in this draft can be used (the spin bit), and it is optional. Regarding real implementations, TIM made an implementation for smartphone clients. Don't know if Firefox or Apple implemented it. But you need this implemented in client and server.
+
+GF (p3): First part: Spin bit. It's also in QUIC (optionally).
+GF: Creates square-wave signal; measuring end-to-end RTT. Simple and no need to take timestamps for the observer.
+CA: Does this assume that both peers are sending at their capacity? What if transmissions are intermittent?
+GF: It is assuming that there is a connection and traffic. In QUIC, we suppose that measurement is done if there is traffic. If there is no traffic or just irregular traffic, the measurement is affected. The measurement is accurate for regular traffic. You can measure at least one sample with a request and an ACK.
+
+GF (p4): The other bit is the square bit, measuring 1-way packet loss. An RFC exists.
+GF: Directions are measured separately. Square wave is of known length.
+
+GF (p5): recapping the new, single CoAP PM Option.
+GF: Main idea is to use the option value for spin and square bit; other remaining bits are for extra stuff.
+
+GF (p6): Applicability in CoAP.
+GF: Both allow observers to measure using these bits.
+GF: Distinguishing several cases, including proxy variants.
+
+GF (p7): Simple cases (no proxy), possibly with OSCORE (if outer). All measurements possible. Multiple observers can measure segments between the observers.
+
+MT: Sure, about outer option. Do you mean to have an inner and outer simultaneously to cover both?
+GF: It needs to be discussed, we plan to work on an implementation. And want to discuss this further with you. So far we have read the OSCORE RFC. We see option to have it outer, but for implementation we need your advice.
+MT: Inner/outer does not have to be mutually exclusive. Can make measurement happen both at the ends, and in the individual hops.
+
+GF (p8): Collaborating proxies create sessions between client-and-proxy, proxy-and-proxy, proxy-and-server. Sessions are separated, one can measure them separately.
+GF: We define the CoAP option to be safe-to-forward, thus allowing non-collaborating proxies. We should be able to make some measurements.
+GF: For non-collaborating proxies, there is a single connection; you can do end-to-end. The proxy can't make measurements, but an observer can make them.
+CA: This scenario will have to be discussed the most. It needs focus. Let's run through an example, then we see whether it doesn't work and you're wrong, or if it does work and I'm wrong.
+GF: I agree, this is the most complicated case. We need to decide if the proxy, when forwarding, can forward for all clients or just for one.
+GF: We plan to have an implementation, and we will have questions about existing tools. A real implementation would give much more knowledge.
+
+GF (p9): Additional methods (exceeding spin and square bits).
+GF (p10): Measures RTT like Spin, but works differently. Single packet with this bit is "the Delay bit sample". it needs some waiting when a sample is lost.
+GF (p11): The delayed can be measured in different ways with 1 or 2 bits. Using 2 bits is more robust and resilient.
+GF (p12): Similar approach for packet loss. Q is a one-way square wave, T creates train and server reflects the bit.
+GF (p13). Then the L-bit is useful for packet loss and can be combined with the Q-bit.
+GF (p14). The Reflection R-bit is also availble and possible to combine with the Q-bit.
+GF (p15): Properties the combinations give.
+
+GF (p16): Extra proposal -- probe-on-user-device (works on server or client). Scales well because there are few connections to monitor.
+
+GF: Handing over to Massimo Nilo or Fabio Bulgarella.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-03/materials/slides-interim-2023-core-03-sessa-performance-measurement-architecture-and-demo-draft-fz-core-coap-pm-00
+
+MN (p1): Presenting implementation from Telecom Italia (TIM).
+MN (p2): Did QUIC during hackathon, has many implementations.
+MN (p4): Really Simple.
+CA: Do you have a structure for each established QUIC connection? Every 4-tuple (IP, port) x (source, dest)?
+MN: In QUIC, you think per connection by relying on the QUIC Connection ID. In TCP, you rely on the 4-tuple.
+
+MN (p5): Screnshots of how client can set markings.
+MN (p6): Observer (here on user device, but could be anywhere on path). Data for every single connection.
+
+CA: Let's focus on building an example to understand if this option is safe-to-forward.
+MT: Priorize example building.
+
+#### Example building
+
+Hashing out the non-collaborating proxy together, aka "can this be Safe-To-Forward"
+
+```
+[client 1] --------                     ----- [server 1]
+                   + --- [proxy] ----- +
+[client 2] --------                 |
+                               [ observer ]
+```
+
+CA: If the proxy collaborates and the option is not safe-to-forward, this would work. But let's consider the proxy not collaborating.
+
+CA: Let's pick the square bit and assume one direction only
+
+talking to S1
+
+C1 sends 11111111000000001111111100000000
+C2 sends 11110000000011111111000000001111
+
+Can the observer do anyting useful with this?
+
+The Observer sees packets, all from proxy outbound IP, single port, server IP, 5683
+
+The Observer sees: 111111111100010100000000111010100111111111
+
+Instead, if we consider:
+
+C1 sends 11111111000000001111111100000000
+C2 sends 00000000111111110000000011111111
+
+The Observer sees: random but kind of uniform stream of 0 and 1
+
+CA: Do you think the proposal can handle this scenario?
+GF: Currently we assume that there is 1 client (sending marked packets) around a proxy. If there were more, after the proxy you can't recognize the exact client anymore and things get mixed.
+GF: In a non-collaborative situation, we should assume just one client making the measurement. This assumption is not so unreal: we are in an IoT situation, and all the clients under the same proxy should be managed by the same organization. So this can be done.
+
+CA: For symmetry reasons, that'll mean only 1 client ever with 1 server.
+GF: Yes, because otherwise including client identification is needed. There are also security and privacy problems with including client identifiers.
+CA: After all you're monitoring traffic.
+GF: Yeah, adding identifier is not practical.
+
+
+CA: Let's see how/if a transparent proxy would break this. The feeling is that you have to carry this assumption. And things get so complicated that it's just better off to ask the proxy to collaborate.
+
+
+```
+[client 1] --------+ --- [proxy] ----- +----- [server 1]
+                                       |
+                               [ observer ]
+```
+
+The proxy may have cached data
+
+C1 sends 00011111111000000001111111100000
+proxy ch -----------++++++++++++++-------
+
+observer will see: 000111111111100000
+
+CA: Can the observer still use the data?
+GF: It wouldn't be that useful.
+
+
+CA: Proposal: the CoAP option is better to be non-proxy-safe, but proxies that kind-of-but-not-really-support it can treat it as proxy-safe. The assumptions you build on are quite tight already, and this is not making things so much tighter.
+CF: What does it mean if we define the option as non-proxy-safe?
+CA: The proxy has never heard of that option and it would just send it on. But the document could have a primer that says "If your proxy ticks these 3 boxes, it can forward the option as-is".
+CF: In that case the proxy does not apply caching?
+CA: It can be implemented in many ways, for instance the proxy can skip caching for messages with this option. Or the proxy can be non-caching in general. Specification would need to specify the behavior on a proxy if the measurement option is included in a message.
+
+CB: From Section 1.2 of RFC 7252: "Safe-to-Forward Option - An option that is intended to be safe for forwarding by a proxy that does not understand it. Forwarding the message even without understanding the option is acceptable (Section 5.4.2)."
+CB: So a proxy that does understand the option can pretend to not understand it?
+CB: To rephrase CA, the option is not safe-to-forward, but the proxy has some understanding.
+CA: That understanding can be mimimal.
+CB: Yes, we need to define a minimum level of how much the proxy needs to understand this option.
+MT: Even without being fully cooperative.
+CB: Might have different levels of processing. It can be a simple proxy that still can forward it.
+
+CA: Just my proposal, if it works well for the authors.
+GF: It looks reasonable to me. We will look carefully at RFC 7252 about the proxy-safe rule. Considering the explanation, I'm confident that it can be modified thusly. We lack implementations with caching proxies etc.
+
+#### Queued questions
+
+MT: Is "observer" in the official terminology used for this in QUIC? In CoAP, it will create confusion and make one think about a CoAP client running Observe. Is "probe" equivalent and good enough?
+GF: In IPPM we use "Observer", as applicable to several protocols. If the term "probe" is better here, no big deal.
+MT: If "probe" is equivalent, I'd avoid "Observer" and use "probe" instead.
+GF: It's equivalent.
+
+MT: How and to what extent do these indicators become less effective or meaningful if using CoAP observe? There are no exchanges after the first one, only lots of notification responses at unpredictable times. You can probably not ignore this case altogether, and probably have to adapt the performance measurement to still make sense (if possible).
+GF: Something to think about.
+CB: The Option works by having paired packets. With Observe, this is only the case if notifications are confirmed.
+GF: In such case you could monitor only one direction. We can consider this (Observation) as a scenario to mention in draft.
+MT: Just not ignore it altogether.
+
+CA: p12 "download flow with more packets" ... which extensions are you assuming? "regular" CoAP rarely has this, only in observe (which is not regular flow) and No-Response. By the way, empty ACKs are invisible to this? Are you assuming particular extensions to be used? Without any extensions to CoAP (or custom configuration), it's all lockstepped.
+GF: Custom configuration where client sends more requests?
+CA: If a client is running CoAP with the default options, it will typically send 1 request, wait for an empty-ACK. And will not send another request before the first request has completed.
+GF: The measurements will then be for each request.
+CA: For empty-ACKs, these cannot carry any options. Are you aware of this?
+GF: Similar to previous question -- in that case can only do measurement one-way.
+CA: Under assumptions that were considered before anyway.
+
+CA: Q-bit might already exist -- if an implementation promises to use CoAP Message IDs sequentially, 64-wave is in the 6th bit of MID -- but beware of identical CON retransmissions (would the option vary there?).
+CA: Skipping because we now have non-collaborative proxies that work.
+
+CA: If you already own the end device, you may want to utilize measurements already taken (RTT estimate in FASOR etc.)
+GF: Useful information. We can compare different sources of measurements, not only for implementation but also for client-side validation.
+
+MN: Why can there not be an option in an empty ACK?
+MT: It is defined to be very minimalistic, just confirming reception.
+GF: Not a big issue. This will not keep the client from producing the spin bit and have a square wave in one direction. The limitation is about needing an observer/probe on the upstream direction.
+
+MT: I suppose you plan a revision before the cut-off? I'll send a review in next 10 days or so.
+GF: Yes, this was a good discussion. Have a more clear idea now.
+MT: Cut-off is March 13th.
+GF: Hoping for a slot during the next IETF meeting, not sure.
+MT: Should be doable.
+MN: Maybe I'll be in Yokohama.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
