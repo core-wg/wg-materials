@@ -1,0 +1,212 @@
+# CoRE Virtual interim - 2023-03-01 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-04/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=c90658e0-5818-4e45-87bf-83dd15f32227
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-04-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+MT doing introductions.
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### CORECONF
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-04/materials/slides-interim-2023-core-04-sessa-target-addr-core-sid-core-comi-00.pdf
+
+CB presenting
+
+**-core-sid**
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+CB (p2): Overview of the CORECONF documents. yang-library will need to be revisited when getting there.
+
+CB (p3): some open-loop changes (due to long round-trips), waiting for feedback. The latest version should cover all remaining open items.
+CB (p4): Going through the main items from Rob addressed in v -20.
+CB (p4): New status per file and item. The structure is a bit problematic because now there is no validator around any more.
+CB (p5): Just wait for DISCUSS from Rob to be cleared, or gather WG feedback on changes since the previous WGLC by issuing a new one?
+
+MT: A WGLC would be 3rd; I think we should do it. Will check with Jaime latest tomorrow.
+MT/CB: Ok to have the WGLC in parallel with waiting for Rob's follow-up.
+
+
+CB (p6): Fun with tooling. Also, any SID files I'll review will be converted to this.
+
+**-core-comi**
+
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+CB (p7): This is all under the hypothesis that SID can stay as it is now. Plan: Move forward with applying changes from hackathon to the draft.
+MT: Already started to synch with Francesca (CoRE AD). This is mainly about handling a change of shepherd and tweaking the author list to meet the 5-author limit. We have a plan that we're starting to roll out.
+CB: Rough plan is that I do finishing stuff, thus I can't be the Shepherd any more.
+
+### CoRE Target Attribute Registry
+
+https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-04/materials/slides-interim-2023-core-04-sessa-target-addr-core-sid-core-comi-00.pdf
+
+CB presenting
+
+CB (p1): -02 addressed WGLC comments, lots of which editorials. Removed the registration of attributes coming from Internet Drafts, and now planned to be ready to ship soon.
+
+CB: Christian found a few more items today.
+
+CA: The latest mail mentioned some attributes used in some contexts only.
+CB: Do you have parameters in the RD that require an A flag?
+CA: We would need a new registration that the Expert has to check.
+CB: The version without flag can be in wide use. Do you think it's ok?
+CA: Yes, it's about design considerations. Some entries just can't be used (e.g., for pagination). Also, for some attributes that show up, it's clear where they do so.
+
+CB: Plan to submit v -03 soon.
+MT: I will be the Document Shepherd and will get on it soon.
+
+### Profiling EDHOC for CoAP and OSCORE
+
+https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-04/materials/slides-interim-2023-core-04-sessa-profiling-edhoc-for-coap-and-oscore-core-wg-interim-meeting-20230301-00.pdf
+
+RH presenting
+
+RH (p2): Reviews from CA and JPM. Simple ones already done in the Github Editor's copy.
+
+RH (p3): CA proposed to change the payload of the combined request to not be a CBOR sequence. The OSCORE ciphertext would not be a CBOR byte string anymore.
+CB: This is not a new format for doing things; Appendix D of RFC9277 already does this and calls it a "CBOR header". It's also very suitable.
+MV: +1 via chat.
+(no objections; proposal confirmed)
+
+RH (p4): CA proposed to avoid normative language on what should not happen after decrypting the combined request; it's safer for the future (e.g., nested OSCORE). Showed new text proposed by CA.
+RH: Concrete thing that can come up is nested OSCORE.
+(no objection)
+
+RH (p5): CA proposed additional target attributes for the web linking (forward- and reverse-flow). More are missing for Initiator and Responder role.
+CA: No need for the latter two, since the first two ones are associated with the link to a resource at a server.
+RH: Because it's in a server? Yes, I get this, looking into it.
+CB: Long attributes. Maybe flag bits for things in groups?
+RH: See later point. On not having this many attributes: bit encoding sounds good. Possible to think of signaling whole profiles (later slide). Also, we want to prefix them (later slide).
+(basically, consider only the two attributes originally proposed by CA)
+
+RH (p6): CA suggested to signal a whole profile by name, with a dedicated target attribute.
+CB: Problem with profiles popping up. Web tried profiles and didn't fly, because effectively introducing a new profile requires all parties to know it.
+RH: EDHOC defines what an application profile is in the first place.
+CB: The producer will never know whether the profile is understood by the consumer, so the set of supported features is always sent in a pedestrian way anyway.
+CB: If you can make sure that the processor is specific to the application profile, then it's not a big problem. In EDHOC libraries or proxies, they may not know.
+CA: This is all about optimization. A producer can just indicate a profile value easily. If the consumer doesn't know the profile, it can't expand the profile into its components, and will go ahead by trial-and-error per EDHOC. Worst case, it's one more round trip.
+RH: But yes, libraries would need to understand it, or the application would need to tell the library what the profile means. In the worst case, it falls back to error handling.
+MT: The registry for profiles would better be defined in the EDHOC draft anyway. If it doesn't happen there, the target attribute won't be defined here.
+RH: Got good feeback here, let's go on.
+(bring up to EDHOC authors)
+
+RH (p7): Currently showing 2 EDHOC resources in the web link example. Why? (when ./well-known/edhoc is preferred). It was ./well-known/edhoc until v -02, then it changed due to a 2021-10 interim ("if you use ./well-known/edhoc, the client knows how it works"). We thought more aboyt it, and ./well-known/edhoc doesn't really mean that the client knows the application profile associated with that resource; it just knows the path and that EDHOC is used, but not how. Authors' conclusion: revert to ./well-known/edhoc
+(no objection)
+
+RH (p8): CA suggested to consider a well-known profile of EDHOC, possibly to take as default profile for /.well-known/edhoc. We think it's good to have a well-known profile (also registered in the new registry mentione before), but not to take it as default profile of any EDHOC resource.
+CA: The default profile would state the obvious about what it means to run EDHOC in CoAP, e.g., ensuring different EDHOC connection identifiers between the two peers. Hard to say how narrow these profiles can be.
+CA: My idea for the ./well-known/edhoc was to be very very little.
+RH: Isn't that implied from the use of CoAP itself?
+CA: It's for the application to not interfere when using EDHOC. Not sure how the profiles would look like in general.
+RH: Had a fleshed-out profile in mind. A minimal profile doesn't give guidance.
+CA: A profile doesn't need to rule out doing the regualr EDHOC cipher suite discovery dance.
+RH: Taking it for further authors' discussion.
+MT: Since this would be well-known, it'd be something to better elaborate on in the EDHOC draft. In a sense, this CoRE document just follows what's there or is possibly defined/registered there.
+(bring up to EDHOC authors)
+
+RH (p9): JPM suggested to change title, since this is not about profiling. Proposed new title: "Using EDHOC with CoAP and OSCORE".
+CA (on chat): +1 on suggested resolution
+(no objection)
+
+RH (p10): Error handling. Allow to protect an EDHOC error message from the server?
+CB: Wondering whether this doesn't create more disclosure than we want to have. Less about protocol, more about how it's used and what is in the error messages. If serious disclosure is likely, may want to reconsider.
+RH: Normally (in base EDHOC) errors are always unprotected.
+
+CA: We shouldn't do undue disclosure in errors in general. Let's keep error handling easy. I'm fine with sending unprotected.
+RH: Like, "let's not make a habit of putting sensitive data in error messages".
+MT: We did something along these lines in Group OSCORE -- failures due to signature verification are giving generic errors. Would that help?
+CB: Best situation is to switch to opportunistic security if some authentication doesn't work. Sure, if the protocol breaks down, there's nothing and the error message should be frugal. But authentication error would be in interest of the appplication to divulge more.
+CA: If a whole class of error infomation needs to be protected, that would be better defined in the EDHOC draft.
+RH: That could be more generic consideration for EDHOC, yes.
+MT: John's position is that something on this topic has to be said somewhere. We discussed this with him, he was fine to state in this document that the error message is sent unprotected. That builds on the current status of the documents. If the EDHOC draft says something upfront about this, then this document would inherit.
+RH: Decision would be based on "is it protected or not?".
+CA: Also beware of distinguishing EDHOC responses from application responses.
+RH: "Is it a resource representation or an EDHOC error message?"
+CA: Not even the content-format can help.
+RH: That'd be a complication.
+(overall feeling to be careful about protecting the error message and be better off leaving it unprotected, while ensuring that no sensitive information is leaked, as already the case in EDHOC)
+
+RH (p11): On retransmission of the combined request. Clear what happens?
+RH: all needed to know and do is already in EDHOC. Resolution, defer to it.
+CA (on chat): +1 on deferring to EDHOC
+
+RH (p12): JPM questioned the usefulness of eadX attributes as used in the current way. The requested behavior is in fact what we intend. Need for clarifications and an example.
+(no objection)
+
+RH (p13): cred-t attribute, JPM suggested to have a new registry for its values, here or in the EDHOC draft.
+CA: Isn't the more important information the source of the credential, from which the type would follow? Can the client do anything with this information if it doesn't know the relevant issuer, and doesn't that issuer only create valid credentials anyway?
+MT: The intention was to simply indicate supported types, and that's it. Responsible AS would work to send around as a separate link, e.g., using the rel= attribute with appropriate value.
+CA: I'm lacking the imagination to find a situation in which a client can use that information. More for general CoRE security scenario discussion than for this document, though.
+MT: Almost all the other target attributes take values from registries defined in the EDHOC document, thus this registry makes sense there too.
+MT: It's worth also defining a range of values for private use, i.e., less than -65536 and more than 65535.
+(no objection)
+(will be discussed among authors and w/ EDHOC authors)
+
+RH (p14): These target attributes are clustered. Prefix them with "ed-"?
+RH: Plus input from CB for structured field.
+MT: Earlier discussion said ed-i and ed-r is not necessary.
+CA: ed-i and ed-r sound better to me than fflow and rflow -- but either works.
+MT: Then is it fine to describe ed-i and ed-r in terms of roles, instead of forward and reverse flow per the original proposal from CA?
+CA: I think what matters is that the description says the concepts are tied.
+MT: Then ed-i and ed-r are better as shorter.
+
+RH (p15): next steps, submit v -07 addressing these WGLC comments.
+MT: The originally planned PR to -core-target-attr won't happen anymore, given that its focus is now only on target attributes from RFCs. We'll keep requesting registration of those attributes in the document defining them.
+
+### AOB
+
+CA: I am currently reviewing draft-bichot-msync for ART; it looks like HTTP is considering multicast-notifications as we have drafted for CoAP. Check it if interested.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[EB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo

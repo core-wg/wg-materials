@@ -1,0 +1,30 @@
+CoRE Virtual interim - 2023-03-01 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CoRE Target Attribute Registry
+
+   https://datatracker.ietf.org/doc/draft-ietf-core-target-attr/
+
+* Profiling EDHOC for CoAP and OSCORE
+
+   https://datatracker.ietf.org/doc/draft-ietf-core-oscore-edhoc/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-04/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=c90658e0-5818-4e45-87bf-83dd15f32227
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-04-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
