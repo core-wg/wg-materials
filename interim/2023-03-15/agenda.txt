@@ -1,0 +1,38 @@
+CoRE Virtual interim - 2023-03-15 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* YANG Schema Item iDentifier (YANG SID)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+* CoAP Management Interface (CORECONF)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+* Relation between YANG and CORE ecosystems
+
+   - SID allocation
+   - Access to YANG information bases via CoAP
+   - YANG Library tailored to constrained environments
+   - YANG models relevant or close to CoAP/CoRE
+   - Binary YANG Push
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-05/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=2bb7b8fc-7fd0-4371-b700-db7aac9b5ec3
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-05-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

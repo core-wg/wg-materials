@@ -1,0 +1,257 @@
+# CoRE Virtual interim - 2023-03-15 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-05/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=2bb7b8fc-7fd0-4371-b700-db7aac9b5ec3
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-05-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+MT doing introductions.
+
+### Jabber & Minutes / Agenda bashing
+
+CB showing (p1) of [his slides](https://datatracker.ietf.org/meeting/interim-2023-core-05/materials/slides-interim-2023-core-05-sessa-coreconfyang-slides-00.pdf) for context. LPWAN allocations is where LT comes in.
+
+CB, on agenda (p2). SID allocation should not take more than 50% of today's time, leaving 30 minutes for more points/issues to discuss.
+
+No bashes.
+
+### YANG Schema Item iDentifier (YANG SID)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-05/materials/slides-interim-2023-core-05-sessa-coreconfyang-slides-00.pdf
+
+CB (p3): Version -20 just submitted. Weird state: both in IESG processing and in a WGLC. A DISCUSS caused the new WGLC, during which Jernej found issues. Waiting for Rob Wilton to confirm that the DISCUSS is addressed.
+
+CB (p4): Most other problems came from the lack of automated validation. It would work better if PYANG solved this, please help if you're familiar with it.
+CB: What I'm not sure about is: does the current PYANG version generate a complete set of SIDs?
+CB: As SIDs could be added later, it would not be a catastrophic problem, but we don't want to create inconveniences for implementors.
+
+CB (p5): The specific issue that Jernej found is that we didn't look at RPCs and actions a lot. The ietf-system module (which is our example) has them, but we don't use them in examples.
+CB: Worked out in Appendix A of version -20. Is this change good? Is anything still missing?
+AB (via chat): Look at https://github.com/core-wg/yang-cbor/issues/130
+CB: Does this need to be added to all RPCs and actions?
+AB: Yes, RPCs and actions. They implicitly have inputs and outputs.
+CB: So there's always 3 schema nodes: RPC itself, input, output, and any further SIDs for leaves in and out of them. Correct?
+AB: Correct.
+JT: The correct version is what AB just suggested. Everything should be both assigned a SID and present in the SID file. You can define RPCs with leaves of the same name in both the input and the output. If you wish to differentiate between those with a SID, you need different schema node identifiers, which implicitly contain input and output nodes.
+JT (on chat, on request to confirm the notes): It's probably what I said. I can create an example that demonstrates the "differentiate between those" to explain that better if needed.
+
+CB: Are we missing out anything? How do we find out?
+JT: Like AB suggested, all schema nodes should be mapped, because that's the only way to ensure future-proofness. People could at any time try to serialize a choice or case statement, even if it's not usually done. This would future-proof things.
+AB: Agree. Again, only the representation of data in protocol messages is visible. The internal of YANG data store is whatever they are, not necesarily CBOR. It may not even be in a form that's out there now, NETCONF and RESTCONF. Doing everything would make it protocol agnostic.
+CB: Do you have an example of what part of NETCONF/RESTCONF is not supported?
+AB: RESTCONF sends input and output nodes.
+CB: That's good, that's one of the questions I wanted to have an answer for.
+
+CB (p6): Then we have an example from LT that's important enough to go through manual allocation. It's used with millibit networks, so detailed attention is warranted.
+
+LT presenting the work of https://datatracker.ietf.org/doc/draft-toutain-lpwan-sid-allocation/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-05/materials/slides-interim-2023-core-05-sessa-sid-allocation-00.pdf
+
+LT (p1): More of a personal presentation, not LPWAN consensus.
+LT (p2): We are designing SCHC compression based on rules, now introducing a YANG data model and the use of CORECONF. We aim at small sizes due to limited bandwidth.
+LT: One important point is that it needs flexibility; different people need to collaborate.
+LT (p3): A new SID file will use another range of SIDs. Large deltas use many bytes. Thus, we propose a mechanism that limits the size of deltas.
+LT (p4): Showing the proposed way to do allocations in some smaller space. Have two blocks, one for identities and one for data. We don't care too much about identities, because their sizes don't matter. But for data sizes they need to be close. To do that, we insert 23-large gaps, and fill those with most important values in that data model.
+
+LT (p5): Showing example of SID allocation. We don't start at +0, but go to +23, so we can use minus to get in there. The next allocation overlaps with the first one. One thing we find in all rules (rule ID and length). With regular YANG allocation (alphabetical), we'd lose 2 bytes due to delta encoding.
+LT (p6): Proposing to spread the 42 data items up to 300 for extensibility; identities start after that.
+LT (p7): In LPWAN, we'll need to discuss for what we'll use the small deltas.
+LT (p8): As to the process, allocations will be done manually according to the RFC from that WG.
+
+CB: There's no change from the -sid process. What matters is that IANA can give you a range, and then fill it with what the protocol needs. So all good on the core-sid side, but interesting to observe.
+CB: How do we check this? Or: How does the designated expert check this? They usually don't need to check every single allocation. Hypothesis: With a fixed version of PYANG, we can write a very simple tool that checks against the manual version and verifies that it's the same except for the numbers. This should become standard practice.
+
+LT: Agree; I used macros in the excel file, but things are not trivial to track for correctness.
+AB: This was done for a specific protocol. If you include gaps and siblings in a request, you make the delta larger.
+LT: In CBOR a delta between -24..23 is just one byte.
+AB: I know. But something could originally have been 4 SIDs away, and now it's >24 because of the gaps. So there's a trade-off. What's great about the default one is that all children of the parent get allocated in those first 23, with almost no YANG model having >23 child nodes.
+LT: In LPWAN, we do reach these numbers.
+AB: You showed things with 4 leaves in (p5).
+AB: I don't think there's any problem with this, just noting that it's easy to mess it up. Would be good to have tools for automated validation, unless the space to check is clearly small.
+CB: Good input. In the end, we need a realistic example and do a measurement. What LT does here is improve the locality at the lower elements of that tree, including future additions, at the cost of using locality higher up.
+CB: It would be good to have an example that encodes something using these values.
+LT: I will try to provide an example.
+AB: Where I thought you'd be going is that identities never show up in deltas, so you want them small because they always get encoded in full value. If you're looking for small sizes, that's what you'd want.
+LT: I don't know how a group will get ranges -- should it ask for a block as a group and split it up, or get them for each document?
+CB: Good question; to be checked in the -sid document. We'll always have families of related drafts using a given range, which should be managed by the people that produced those drafts.
+
+AB: For protocols that care between 1 and 2 bytes, you really want a range down at the bottom -- where it's never used for a delta, a value of 6mio would be large. That'd be more complicated, having a range for identities and a range for the objects. I don't think we should go there. Low identifiers should be reserved for IoT use cases.
+LT: Agree. If we look at the current range, the IETF range is for 32 bits length. We're almost on the same values/size. 5000 should be a reasonable value.
+CB: IETF range is 1 million numbers, which are 2 or 4 bytes. If identity is important, we should aim for the smaller -- that'd be a competitive space, but I think we can manage.
+CB: Can you check the -sid document and possibly give a WGLC comment by tomorrow?
+LT: Yes, will do.
+
+### CoAP Management Interface (CORECONF)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-05/materials/slides-interim-2023-core-05-sessa-coreconfyang-slides-00.pdf
+
+CB (p8). This went to WGLC 2 years ago, and now can continue.
+CB: Found simplifications, and a critical bug, so no way we'll retain compatibility with version -11. Question: are the simplifications OK?
+CB (p9): describing made simplifications.
+CB: Some things need to be encoded in URI paths (whereas encoding them in CBOR is easy). Simplification: All "keys" go into what would be a FETCH payload. For the first element (SID), we defined a base64 encoding that takes numbers rather than byte strings.
+
+LT: So these 4 bytes are encoded into 6 characters?
+CB: It's more than that. It's not "eth0" but also that this is a text string. CBOR encoding of eth0 is 5 bytes, and then `5/3*4=7` bytes.
+LT: I thought GET was for humans and FETCH for machines.
+CB: Losing the ease of diagnosing is definitely one downside.
+
+CB: This is what version -12 proposes; the reason is that the old encoding couldn't cope with commas in the text strings. This now is fully data transparent.
+
+CA: There's still GET and FETCH. Why is GET still there, given compatibility is out of the window?
+CB: FETCH wasn't defined back then.
+CB: Good question. We could get rid of GET/POST/PUT and do everything with FETCH and (i)PATCH.
+KZ: +1 to dropping GET etc, or making it optional to implement.
+CB: This would make (p10) overtaken by events.
+CB: Taking this as consensus-to-be-verified-on-list.
+
+### Constrained YANG Module Library
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-yang-library/
+
+CB (p11): Things typical of a constrained server, which would announce its available models using yang-library.
+CB: Let's look at whether since this was written, anything in the used libraries has changed.
+
+CB: Question to YANG experts.
+
+JT: Looking at it right now ... it already supports NMDA (RFC8342); no additional comments.
+CB: We'll probably do a WGLC on this as well.
+
+KZ: Skimmed it. From an implementation perspective, fully implementing this at compile time would be useful (and sending it from flash). In practice, that'd mean that all values are fixed or depend on compile time info, and I think that's the case.
+CB: Would be good to check it again with a constrained implementation and see what output we get. ROMability was an objection.
+KZ: Sounds good.
+CB: The draft should say that, so reviewers will screen for it.
+
+
+### Other Related documents on YANG and CORE ecosystems
+
+* YANG models relevant or close to CoAP/CoRE:
+    - https://datatracker.ietf.org/doc/draft-marin-yang-edhoc-oscore/
+    - https://datatracker.ietf.org/doc/draft-toutain-lpwan-access-control/
+    - https://datatracker.ietf.org/doc/draft-tiloca-lpwan-8824-update/
+        - https://gitlab.com/crimson84/draft-tiloca-lpwan-8824-update/-/blob/main/ietf-schc-coap@2023-03-07.yang
+
+CB (p12): Some of these turn up both in constrained and non-constrained environments; data may come from a random NETCONF implementation that then accesses the constrained device. In the end, all these need to also work in Constrained Environments.
+CB: Is there anything to be learned from these models on how to make CoREConf better? (Like we learned something from LPWAN before, which conveniently worked even w/o changing the specs.) Can we extract best practices?
+
+LT: on the EDHOC and OSCORE model, we use binary types for keys. In CoREConf it's still strings; not sure if we can convert the strings to binary differently.
+CB: Had discussion e.g., around date-time representations. At some point, we need something within CoREConf that helps import modules with inefficient representations, but we don't have that yet, so models have to use YANG binary in the first place. Importing a model that doesn't do that, so far you have to change it.
+
+RM: I learnt that I have to be very careful of the used types, considering the constrained devices involved.
+CB: So this goes into the "best practices".
+
+AB: Using binary data to achieve compressed encoding won't fly with YANG doctors. Making the code work is sometimes difficult, you have to trust the tool.
+CB: There's tension because YANG doesn't allow building complex binary encodings, and we've learned that sometimes we have to do that (cf. CDDL's nesting of data in .cbor operator). Can't do this as easily in YANG as we can do it there. I expect we use binary for things that are opaque by nature, and don't try to come up with complex binary encodings to use. (For a hash, it's not meaningful to look at it, so it's OK ... and for opaque identifiers). But if we use a model that does an IP or MAC in the chatty way, that may need some action.
+
+AB: The model writer should write it to be useful to humans. The protocol has to figure out how it works on the wire. And that's only a matter of the protocol.
+CB: That's a good basic rule to apply. We just don't have it implemented yet. YANG-CBOR would need to be extended for better support.
+
+LT: Since CBOR is typing what is sent, there's no ambiguity between a string and a binary value. So no harm in doing both.
+CB: Andy refers to the need for eventually debugging. We're just now getting a general CBOR dissector into wireshark, and tools need to learn to do these things. Life will be difficult until they learn this. Having something in YANG-CBOR that can do this (take a chatty model and convert to efficient representation) would be a good thing, and we don't have that. It would be a new development project.
+
+LT: If you put a hex string in your data model, then you convert to restconf and you use a hex string, while when you convert to coreconf you use binary. You don't need to worry about the encoding when defining the model.
+CB: We even have CBOR tags for that, specifically for hex strings (23). But we haven't used that in YANG-CBOR so far, we'd need to extend YANG-CBOR to allow that address. And then for MAC addresses, IP addresses, date time.
+RM (on chat): I agree that it would be a good thing to keep model developers agnostic, but coding could not be so optimized.
+
+CB: What I'd like to see is a little bit of information about applications that need this, and understand what damage the lack of it does.
+
+CA: It's harder to know when to do the CBOR encoding. We need to agree on which compression mechanisms can be used where; does that need extra information in the YANG model?
+CB: Two ways -- completely deterministic (every date time becomes expressed as ...) and on-demand (if someone's address looks like a date-time, it becomes one). Deciding between these two will be part of that project.
+
+LT: Same problem with XML and JSON. You have a problem when doing conversion. These are problems for every representation, not only for coreconf.
+CB: Unions are another problematic aspect, and are complex. But normally, turning JSON into CBOR is problematic, but if you have a YANG model, that model tells you what to do.
+
+AB: I found CBOR to have more fidelity in what it puts on the wire than JSON. It allows for better validation. The encoding that I'd want to get rid of is XML in netconf, and use CBOR ... but the WG is probably not ready for that.
+AB: Related to TLV vs. content analysis. TLV approach is much better if it's right. As soon as TLV is wrong ... then everything is toast. But when it's right, it's more efficient and more accurate.
+
+* Binary YANG Push
+
+    - https://www.ietf.org/archive/id/draft-ietf-netconf-udp-notif-09.html
+    - https://www.ietf.org/archive/id/draft-ahuang-netconf-notif-yang-01.html
+
+CB (p13): about udp-notif: CoAP would have solved a lot of problems for this one. Maybe we should just do a CoRE draft on how to do this. Hard point: congestion control (the draft waves it away).
+AB: In the past, that wouldn't have flown.
+CB: How implemented is this?
+AB: I don't know of any but the authors'. There is an Open Source implementation started. The other draft creates a structure for SID creation, so that's why I brought it up. We only need that structure.
+AB: NetConf needs to move the ball on that; this WG doesn't need to change anything now that the structures are supported -- that was the needed change, and it's done. All good.
+CB: We should still be aware of this going on, and think of it as a potential CoAP application. We should be able to do similar things in other environments.
+
+### AOB
+
+AB: Maybe not in scope, but it's perplexing how all published IETF modules will get SID files. One-at-a-time it'll take years. It's up to NetConf. CoRE has like 11 modules that'll get numbered. The other ~300 published ones ... that's a discussion to be had.
+CB: Hoping for yang-catalog.org, they're set up to make this happen. But not now.
+AB: I thought someone at some point point will generate a bunch of SID files to use and that's it.
+
+LT: Now with a SID file it's easy to go from JSON to CBOR. The other direction is complex -- int? enum? identifier? So you need to know the type. One way is to look it up in the YANG data model.
+LT: With Alex, we did a hack on PYANG, available in [my repo](https://github.com/ltn22/pyang), which adds to the SID file the type as extracted from the YANG data model. This way, conversion can be done in both directions. It's useful for SCHC. Now we can easily convert it to JSON for validation. Also, we now have a map that lists SIDs and allows parsing a YANG tree without knowing what's inside. Alex will release an implementation for tree manipulation.
+
+Alex Fernandez: (Master student w/ LT, also with RM on the EDHOC/OSCORE YANG model). Conversion between Python dictionary and (?) is now easy thanks to that PYANG branch.
+CB: That can help with hacking PYANG.
+
+
+MT: CoRE will meet at IETF 116, for 2 hours on Tuesday, March 28.
+
+MT: We plan to resume biweekly interim meetings in April, with the same cadence.
+
+- First on Wed, 2023-04-26, 14:00-15:30 UTC (16:00-17:30 CEST)
+
+- Last on Wed, 2023-07-05, 14:00-15:30 UTC (16:00-17:30 CEST)
+
+- We'll synch with CBOR and confirm on the mailing list, hopefully already during the IETF week.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+
