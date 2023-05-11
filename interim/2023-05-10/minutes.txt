@@ -1,0 +1,110 @@
+# CoRE Virtual interim - 2023-05-10 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-07/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=14149a5e-3168-434a-b33a-276112b6d88b
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-07-core
+Jabber: core@jabber.ietf.org
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+## Constrained Resource Identifiers
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+CB presenting diffs between v -12 and the Editor's copy.
+
+CB: Version -13 planned soon. Worked on the Editor's copy in the last few days.
+
+CB: Section 5.1.0; a few things cannot be well expressed with CDDL, so this new text is giving clarifications as a bullet list. The third and fourth items are actually new.
+CB: the third item is about empty array vs. null for the empty path. We require an empty array here, as the empty path feels closer to the semantics of the empty array. So the empty path is the empty array.
+CA (on chat) supports the choice
+CB: the fourth item says that the entirely empty outer array is not a valid CRI reference.
+CB: This closes some related issues on the Github.
+
+CB: Section 5.2.1 is on error handling and extensibility from CA's PR #62. I made some additional editing on it.
+CB: This describes ways for a CRI to be invalid or malformed. We also have the concept of "unprocessable" CRI. You don't need code to handle unprocessability if the potentially problematic processing is not possible to occur altogether. The consumer has the ultimate responsibility, but the producer also has to produce something interoperable.
+CB: So no need for excessive checking, if the potentially problematic path is excluded by construction on the recipient side. This addresses part of issue #44.
+CB: One can still handle an unprocessable CRI, it's just not processable as a CRI by itself. It's not that the code blows up. CRIs with identical serialization are treated as identical. "serialization" might needed to be tweaked.
+CB: We should say that CRI shouldn't use indefinite length representations at all. It's easier for extensibility but we can just go all-in and stronger about that. We're not expecting CRIs to be streamed.
+CA (on chat): "none at all" is fine.
+
+CB: Section 5.2.1 is on '.' in hostname elements as not reserved, which is now clarified. Also indefinite legnth encoding is forbidden.
+MT: Can this be an intrinsic constraint of CRIs mentioned earlier?
+CB: Yes, so we can remove it from here.
+
+CB: We need to add more content on what a minimal representation is, plus to make some editorial fixes. Then WG Last Call should be possible.
+MT: Sounds good. Timeline?
+CB: Version -13 hopefully out in the next few days, ready for WG Last Call. Chair's review can also happen during/after WG Last Call.
+MT: Implementation/testing side? Anything left?
+CB: Planned to work on what is left there in parallel with the WG Last Call.
+
+MT: So the remaining issues/PR on Github are only on minimal represenation and editorial fixes?
+CB: And on test vectors.
+
+MT: Can CA review for the WG Last Call?
+CA (on chat): Yes
+
+CB: Last remark. CA added as Contributor, hopefully it's fine. We'll also check again with Klaus.
+CA: Fine to be Contributor.
+
+### AOB
+
+CB: Anything for the next interim meeting in two weeks?
+JJ: Good to discuss about pending actions for IANA registrations, e.g., from Global Platform.
+CB: I'll send you the list of the involved contacts.
+JJ: Then they can clarify their request.
+CB: First we have to double-check with them; the request happened long ago.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+
+

@@ -1,0 +1,26 @@
+CoRE Virtual interim - 2023-05-10 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Constrained Resource Identifiers
+
+   https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-07/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=14149a5e-3168-434a-b33a-276112b6d88b
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-07-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
