@@ -1,0 +1,34 @@
+CoRE Virtual interim - 2023-06-07 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* Fasor RTO/Congestion Control
+
+   https://datatracker.ietf.org/doc/draft-ietf-core-fasor/
+
+* OSCORE-capable Proxies
+
+   https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+
+* AOB
+
+   * Request to make the Conditional Attributes on a Standard track
+
+   * Progress on draft-ietf-core-groupcomm-bis?
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-09/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=83412f0c-9648-4311-bec9-12d11cd4d860
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-09-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

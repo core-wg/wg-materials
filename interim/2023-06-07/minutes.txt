@@ -1,0 +1,184 @@
+# CoRE Virtual interim - 2023-06-07 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-09/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=83412f0c-9648-4311-bec9-12d11cd4d860
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-09-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Jabber scribes: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+MT: Doing introductions
+
+### Jabber & Minutes / Agenda bashing
+
+GS (via chat): Please do -oscore-capable-proxies in first 30 minutes
+MaK: Works for me
+
+### OSCORE-capable Proxies (Rikard Höglund)
+
+https://datatracker.ietf.org/doc/draft-tiloca-core-oscore-capable-proxies/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-09/materials/slides-interim-2023-core-09-sessa-oscore-capable-proxies-core-wg-interim-meeting-20230607-00.pdf
+
+RH presenting
+
+RH (p2): problem recap: OSCORE useful also at proxies (now not defined), which yields to multiple levels of OSCORE-protection (now forbidden).
+RH: OSCORE only considered C and S as endpoints, and didn't allow double protection.
+RH: This work started in -core-groupcomm-proxy as appendix, then was split out as agreed.
+RH (p3-4): Recapping some of the use cases (proxies in group communication, multicast notifications with proxies); also in LwM2M (with different proxy roles).
+RH (p5): Updates RFC 8613 (admitting OSCORE at proxies; admitting OSCORE nested protection). It also applies to Group OSCORE as-is.
+
+RH (p6): Going through updates since the last presentation at a CoRE interim meeting in September 2022 (two more versions submitted after it).
+RH (p7): Shown diagram of iterative process for incoming requests. Decrypted request goes back to start until no more decryptions to do are left. The conclusion is either an error, or a delivery to the application, or forwarding.
+RH (p8): More updates - Revised the general rules to decide whether to encrypt anyway CoAP options that are originally defined as class U/I. A good case in point and sanity check was the Request-Hash option from -core-cachable-oscore (class U/I).
+RH: The rationale is to encrypt options as much as possible.
+RH (p9): Graphical flowchart of the rules for protecting options.
+RH (p10): More updates, guidelines on key establishment (e.g., EDHOC for OSCORE; Group Manager for Group OSCORE) -- e.g., establish first with the proxy, then through the proxy with the origin server.
+RH (p11): Revised notation in examples; added one more example with EDHOC and the EDHOC+OSCORE combined request (10 messages instead of 16 with no combined request).
+
+RH (p12): Open: Onion OSCORE, now in Appendix B. The document body has the needed mechanics and mentions the use case at a high-level. Remove the Appendix and have this somewhere else?
+CA: Makes sense to me to remove Appendix B, moving that content to another document to be informatively refer to (if ready in time). Having that content in the current document would just encourage implementing it in a non-thought-through way.
+CB: Is work needed in Appendix B or on the main document, to make something like Appendix B work?
+RH: It's needed in Appendix B only.
+CB: If people are interested in running an experiment on appendix B, it could be an interesting experimental protocol. But it requires people who want to participate in the experiment. It's good to work on it to not have any show stoppers from the main document.
+GS (on chat): +1 to separate draft
+ED (on chat): TOR for you IoT devices to chat among themselves; interesting ;-)
+
+RH(p13): The Hop-Limit CoAP option has no processing defined for OSCORE in RFC 8768. (Typo in the slide: it should be RFC 8768)
+CA: Privacy implications. Better protect it as well as possible, and accept that it may pass through, say, 30 outer proxies and 30 OSCORE aware ones.
+RH: The proposal would be to explicitly define it as Class U. Per the rules defined in this document, if proxies are present, then the option would be unprotected end-to-end, but it would be protected on the (client/proxy/server)-to-proxy links. This might end up the way you expect it to.
+CA: Take it offline?
+MT: This was more about not having an inner option that doesn't help and just introduces overhead.
+RH: We could produce examples.
+
+RH (p14): summary and planned updates towards v -07, which should be ready for a WG Adoption Call. Regardless, the document is stable, comments are welcome.
+
+CA: Regarding when Group OSCORE is used: "Should" proxies not be in same group as the origin endpoints? Any added harm other than having someone else in the group exceeding just having one more member? So: If there's a good reason to have the proxy in the group, that's fine.
+MT: Agree, it might actually be intentional and acceptable within the security model of Group OSCORE.
+CA: Maybe "For the purposes of this document, there is no reason to add the proxy to the group."?
+MT: Sounds good.
+
+GS (on chat): The draft is progressing well.
+
+### Fasor RTO/Congestion Control (Markku Kojo)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-fasor/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-09/materials/slides-interim-2023-core-09-sessa-fasor-rtocongestion-control-00.pdf
+
+MaK presenting.
+
+MaK: New version submitted in March this year.
+MaK (p2): Brief recap. This tries to find a middle ground when there are random and congestion caused losses. It aims to do flow control and find retransmission timeout.
+MaK: Optional in CoAP; if implemented, it replaces default timeout and congestion control.
+MaK (p2): Recap on Fast RTO and Slow RTO.
+MaK (p3): Different states for retransmission. Once out of Fast, going to Fast_Slow state. Makes mechanism efficient in presence of random losses. Fast_Slow is one-shot -- going either to Fast or to Slow.
+
+MaK (p4): Current status. Asked for reviews in 2020, got 2, went dormant, but now revived. Authors think that review points were addressed. Added more explanation and justification for logic behind it, also why it can be slightly more aggressive.
+MaK (p5): Next steps. The next version might be ready for WG Last Call.
+
+CA (on chat): Great to see this progressing!
+
+CB: Failed to understand pseudocode in the Appendix; what is the notation related to? It uses variables suddenly written in brackets -- a pointer to the considered ecosystem / role models would help. (Or making it more Python-like.) Not sure it is even mentioned in the main document. It is useful to have (had confusion in CoCoA there).
+
+CB: This had a 2.5 year hole; who of the authors is still active? Who will follow this through to completion?
+MaK: Me and Ilpo mostly.
+CB: You can check with the other ones if they're fine to be listed as Contributors. So we're also clear on whom we should talk to.
+MaK: They were involved in writing this, so they should be acknowledged.
+CB: IETF has tension between authors as in academia, and authors in RFC 2418 sense. Having a hard time myself with this. Conclusion "leave as is" would be fine.
+
+CA: This is making changes to the message retransmission, but not to NSTART. Do you plan some more work on it, or is it out of scope / orthogonal?
+MaK: Out of scope for here. Default mechanism has nothing RTO computation related, and that's what it changes.
+CA: Thanks.
+
+MT: Recently adopted document -core-coap-pm. I was wondering if that method can complement this, as additional source of information for estimating the Round Trip Time. It might add nothing to this case or complement it, but I would like to understand. See https://datatracker.ietf.org/doc/draft-ietf-core-coap-pm/
+MaK: Will have to have a look.
+CB: Also interesting to see for which kinds of traffic profiles they are applicable.
+
+CB: When do you expect version -03?
+MaK: No exact timeline yet, unlikely in the next few weeks. Hopefully early July.
+
+### AOB
+
+MT: Esko asked for two items.
+
+ED: Came by mail, let's take it up here:
+
+Request to make the Conditional Attributes on a Standard track
+https://mailarchive.ietf.org/arch/msg/core/IgBB7VuSLimPjbuI_9GPyWFAiJs/
+
+ED: Not clear why -- if it's informational, it can still be used in other standards. If there is a benefit, how would that happen? It needs resubmission / re-review (as that document might change, so also bad for current users). Thoughts?
+CB: There was dithering about the issue before. Last statement was "we don't necessarily need it as a Standards Track for CoRE, so for us informational is good enough". It looks like OMA needs a normative reference. The main difference is that more detailed and tedious review will get in from IESG. Sounds like OMA needs it; up to the Working Group to decide now.
+ED: Sounds possible; if authors willing to do extra work.
+MT: IoT-dir review asked that too; authors just want to know what to do. There were already questions at IETF 116 on "good to have it Standards Track, but let's see if more requests come in". This is more requests. Can re-confirm, but sounds like we'll do it. Already has normative inbound reference from LwM2M.
+ED: Should this mail be answered by chairs?
+MT: We can thank OMA and point to this meeting's notes.
+CB: Sounds good.
+
+ED: Progress on [draft-ietf-core-groupcomm-bis](https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis/)? When will this move forward? Or should something be updated first?
+MT: Waiting for follow-up from CB on his WG Last Call review, and John Mattsson's additional comments.
+CB: Shepherd needs to do this (that's me).
+
+MT: Also, CA pointed to non-traditional responses (core-responses) in a comment about core-oscore-groupcomm (Group OSCORE). It would be good to reference this; discussed with oscore-groupcomm authors: Would be good to have the reference in groupcomm-bis instead, since that's where the multiple responses to a group request are defined (Group OSCORE just defines how to handle them securely).
+CB: Had the document -core-responses to gather the information we had collected for use cases. Do we need this document published or did we just gather things there for actual use in other documents?
+MT: I think it's a useful document, defining a general concept of non-traditional responses. Then we have incarnations of that concept, one of which is the multiple responses from the same server to a group request introduced in -core-groupcomm-bis.
+MT: Hence, -core-groupcomm-bis can also add an informational reference to -core-responses. No need to mention "non traditional responses" by name, as the name can change.
+CA: It'll need some more work, hard to use (MT: don't have to name nontraditional-responses)
+CB: Can you send me ToDo list of things to be fixed?
+CA: Could need some WG consensus check on whether that unification of nontraditional responses is the way do go. I am convinced, but also feel a bit in the void.
+CB: Can we just describe similarities?
+CA: OSCORE needs something concrete in order to describe unified handling.
+CB: So normative document?
+CA: I'm afraid so.
+MT: So we'll add an informative reference from -core-groupcomm-bis to -core-responses, addressing a recent comment from CA (originally meant for -oscore-groupcomm).
+
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[MaK]: Markku Kojo
