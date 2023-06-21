@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2023-06-21 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Jabber + Minutes
+   * Agenda Bashing
+
+* CORECONF
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+   * https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+* CoAP: Non-traditional response forms
+
+   * https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-10/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1e4a7427-d659-483c-b8bb-ea463992572f
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-10-core
+
+Jabber: core@jabber.ietf.org
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

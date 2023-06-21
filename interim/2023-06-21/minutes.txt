@@ -1,0 +1,151 @@
+# CoRE Virtual interim - 2023-06-21 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-10/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1e4a7427-d659-483c-b8bb-ea463992572f
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-10-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Marco Tiloca, Rikard Höglund
+Chat Monitor: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Jabber & Minutes / Agenda bashing
+
+### CORECONF (Carsten Bormann)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+* https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+Objective: look at status we'll achieve for IETF 117 hallway meetings
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-10/materials/slides-interim-2023-core-10-sessa-coreconf-slides-00.pdf
+
+CB presenting
+
+CB (p1): summarizing the state of the 4 CORECONF documents.
+
+Starting with -core-sid
+
+CB (p2): Recent/ongoing updates on SID allocation triggered by Rob Wilton's DISCUSS.
+CB (p3): The main remaining thing is to run a patched up PYANG to generate the SID file example. All relevant SIDs should be covered, but it is not catastrophic if more need to be added manually later on.
+CB (p4): Examples of SIDs for RPCs/actions from version -20.
+CB (p5): -core-sid defines a process to be used by default. An addition will clarify that alternative processes are acceptable, see, e.g., draft-toutain-lpwan-sid-allocation
+CB (p6): Presenting timeline for planned updates. A new WGLC can happen around week 27, right after the next interim meeting.
+MT: The timeline looks good. The original plan didn't include another WGLC, but it looks appropriate.
+CB: The acting responsible AD decided that it's better to fully push back to the WG, and doing another WGLC is reasonable.
+MT: Good to have one more. We just have to move further back the status in the Datatracker, as it now suggests that an actually last WGLC happened. I would like to confirm with Jaime who is Shepherd for this document.
+CB: The WGLC period can be 1 or 2 weeks, 2 weeks may be feasible and better.
+MT: 2 weeks sounds good.
+
+Moving on to -core-comi
+
+CB (p7): Discussed during the IETF meeting in London. The conclusion was that the draft is too complicated. Christian had ideas for significant simplifications. We have now converged on the non-radical solution (keep GET/PUT/DELETE for the whole-datastore).
+CB (p8): The just posted version -13 can be discussed on the mailing list. Open question: Do the PYANG changes for core-sid impact this work? The plan is to have a WGLC during week 27, right after the next interim meeting or earlier.
+MT: Good to run the two WGLCs in parallel. The shepherd is Michael Richardson.
+
+CB: The next steps can be about finishing -yang-library. Another point is that the actual YANG data is in a text-based format. It would be good to be able to switch a YANG model to a more efficient representation (design effort needed).
+
+### CoAP: Non-traditional response forms (Carsten Bormann)
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+* https://mailarchive.ietf.org/arch/msg/core/l1g-AMbpVC2Mo7mZfiqw2niuu7M/
+
+Objectives:
+* Look at next steps
+* Should this be a normative document?
+* Does the WG like the unifying approach?
+
+MT: As I replied on the mailing list (see above), I think this is useful.
+
+CB: Unifying approach seems like a good thing, based on feedback.
+CB: Writing up a new big picture/architecture is one point to do, covering these forms of responses and presence of one-to-many communication not fully imagined when originally working on CoAP. This part about the architecture can be informative.
+CB: This document also defines multiple CoAP options. Not aware of any implementations of those. These options illustrate possible uses of the architecture above.
+CB: In the best case, both parts will be done quick, so we can point from this document to the normative ones (with the options). Or we add the illustrative options with a loud caveat that they are to be finally defined in other documents.
+
+CB: Next steps is to discuss things further. Including the topic of terminology.
+
+RH: I think this unifying approach makes sense, I'll catch up for the discussion.
+
+MT: I don't find the terminology confusing, for instance multicast responses is clear to me. It means that the response is sent over multicast, irrespective of the kind of request and how the request was sent.
+MT: I think the overall strategy makes sense. The architecture can be informative, while the options are a different thing and can be one/more normative documents.
+MT: Christian had an idea for a further new option, similar in scope to "Multicast-Timeout" from -groupcomm-proxy: a kind of flag for the client to indicate to a proxy that the proxy should forward back multiple responses until further notice (instead of for a specified amount of time).
+RH: I understood the same, but some signaling is also needed for when to stop.
+CB: One idea is to use the Observe option for the termination signaling.
+MT: Christian thought about using the Observe option but found some issue with that, hence the idea for the new option.
+MT: A motivating use case is about: a client using Group OSCORE end-to-end with a group of servers; the client using OSCORE with a proxy P1 deployed between itself and the servers (see -core-oscore-capable-proxies); and a proxy P2 deployed between the client and P1. The client would use Multicast-Timeout with P1 and it would be encrypted between the client and P1. But then, for things to work, also P2 has to relay back multiple responses to the client, but, in the interest of privacy, the client would prefer not to reveal to P2 exactly for how long. Hence, a new option for P2 rather than having Multicast-Timeout also as outer option to be consumed by P2.
+
+MT: We can continue on the list and have this topic also during the next interim meeting.
+
+### AOB
+
+#### Tentative items for the next CoRE interim meeting
+
+* CORECONF (-core-sid, -core-comi)
+
+* -core-attacks-on-coap
+    * https://datatracker.ietf.org/doc/draft-ietf-core-attacks-on-coap/
+    * https://github.com/core-wg/attacks-on-coap/issues/3#issuecomment-1560728616
+    * https://mailarchive.ietf.org/arch/msg/core/xol237i7KFXHNLQ1j7rmRUTYDlM/
+
+* -core-dns-over-coap
+    * https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+* -core-responses
+    * https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+    * https://mailarchive.ietf.org/arch/msg/core/l1g-AMbpVC2Mo7mZfiqw2niuu7M/
+
+#### Activities during IETF 117
+
+CB: Shall we schedule a side-meeting during IETF 117?
+MT: Sounds good
+RH: I would join
+CB: I will have a look for booking a room
+MT: Same for me
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+
