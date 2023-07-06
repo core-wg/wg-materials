@@ -1,0 +1,305 @@
+# CoRE Virtual interim - 2023-07-05 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-11/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1bcf9d87-f9e6-4502-a429-5dcaa4688cb2
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-11-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+### CORECONF (Carsten Bormann)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+* https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-11/materials/slides-interim-2023-core-11-sessa-coreconf-00.pdf
+
+CB presenting (p1): rehash of where we are.
+CB (p2): Version -20 of -core-sid was pushed back to the WG, we are still working on it.
+CB (p3): A new version of PYANG is needed to generate the examples we want. The current examples were manually edited. We also need SIDs for the remaining identifiers. More actions: editorial items and validation mechanism.
+CB (p4): PYANG issue overview. Laurent's and his students' patches are incoming.
+CB (p5): So more work needed before the expected WG Last Call, but we can have discussion also at IETF 117. Not worried, it's just a delay.
+CB (p6): COMI for mapping CORECONF to CoAP (like RESTCONF for HTTP), and also CBOR format. Simplified after the previous WG Last Call. For today: how do we use POST? The previous simplifications focused on FETCH / iPATCH, but we didn't look at POST before and we should now.
+CB (p7): apart from POST, current TODOs ("e" means fixed in the Editors' copy). Question: Does that work, is that concise?
+CB (p8): Showing operation example with POST from version -13. The example shows two items, but that's wrong. The fix is obvious, but it also shows another strange thing: why is SID repeated? That's probably a mistake and easy to fix.
+CB (p9): Fixed example, also aligned with RFC 8040 restconf. Difference between RPC and Action: the Action goes to a node in the tree (like a method), while the RPC goes to the server as a whole. The example in RFC 8040 has a weird identifier in between, for which it is not clear why it is needed. Proposal: Getting rid of it here. It's clear that a request will have an input SID, and a response an output SID. Routing in YANG SID space is done by operation name (RPC / action name, e.g., 'reboot'), so we can save about 3 bytes by omitting that information. Not sure if any of these are implemented, I'm looking for implementer to talk to. Ongoing discussion among authors, we'll reach out to the mailing list soon.
+
+CB (p10): Late with the original timeline. Want to use SID progress in COMI using PYANG rather than manual, want to use validation progress. After those are done, WG Last Call again? At any rate, discuss at IETF 117.
+CB (p11): Then do the frequently requested thing: efficiently encode IP addresses etc.
+
+Questions?
+None.
+
+MT: On -core-comi, bring Michael Richardson up to speed as he is shepherding.
+CB: He is in offlist discussions.
+
+ED (on chat): +cborseq should be +cbor-seq
+CB: Taking care of that.
+
+### Attacks on the Constrained Application Protocol (CoAP) (Christian Amsüss, Jon Shallow)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-attacks-on-coap/
+* https://github.com/core-wg/attacks-on-coap/issues/3#issuecomment-1560728616
+* https://mailarchive.ietf.org/arch/msg/core/xol237i7KFXHNLQ1j7rmRUTYDlM/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-11/materials/slides-interim-2023-core-11-sessa-draft-ietf-core-attacks-on-coap-00.pdf
+
+JS: Open points from discussions mostly on the Github.
+JS (p2): TOC
+JS (p3): Standard Block2 with request payload, requests get reordered.
+JS (p4): Using only ETag has limitations: the server still has to make an assumption in case of ambiguity in the transfer intended by the client, and the client can get confused by the response.
+JS (p5): Simple with Request-Tag, the server can send appropriate response. Here, no ETag is used so no changes can be detected.
+JS (p6): The client doesn't know in advance whether the response is going to be fragmented. An obvious fix, but not efficient, is using Request-Tag in every request, just to be on the safe side.
+JS (p7): Alternative mitigation than Request-Tag all the time:
+
+* No concurrent, multiple requests (note that NSTART=1 is not enough)
+* Some signaling from the server that Block2 will be used. How practically? Request-Tag in response? (not specified today) New Block2 option embedding Request-Tag?
+
+CB: Can we use Echo for this?
+CA: Using Echo would mean that the request has to be sent once more.
+CA: There's no way to detect whether the client is just not using a Request-Tag at all, or using it. Now I think it was a mistake to say to not send ETag in a request with no Block1 fragmentation. A good mitigation is to send the Request-Tag with every request.
+
+JS: Difficult to mandate something. Not straightforward... If the client gets back a block response it can determine that it should have used Request-Tag, so to update the cache key.
+CA: Your examples use POST, so the operation is performed the second time.
+JS: But if you use FETCH?
+CA: Then it's different. DTLS already sends more data, given the Token use updated in RFC 9175. So the proposal above shouldn't be that much overhead for the DTLS users.
+CB: You only need a Request-Tag if you plan to have multiple outstanding requests, (not in the NSTART sense) but multiple Block-wise activities?
+CA: No.
+JS: The proxy can run multiple exchanges on behalf of multiple clients.
+CA: Right, the proxy acts independently.
+CB: Since the proxy can't guarantee, it always must send a Request-Tag.
+CA: Not having concurrent multiple exchanges does not help. It can even be about retransmissions from previous requests.
+
+JS: Not need a decision now but we need an answer.
+CA: Into which draft?
+JS: Into -core-attacks-on-coap
+CA: Then, where do we fix it?
+
+MT: The draft is now Informational. Would this make it Standards Track?
+CA: We would probably not fix this in -core-attacks-on-coap. I'm thinking of a short document to update RFC 9175 saying that what applies to Request-Tag also applies to requests with a body where the client cannot be sure whether the response is not going to be fragmented.
+MT: Yes, that would work.
+
+CA: Any signaling we introduce would not be slimmer than using the Request-Tag approach.
+JS: Unless the server added it with the Block2 response.
+CA: That could also happen on proxies which complicates things.
+JS: Either way, a simple set of words would be needed. Suggestion: "Use Request-Tag, unless you really don't want to"
+
+JS (p8): Missing ETag meeting changing resource corrupts data. NSTART issue comes up next anyway.
+
+JS (p9-p10): When the attacker changes the Token of exchanged messages ... (showing scenario of Token manipulation)
+JS (p11): OSCORE is safe thanks to the end-to-end binding not caring of the Token; DTLS suffers from rogue proxy or has successfully MITM'd the DTLS connection.
+
+JS (p12): Recommended to use OSCORE (and certainly not No-Sec). This should be clarified in the -core-attacks-on-coap draft.
+CB: We should distinguish attacks from an attacker that we originally imagined and attacks from an attacker more creative exploiting things we didn't think of before. This is not in the same class of attacks like re-ordering discuss above.
+CA (on chat): +1 on CB's "we already have lost" if NoSec or DTLS-MITM is used.
+CB: Let's not confuse people and instead tell them what they should do.
+CB: For example, the rogue proxy can change the message payload altogether. Fundamentally, it's nothing new.
+JS: The OSCORE end-to-end trust mitigates a lot against that.
+CB: Yes, but independent of this specific attack.
+JS: True.
+
+JS (p13): Clarify body-but-no-block1/block2 interaction, and on observe-vs-block2.
+
+CB: It's voluntary to get the rest of the blocks for a response. If the first response gives you a code confirming that the server understood the deregistration, you don't need to get the rest.
+JS: There will be a cache key, so a memory starvation attack on the server is a risk. Unless some timeout or garbage collection clears away those cache keys.
+CA: The server always has to expect that the client does not fetch the rest of the resource.
+CB: There are 2 kinds of responses. One where the server responds with 2.31 (this is still active), and one with 2.05 (success). For a 2.05 response, the request would be considered done.
+
+CA: We should fix block-wise's behavior to repeat the body of the request in FETCH requests in the presence of Block2 when the request is not fragmented. It is necessary for stateless processing of FETCH requests.
+JS: If the FETCH request has 6 blocks to send upstream, and we start getting Block2 responses, do we have to repeat the 6 requests?
+CA: No, if Block1 is used and can't be processed independently then the server is stateful. Most FETCH requests have the body fitting a single payload. Repeating the FETCH payload has benefits.
+JS: So if all fits into a single block things are fine, but issues appear when a proxy is involved (with size limits)?
+CA: It's still fine. The proxy accepts the big request and keeps the state around while sending the small chunks. The proxy has to be block-wise aware.
+
+MT: Is all this material intended for -core-attacks-on-coap? Or for somewhere else like -corrclar?
+JS: They are not specifically attacks. Due to the order documents were released, things can be confusing.
+
+MT: Or it can be a selective update to block-wise.
+CA: We do have -corrclar.
+CB: Currently -corrclar is not a WG document; if we want to give it that status, we should consider making it one.
+MT: For now let's not lose track of this (slide 13).
+
+JS: I can submit PR, but against what?
+MT: Make one separate issue for each bullet point.
+CB: I'll look up where the repo is.
+CA: https://github.com/core-wg/corrclar
+JS: I will create the issues.
+
+CA: I will prepare a proposed update to RFC9175 :-/
+
+### DNS over CoAP (DoC) (Martine Lenders)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-11/materials/slides-interim-2023-core-11-sessa-dns-over-coap-doc-00.pdf
+
+ML presenting.
+
+ML (p2): Recap.
+ML (p3): Paper is out https://arxiv.org/abs/2207.07486
+ML (p4): Relation to CBOR format. dns-message as fallback if application/dns+cbor is not supported by some party, or just happens to be smaller.
+ML (p5): Summary of updates already in the Editor's Copy. One point is that DoC is orthogonal to DoH.
+CB (in chat): What is "orthogonal" here?
+ML: It means not 100% compatible, just eligible to mapping. Clear?
+CB: Yes.
+
+ML (p6): Open discussion with Ben Schwartz. May need an ALPN ID for DNS over CoAP/DTLS (see Github issue 22). A cross proxy can't just do translation due to TTL (but FETCH is not translated anyway?)
+MT: Have you checked the Query Method? HTTP is defining this. See https://datatracker.ietf.org/doc/draft-ietf-httpbis-safe-method-w-body/
+CA: Even if FETCH is defined to be translated to QUERY in an update to the proxying document, it still would not make DoH use QUERY.
+CB: I don't know about QUERY, but I do know about SEARCH. It has been stuck since RFC 5323, and it may never be unstuck.
+ML: DoH have specific methods defined: GET and POST. A translation needs to be defined.
+CA: Given that DTLS is not compatible, we cannot go that route even if there was a FETCH translation. Let's just state that translation doesn't work. DoC cannot be done using a reverse proxy translating to DoH.
+
+ML (p7): Not sure this is still relevant given the previous presentation.
+
+CB: What is MID?
+ML: The DNS header Message ID.
+CB: This can be confused with the CoAP Message ID.
+ML: Can we still use MID=0 and rely on the Token?
+CA: We can. DNS is defensive to allow defending against blindly injecting parties, which CoAP generally doesn't consider (if you're worried, use a non-trivial Token). But the DNS MID can still be 0.
+ED (on chat): For the DNS identifier we can use "ID", not "MID" (official RFC 1035 term).
+ML: That would work, although "MID" is also used in DNS literature. That document will not be ambiguous anyway.
+CB (on chat): "DNS ID".
+
+ML (p9): So what do we need? We won't translate. On SVCB, statement would be helpful, as would be general feedback.
+
+ED: on the Content-Format number, you can ask 53.
+ML: Yes, but 53 would be better for the CBOR format (benefitting from the shorter ID).
+CB: 353 for application/dns
+ED: Yes, since the length is not critical there.
+CB: 5353 is to leave for another experimental space.
+ML: 353 sounds good.
+ED: Why not 54? Many bytes available.
+CB: I disagree.
+ML: I'd also like to keep it mnemonic.
+ED: Then 533?
+ML: Something using '5' and '3'.
+
+ML (p10): Version -03 to be published for 117.
+
+### CoAP: Non-traditional response forms (Carsten Bormann, Christian Amsüss)
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+* https://mailarchive.ietf.org/arch/msg/core/l1g-AMbpVC2Mo7mZfiqw2niuu7M/
+
+> This document establishes non-traditional responses as a general
+> concept, including criteria for when and how they can be applied. And
+> while it doesn't attempt to do this normatively, it insinuates that
+> observation, multicast requests and others are users of that concept.
+>
+> Is that an approach you find useful?
+
+CA: No slides, just rehash. It's not a WG document, but I don't want to spend implementation and specification effort on something that the WG rejects :)
+
+CA: Define generic concept, "non-traditional response" (NTR), i.e. every response that is not the single one response to a request.
+CA: The document would define:
+* What requirements options have that allow NTRs (e.g., the messages need to be distinguishable explicitly or implicitly)
+* What the preconditions are for sending NTRs (there needs to be a critical property in the request that sets things up)
+* How gaps are filled in the space spanned (e.g., what is the required OSCORE processing when obtaining multiple responses due to a request to a multicast proxy?)
+  * Possibly give guidance as to what outer options soliciting NTR are, otherwise we leak information on what is going on beyond what a proxy needs to know. It would be tempting to declare all outer as Observe, but that would give the proxy leisure to only send the last one.
+
+CA: I'd like to get a feeling if the Working Group wants to support this direction. Original direction was defining things like pre-configured responses. In version -01, this is generalized to flesh out the concept behind, not only used by those options. But also others like observe (multicast) notifications, multiple responses from a same server other than notifications, use of multicast proxies, and the Q-Block options.
+CA: We should: 1) define this concept (what is a non-traditional response); 2) describe how these options are defined, and give general guidance for processing. This helps to keep the drafts that specify uses of this concept clean and following the same mechanism.
+CA: The idea is not to re-define observations and other such mechanisms. An appendix describe them simply in an informative way, but their actual specification is for other dedicated documents, such as some already ongoing ones.
+
+CA: Is the Working Group interested in getting behind this?
+CB (in chat, being one of the authors): +1
+MT as individual: I support this; it's cohesively clarifying something that happened or is happening in multiple documents that is otherwise hard to track and keep homogeneous.
+RH (in chat): It seems useful to me also.
+
+CA: Jon and other implementers, would this help you in the implementations of CoAP?
+JS: It comes down to the implementors. I'm providing library support. (and I am supposed to have retired) Having a structure makes sense to me.
+
+MT: Did you mean "option" in the sense of alternative approach or CoAP Option?
+CA: Every request that solicits non-traditional responses will have to indicate that (as it will keep the Token open). It can happen using CoAP Options, but also header components or otherwise (like request destination address for multicast).
+
+MT: You mentioned a possible further CoAP option, acting as a kind of on/off switch, differently from Multicast-Timeout defined in -groupcomm-proxy and giving a time indication to a proxy.
+CA: It can make sense to have 1 or a few general setup Options. These would be proxy-unsafe, while what describes the characteristic of responses can be safe to forward. Like if we had an alternative to the traditional block-wise responses (allowing the server to respond with multiple Block2 responses in a row). The proxy unsafe options is keeping the Token open, the other related options would then not have to be proxy unsafe. Having general purpose option(s) would be good.
+MT: You actually gave an example of use case for that. See also the minutes from the CoRE interim meeting of 2 weeks ago where I tried to quote it.
+
+MT: Do you plan a new revision before the IETF 117 cut-off?
+CA: I have 5 documents to work on, so not sure if I have the time. We need implementation experience. I want to gather that and then proceed.
+CB: Submitting on Sunday of the IETF meeting would work.
+
+MT: We also have a CoRE side meeting booked for Friday of the IETF week. One main topic is this.
+CB: The side meeting would benefit from a new document version (with some updates).
+
+### AOB
+
+* CoRE will meet at IETF 117 for a 2-hour session
+    * Tuesday, July 25, 09:30-11:30 (San Francisco Time) / 16:30-18:30 (UTC)
+
+* CoRE side meeting at IETF 117, on "CoRE core topics"
+    * Room: Golden Gate 4
+    * Link for remote attendance:
+        * https://meetings.conf.meetecho.com/interim/?short=442370dd-2bf3-4013-aeb8-7dc3f1dba22f
+        * In case of issues, Jitsi is the backup plan
+    * Friday, July 28, 09:30-11:00 (San Francisco time) / 16:30-18:00 (UTC)
+    * Expected to cover especially CoAP non-traditional responses (draft-bormann-core-responses)
+    * https://wiki.ietf.org/en/meeting/117/sidemeetings
+
+* Planned next series of CoRE interim meetings (all at 14:00-15:30 UTC / 16:00-17:30 CEST)
+    * 2023-08-30 - CoRE interim meeting
+    * 2023-09-13 - CoRE interim meeting (MT and CB not available)
+    * 2023-09-27 - CoRE interim meeting
+    * 2023-10-11 - CoRE interim meeting
+    * ((( 2023-10-23 - IETF 118 cut-off )))
+    * 2023-10-25 - CoRE interim meeting
+
+    Same cadence (Wednesday of odd weeks), interleaved with the CBOR interim meetings
+
+    To confirm with the CBOR Chairs and on the CoRE mailing list
+
+    CA: The intent is to keep CBOR interim meetings with same cadence we have had so far.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow

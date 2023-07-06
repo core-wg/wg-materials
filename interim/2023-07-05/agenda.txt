@@ -1,0 +1,40 @@
+CoRE Virtual interim - 2023-07-05 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* CORECONF
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+   * https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+* Attacks on the Constrained Application Protocol (CoAP)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-attacks-on-coap/
+   * https://github.com/core-wg/attacks-on-coap/issues/3#issuecomment-1560728616
+   * https://mailarchive.ietf.org/arch/msg/core/xol237i7KFXHNLQ1j7rmRUTYDlM/
+
+* DNS over CoAP (DoC)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+* CoAP: Non-traditional response forms
+
+   * https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+   * https://mailarchive.ietf.org/arch/msg/core/l1g-AMbpVC2Mo7mZfiqw2niuu7M/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-11/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=1bcf9d87-f9e6-4502-a429-5dcaa4688cb2
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-11-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
