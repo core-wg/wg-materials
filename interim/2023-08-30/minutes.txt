@@ -1,0 +1,171 @@
+# CoRE Virtual interim - 2023-08-30 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-12/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=7a460af2-cbc7-475c-8802-e984da9cbdb0
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-12-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+FP: Paul Wouters accepted to be responsible AD for draft-ietf-core-oscore-edhoc
+
+MT doing introductions.
+
+CB: T2TRG face-to-face meeting planned on Friday 2023-11-03 (the Friday before IETF 118) in Prague; topics related to CoRE evolution are welcome.
+CB: Please fill in the short survey at https://www.surveymonkey.com/r/T8NWR5V
+
+### YANG Schema Item iDentifier (YANG SID)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+CB presenting
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-12/materials/slides-interim-2023-core-12-sessa-carstens-slides-coreconf-href-corrclar-00.pdf
+
+CB (p1): Recap of the current status.
+
+CB (p2#1): As to -core-sid, the maintenance of pyang is not very active, needing planning for long times for PR merging -- having CoRE branch/fork for some months. Without further waiting for that, we had to fix the examples in the draft manually, so we are ready for WGLC with one open question (see later).
+
+CB (p2#2): Already in -core-comi-14, we skip the "input"/"output" identifiers as redundant.
+LT: What do you mean by skipping?
+CB: As it's clear at all points in time whether something is input or output, that information doesn't need to be in the interchanged data structure. So we also don't need a COREconf SID for that, but we want to provide a SID for RESTconf. Best look at the COMI example.
+
+CB (p2#3): Asking for review. Need to check with co-authors if fine to have WGLC.
+
+CB (p3): SID files accompany YANG models. They're in YANG-JSON, now we are editing them in CSV form; the JSON->CSV direction undoes current pyang weirdnesses.
+CB (p3): Question: What are the identifiers for the RPC actions? The identifier we originally assigned SID 1716 to was incorrect, and has been replaced by SIDs 1775 and 1776. SID 1775 is only needed for RESTconf. SID 1776 would be used in RESTconf and COREconf. I chose to use new numbers (still draft, could have reused), but it's less confusing that way, since the old identifier/SID has been around for so long.
+
+CB: I think we are done with this document too. But there's also a version of pyang generating SIDs for identifiers that never occur (e.g., SID 1777, not needed because datetime only has an input). To me, it seems simpler to just not generate them.
+LT: I think it's good not to put them, they are not needed. One can generate them later.
+IP (on chat): Sounds good to me as well.
+CB: The downside of missing a number is limited, since they can always be generated later. Not sure of anyone who wants to use this. I think we are on the safe side.
+LT: You have no output if there is nothing specified.
+CB: The output could still have bogus SIDs, and things would still be fine. The downside of having too much is limited, but it complicates things and confuses people.
+CA (on chat): I don't know much about YANG, but, from what I have heard, not generating them sounds good.
+
+CB: The Chairs will need to decide whether can we do a publication-requested based on this.
+MT: We could have another WGLC, right? That was the original plan, ideally together with -core-comi.
+CB: I start vacation on Tuesday -- things need to be done now or in September. We can take this offline.
+
+MT: One week for the new WGLC should be enough, starting next week ideally for both -core-sid and -core comi. NETMOD will be put in CC like for previous last calls on these documents. Please confirm with the co-authors of -core-comi, otherwise the WGLC on -core-sid can start first anyway.
+
+CB: Any comments from MCR on recent implementation work?
+MCR: There were some bugs where the implementation was behind the specifications. Some later changes are still on PRs, so it is hard to run the right version of YANG. I would appreciate more reviews.
+CB: Proposal: let's use the Github repo of CoRE WG.
+(some GitHub procedural stuff)
+MCR: The latest issue is around phantom identifiers. The current code maybe does not number all the things that it should, and there might be missing examples to catch where it does not do what it should. It would not be a showstopper, just a bug.
+MCR: For users over ANIMA, there are data structures that are not RPCs. Sometimes the YANG community lacks understanding there.
+CB: Answered something yesterday that something was data-in-flight and not data-at-rest, that model is often not on radar. But there is nothing getting in the way of finishing this, right? Good.
+
+### Constrained Resource Identifiers (HREF)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+CB presenting
+
+Presented slides (from p4): https://datatracker.ietf.org/meeting/interim-2023-core-12/materials/slides-interim-2023-core-12-sessa-carstens-slides-coreconf-href-corrclar-00.pdf
+
+CB (p4): Progress report.
+CB: IANA questions will take some more time to understand on how to correctly set up the new registry with integers abbreviations of URI schemes.
+CB: WGLC reviews resulted in [#75](https://github.com/core-wg/href/pull/75), which needs reviews.
+CB: Some editorial work also needed; it will not happen before vacation.
+CB: One, new important thing -- CRIs and CoAP options. Normal options do a lot already. Under the objective to not have URI parsers, we could need Proxy-CRI (no text yet) as equivalent of Proxy-Uri. Similarly, we can have a numeric-equivalent of Proxy-Scheme (with coap scheme length of 0 in unsigned encoding). These options will be in the 1+1 space as to option numbers.
+
+CB:Maybe second short WGLC on a new version including this?
+MT: The additional WGLC sounds good and can be focused on the new part on the Options.
+CB: Even though there's less rush on this and we can also put more time to do it right.
+CA (on chat): Probably obvious from me being involved in the planning, but for the record: I'd welcome these options.
+
+### corr-clar and discussions about FETCH/Block
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-clar/
+* https://github.com/core-wg/corrclar-process/blob/main/process.txt
+
+CB presenting
+
+Presented slides (from p7): https://datatracker.ietf.org/meeting/interim-2023-core-12/materials/slides-interim-2023-core-12-sessa-carstens-slides-coreconf-href-corrclar-00.pdf
+
+CB (p7): This document has been revived and its GitHub repository is active. The content is intermixed with implementation issues.
+CB: One specific issue is [Californium 2088](https://github.com/eclipse-californium/californium/pull/2088): Eclipse Californium used to reuse the CoAP token value throughout the same block-wise transfer; Zephyr relied on it on the server side. Californium reverted and provided an option to accommodate Zephyr.
+CB: Two aspects -- people are running stuff outside (so some emergency fix is needed), and people perceiving this as "Californium does things right again now" (dangerous situation).
+CA on chat: facepalms.
+CB (p9): The more generic issue is that there are more issues around FETCH and block-wise. "Taking the 3rd block of a POST on its own" rarely makes sense (i.e., POST is rarely stateless), but for FETCH it is different, as it is very likely to be wanted as stateless.
+CB: We want to do this right, but also to through a minimal change. I'm not suggesting that we design this all in this meeting; it is an example of a corr-clar issue that requires our timely attention.
+
+CB (p10) on process: MT wrote how the process for this document can be (summarized here).
+CA: Do we have to delay WG adoption until we categorize the issues? Maybe it's better to adopt soon, once we're happy with the process that then we follow. The document can still change through the process once it is set up (as "Confirm each issue" is also sufficient to do a change on the WG document). At least we can point people to a work-in-progress happening as a WG document. This also serves to discourage people from rushing implementing things that have to be revised anyway. New sequence would be 4.1, 5, 1, ..., 3, 4b, 6. That is:
+> 1. Reshape the -corr-clar document in order to include the revised process
+> 2. Consider WG adoption.
+> 3. Go through available material (issues, FAQ) and revise/create Github issues as needed
+> 4. Categorize the Github issues into topics (dedicated team)
+> 5. Confirm each issue with the CoRE WG, get feedback from protocol designers/implementors:
+> — include and cover in -corr-clar, as is or revised; or
+> — simply omit in -corr-clar; or
+> — leave for a possible -bis document (e.g., for some specific points
+> 6. Reshape the -corr-clar document in order to reflect a sequence of pairs (Diagnosis, Therapy)
+> 7. WG document work can focus on improving the therapy parts
+
+MT: The process can also be transferred into the main corr-clar repo for finalization (corrclar-process is still private I think).
+CB: I can dump the text over the draft too, let's do that quickly.
+
+CA: Nothing fundamentally wrong with Californium I think, the behavior is correct. It's more about what happened on the other side.
+CB: Don't have a link, we could ask.
+
+### AOB
+
+Francesca and Christian are happy with their kids.
+
+MT: We will cancel the next interim meeting in 2 weeks, due to Chairs unavailability. The next one we have is on September 27; most likely, the topics of today will come back.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[IP]: Ivaylo Petrov

@@ -1,0 +1,34 @@
+CoRE Virtual interim - 2023-08-30 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* YANG Schema Item iDentifier (YANG SID)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+   * Implementation Report from MCR
+
+* Constrained Resource Identifiers (HREF)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* corr-clar and discussions about FETCH/Block
+
+   * https://datatracker.ietf.org/doc/draft-bormann-core-clar/
+   * https://github.com/core-wg/corrclar-process/blob/main/process.txt
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-12/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=7a460af2-cbc7-475c-8802-e984da9cbdb0
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-12-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
