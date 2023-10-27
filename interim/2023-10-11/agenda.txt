@@ -1,0 +1,40 @@
+CoRE Virtual interim - 2023-10-11 - 14:00-15:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* CoRECONF (SID, COMI)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+* A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/
+
+* Group Communication for the Constrained Application Protocol (CoAP)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+
+* CoRE Parameters Registry: publicly registering URNs?
+
+* An easy/standardized mapping from DNS-SD service description to CoRE discovery?
+
+* Planned next interim meetings
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-15/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=0d214cd2-3888-4a45-b1ae-044d03b27762
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-15-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

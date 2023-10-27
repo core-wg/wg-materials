@@ -1,0 +1,248 @@
+# CoRE Virtual interim - 2023-10-11 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-15/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?short=0d214cd2-3888-4a45-b1ae-044d03b27762
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-15-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+## Agenda
+
+Pre meeting (https://youtu.be/zWjA2qXIwxk?t=49 until ~04:27): MT, CA, and JJ chatting about how pubsub principles could have been applied to the CoRE Resource Directory as well.
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+MT doing introductions.
+
+### Document status
+
+CB: target-attr has just been approved by Rob Wilton; registry will be around soon.
+\*: congrats!
+
+### A publish-subscribe architecture for the Constrained Application Protocol (CoAP)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-15/materials/slides-interim-2023-core-15-sessa-coap-pubsub-v13-00.pdf
+
+JJ presenting.
+
+JJ (p2): recap. The document incorporates Klaus' design considerations since version -12.
+JJ (p3-4): Publishers and subscribers are both CoAP clients. Resource structure. Properties of a topic can be tweaked at its configuration hosted at the broker.
+JJ (p5): After a client (e.g., an admin) has created the topic resource with the configuration, a publisher can start publishing on the topic-data resource. Until the first publication, the topic-data resource is a placeholder -- after the first publication, it's fully created. Then subscribers can observe the topic-data resource to obtain the new content as it is published.
+JJ (p6): The topic lifecycle is there since version -12. Paths are not static but discovered.
+JJ (p7-8): By the way, come to the hackathon for interopping!
+JJ (p9): Discussion points from previous IETF meeting.
+JJ (p10-11): The work-in-progress version has a lot of things done. Open: security considerations are work-in-progress, I should have a new version before Prague. I prefer to get security content from draft-ietf-ace-oscore-gm-admin and other ACE documents.
+JJ (p12): A topic-data resource could be set up and hosted somewhere else than at the broker. It sounded simple. But many topic properties need to be shared between the broker and the hosting server, which needs a dedicated protocol. It also messes up with the topic lifecycle a bit.
+
+ED: Question on picture of p12. Is the difficulty not up to the implementer? Let them decide. It does not need standardization.
+JJ: My assumption was that we want to use normative language in this document or we'd leave people hanging. We could leave it open so that other drafts could jump in and define that protocol.
+ED: Eventually, two addresses can even point to same machine. Or two machines with fast network. We could just allow it. This specification would just say what is required.
+JJ: My concern is just it's not very straightforward. Pubsub is big already, and it has been around for so long in CoRE.
+ED: I just wondered whether there's reason to forbid it.
+JJ: Good point. Right now, the topic-data resource is said to be created by the broker. It could still be open. Maybe it needs a section on caveats about hosting it somewhere else. Hard to define it in a light fashion.
+
+CB: It's important to think about ways we'll evolve this. Hosting data on different server is a valuable feature. We can define things now so that a client should be prepared to find things that way, without forbidding the topic-data resource from being on a different server than the broker. (What does that even mean). Client should be prepared for this. For now, the broker might do this in a proprietary way.
+CB: The feature is going to be most valuable if the data owner can act interoperably, interacting with different brokers, and for that we need a standardized protocol. But that can be a second step, and we don't have to prevent clients from using that feature even before we have such a protocol.
+JJ: To clarify, clients have no problem with this.
+
+CA: Nothing to add on the synching -- just don't forbid it, everything else can be done later.
+CA: Under that model, it feels like the broker is acting as a "reverse proxy" towards a resource that is hosted somewhere else. It's still good to imagine how this can become, and it shouldn't require much text to add.
+
+CA: (essentially reading out https://mailarchive.ietf.org/arch/msg/core/3acyttrhBnAyVOWwBB2-dpG39EA except from the two "examples" paragraph and the proposed text, which were added later)
+JJ: Yeah, many years ago we had some reverse proxy stuff in pubsub. I get the point.
+CA: Indeed, metadata on a topic configuration can be about an actual topic-data resource sitting on another hosting server, but in principle it's not necessarily about a topic, it's about a resource.
+JJ: I think that's possible. Draft is rather generic in that sense, and properties are open to extension. Don't know if I can fully capture it in the draft, but happy to modify if not.
+
+MT: Agree with CB and CA -- don't prevent the separate, future work on the synchronization protocol, but no need to engineer it here and now. If the topic-data resource is hosted somewhere else, we know which issues will arise. It's good to mention them in the draft, saying that it's up to the separate synchronization protocol to address those.
+
+MT: On security considerations -- we have two documents in the ACE WG that should help out.
+    * -ace-pubsub-profile should help as-is, in providing **a** security model for publishers and subscribers.
+    * -ace-oscore-gm-admin considers specifically a Group Manager for Group OSCORE, but it could still be an inspiration for a future companion document that provides **a** security model for pubsub administrators (which might even come up in ACE in the future).
+
+JJ: Then there is agreement on allowing topic-data resources on a different host than the broker. (Already had section that I removed).
+
+CA: Fine to say that a link is not necessarily a relative reference, it's just a URI. No text needed on what can go wrong.
+JJ: So allow other values to be placed in the URI of the topic-data resource?
+CA: It's still the broker putting a URI there, but it doesn't matter how the broker comes to that URI (it's implementation specific).
+CB: From the client's point-of-view, the broker decides. It doesn't see where that information is coming from.
+JJ: But from the publisher's point-of-view, could it raise an issue? But I get the general idea.
+
+JJ: Missing anything? (Assuming people have read the draft)
+CB: The draft doesn't exist yet
+JJ: It's in the Github repo.
+CB: We need to have it available as a draft.
+JJ: Just trying to save version numbers.
+CA: Version numbers are cheap.
+CB: We can get up to version -99.
+
+CB: Timeline for v -13?
+JJ: I can submit something right now, otherwise before the cut-off with security considerations.
+CB: v -13 with TBD on security considerations now if it's viable, otherwise just wait for the cut-off. Please avoid the 23rd :-)
+JJ: I'll do -13 now, just ignore its security considerations when reading it.
+
+### CoRECONF (SID, COMI)
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-15/materials/slides-interim-2023-core-15-sessa-coreconf-sid-comi-00.pdf
+
+CB presenting
+
+CB (p1): sid is in IESG review again, the telechat is next week. SID for existing protocols should be started right away.
+CB (p2): About -comi, Tom Pech reviewed from a netconf point-of-view: we didn't know some conventions, so now improving accessibility to netconf people.
+CB (p2): Also about -comi, Andy commented with more technical points. Examples are still much work because they are starved on tool infrastructure.
+CB (p3): Also Andy, point 1: data store architecture. Can support NMDA or just be simple "unified" form. Too little implementation experience with COMI and NMDA, thus just define unified form, leaving NMDA to separate document.
+CB (p3): point 2: Information about what "keys" are used in the instance identifiers is not repeated in the response, it just contains a SID for where you are in the schema tree (but no keys such as "IP address" and "port number"). Two problems: Media type expects the keys, and we might need explicit correspondence rules (like, what in request matches what in response). Also lacking implementation experience, because we don't have the YANG models yet.
+CB (p3): point 3: Enumerating keys may be expensive. Do we need RESTCONF's parameters? If not, how does the client know which keys are relevant? We can't use a trivial example to discuss it, because on trivial example it just works.
+
+CB (p4): Also Andy: failure modes. Potential for deadlocks?
+CB (p4): And more comments, some of which unclear (e.g., extra layer for '0' is wrong). I will check with Andy.
+
+CB (p5): Quite some substance in comments. Planning -comi-17 soon. Some points will remain open as issues on the Github. I hope to have (hallway) discussions about those in Prague at IETF 118.
+CB: Note that you can implement CoMI already, as long as you don't hit those items.
+
+MT: CoRE will hopefully stay in the second half of the week (Thursday in the preliminary agenda for IETF 118). So if the hallway discussion happens in first half, we could confirm outcomes in the CoRE session.
+CB: Netmod should have its session on Tuesday. Maybe we can carry some of these points in there.
+
+### Group Communication for the Constrained Application Protocol (CoAP)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+
+* Discuss some points from John's review:
+    * https://mailarchive.ietf.org/arch/msg/core/Xa9l_GzsT7inpRyOlOayZYTRDME/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-15/materials/slides-interim-2023-core-15-sessa-discuss-draft-ietf-core-groupcomm-bis-review-comments-00.pdf
+
+ED presenting
+
+ED: Selected comments from John Mattsson.
+
+ED (p3): On "not recommending an experimental protocol" sounding too strong or wrong. The current text came from addressing WGLC comments on justifying the past tense when talking about RFC 7390. But there's actually no harm in using that protocol.
+ED (p4): suggested way forward.
+CB: I'd like to keep thinking of that protocol in past tense. We don't want to recommend using it. You still can, but it's not the direction we guide people to use. For overhauling the RFC, one reason was that we had no use for that protocol. An experiment can end. The experiment ended by seeing that nobody implemented it. We may not have formally recorded the reasons, but with some effort we might manage that.
+ED: So that protocol gets obsoleted with the rest of the RFC, concluding the experiment.
+MT: Maybe just remove everything from the quoted text except for the first sentence ("The IETF ... group creation."). Don't event mention that experimental protocol.
+CB: That was an experiment that concluded, due to the absence of implementations.
+MT: Essentially removing the text in bold?
+ED: Actually replacing it with ", and the experiment is concluded".
+
+ED (p5): About unsecured discovery. We could need concrete examples of how and when NoSec can be used. Examples on slides (e.g., cbrski, see draft-ietf-anima-constrained-voucher that could be added as informative reference). Also point out that NoSec is not used for any actual application data.
+ED: Alternatively just generally refer to secure bootstrap mechanisms. Open, can take either approach. Opinions and further ideas?
+MT: The first option sounds better, it's more explicit.
+RH: Same.
+MT: Yet, it doesn't exclude using also (part of) the second option, which gives more context information.
+
+ED (p7): comment: Be strict unless proven to be not sensitive.
+CB: I am having a hard time with the terms "sensitive", "mission-critical" etc., because in the end there are security objectives. Issues are created only when things are done when having privacy issues. Instead, come from the objectives as a starting point, rather than distinguishing sensitive and non-sensitive. One important point is the concept of "proximity", which can provide some form of security that is different from what we normally use, but is appropriate in those steps. Sensitivity at later stage may not be present at this stage.
+ED (p8): My proposed solutions, on having Group OSCORE by default, spelling out exceptions.
+CB: The question is rarely "whether we have security" but "what do we gain from the communication", and if there is no way to get to a secure communication, that is a problem. Hard to find whom you want to talk to while you don't know it.
+ED: Then we can rephrase in terms of security objectives?
+CB: Also mentioning specific steps of the current workflow. See if we can come up with something.
+MT: So the exception to using secure communication is about specific, well-defined steps that are proven to not require security or to not be able to attain it (e.g., early discovery). This avoids talking of a whole application and using "sensitive" or "mission-critical".
+
+
+ED (p9): Optional vs. mandatory address/port for naming CoAP groups in Figure 1, apparently contradicting later text in Section 2.2.1.1.
+ED: The figure is about CoAP groups as a concept, the later text is about expressing their name in the authority component of a URI. Thinking of URIs, they may have host name (no explicit literal) and no explicit port.
+CB: To exercise multicast you have to know the address; at that point, you need to know the address. But you can talk about groups before you know.
+RH: The figure indicates address and port for a CoAP group. Can't you have a hostname instead of the IP address?
+ED: In the URI yes, but that would be resolved to an address. Also, you may have multiple names (based on different hostnames in URIs) that are resolved to the same address and thus point to the same CoAP group.
+RH: I see what you say.
+MT: Just noted a nit in top left field of Figure 1 about application groups. For consistency, it can be "[ - application group name]" instead of just "[ - group name]"
+ED: Which is also aligned with another comment about avoid to generically say only "group", unless it is clear from the context what type of group we are talking about.
+
+ED: Will require some more thinking, but that was good input.
+
+### CoRE Parameters Registry: publicly registering URNs?
+
+Background: KNX association has registered the 'urn:knx' URN prefix and defines CoRE interfaces using this. For example: urn:knx.if.foo
+
+The CoRE Parameters Registry, Interface Description (if=) Link Target Attribute Values subregistry, defines per RFC 6690 that URIs/URNs MUST NOT be registered there.
+However, there was a notion that registering the URNs publicly somewhere at IETF, e.g. in this registry, would be useful: it would add exposure, show how SDOs are using CoRE Link Format, etc.
+
+What do we think about registering URNs this way, or having a different list of URNs that show how CoRE Link Format is being used?
+
+MT: Deferred to mailing list due to lack of time
+
+### An easy/standardized mapping from DNS-SD service description to CoRE discovery?
+In the past there was substantial work to provide (bidirectional?) mapping between DNS-SD and CoRE Link Format. In general, it becomes complex when all features are to be supported and when bidirectional mapping is needed.
+
+Recently, based on work in ANIMA WG, there was a need identified to support multiple types of 'discovery method' including CoRE discovery and DNS-SD. The idea was that, since DNS-SD service format is already defined, we could just map that in a generic way to CoAP/CoRE discovery (e.g. Link Format and/or more compact CBOR based method - do we have such?)
+
+This avoids defining things twice in slightly different ways. A generic mapping could work for any 'simple'/standard DNS-SD defined service.
+
+Simple use case:
+1. Client sends out CoAP multicast discovery request for DNS services of type X
+2. One or more servers that offer service type X respond with details about the service, including service instance name, SRV record parameters, and TXT record data.
+
+MT: Deferred to mailing list due to lack of time
+
+### Planned next interim meetings after IETF 118
+
+* W47 Wednesday 2023-11-22, 15:00-16:30 UTC / 16:00-17:30 CET
+   - 2 weeks after IETF 118, on the day before US Thanksgiving
+
+* W3 Wednesday 2024-01-17, 15:00-16:30 UTC / 16:00-17:30 CET
+
+* W5 Wednesday 2024-01-31, 15:00-16:30 UTC / 16:00-17:30 CET
+
+* W7 Wednesday 2024-02-14, 15:00-16:30 UTC / 16:00-17:30 CET
+
+* W9 Wednesday 2024-02-28, 15:00-16:30 UTC / 16:00-17:30 CET
+
+(IETF 119 cut-off deadline on 2024-03-04)
+
+Same alternating cadence with CBOR. To be confirmed with the CBOR Chairs and CoRE.
+
+CA: Cadence will be fine
+MT: Will check also with Barry and confirm on the mailing list
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
