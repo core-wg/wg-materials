@@ -1,0 +1,26 @@
+CoRE Virtual interim - 2023-11-22 - 15:00-16:30 UTC
+
+
+* Administrivia
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* Brief update on documents in AD/IESG processing
+
+* CoRE Parameters Registry: publicly registering URNs?
+
+* draft-ietf-core-href: New CoAP Options
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-17/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=79a3e027-5186-420d-b517-84fab08505df
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-17-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

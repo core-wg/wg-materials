@@ -1,0 +1,155 @@
+# CoRE Virtual interim - 2023-11-22 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2023-core-17/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=79a3e027-5186-420d-b517-84fab08505df
+Notes: https://notes.ietf.org/notes-ietf-interim-2023-core-17-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Rikard Höglund, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+### Brief update on documents in AD/IESG processing
+
+* draft-ietf-core-sid-23
+* draft-ietf-core-oscore-edhoc-09
+
+CB: Progress on draft-ietf-core-sid during the IETF week. There are still two DISCUSS ballots to be cleared. We need to check with the ADs about the remaining comments, but we should be done soon.
+
+CB: The other document that progressed is draft-ietf-core-oscore-edhoc, and Marco can give a status update about it.
+MT: We received 4 reviews (GENART, OPSDIR, ARTART, SECDIR) and processed them, creating one PR for each review. Carsten reviewed the PRs and we have addressed his comments. Göran (co-author) confirmed that the PRs are good. Rikard (co-author) will also check and confirm. If the reviewers are fine we will merge the PRs and submit the result as version -10.
+CB: If this is submitted during this week, it can make it for the next IESG telechat meeting, otherwise it will have to wait for the telechat after that.
+
+### CoRE Parameters Registry: publicly registering URNs or URN-namespaces that offer CoRE links/ifs?
+
+(Item carried over from Interim #15 where it was postponed - proposed by [ED])
+
+Background: KNX association has registered the 'urn:knx' URN prefix and defines CoRE interfaces using this. For example: urn:knx.if.foo
+
+The CoRE Parameters Registry, Interface Description (if=) Link Target Attribute Values subregistry, defines per RFC 6690 that URIs/URNs MUST NOT be registered there.
+However, there was a notion that registering the URNs publicly somewhere at IETF, e.g., in this registry, would be useful: it would add exposure, show how SDOs are using CoRE Link Format, etc.
+
+What do we think about registering URNs this way, or having a different list of URNs that show how CoRE Link Format is being used?
+
+One further idea is not registering all the links (very time-consuming potentially) but only the top-level URN that offers "something" Link Format, along with a single pointer to the organization or specification or specification-collection so that people can explore further what Link Format definitions are available there.
+
+ED: (See background above) How can people get an overview of all attribute types if they are not registered. Would an informative way of registration make sense?
+
+CB: There is a registry for URN name spaces, however most of those registrations are not about IoT and thus not a good way to find registrations. You said that we don't have to register the URNs? Actually we are not allowed to. The question is if we can collect this info in some other way. We came up with the idea of using a Wiki-page referenced from the CoRE Github landing page. The Datatracker can potentially reference it as a resource (needs investigation).
+
+CB: The main point is to keep the Wiki alive, and insert pointers in places where they are beneficial. IANA can point to a Wiki.
+
+ED: We do not have this Wiki yet.
+MT: Here's the root of the Wiki (https://github.com/core-wg/wiki/wiki), where a new Wiki page can be created. The Wiki page can then be linked from the landing page (https://core-wg.github.io/), and possibly from an IANA registry. We can start preparing a list and then create the Wiki page.
+
+ED: We can start thinking about this.
+
+CB: I can create a new Wiki page.
+CB: Tentative new page at https://github.com/core-wg/wiki/wiki/URNs-used-to-identify-interfaces-(if=)-and-resource-types-(rt=)
+
+MT: Once it is populated we can link to it from relevant places.
+CB: Later on, we can also convert the wiki to a repo, it is easy.
+
+### draft-ietf-core-href: New CoAP Options
+
+CB presenting
+
+CRIs (and the URI scheme numbering scheme) motivate adding CoAP Options that can use these formats.
+* Briefly discuss the proposal in github.com/core-wg/href
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2023-core-17/materials/slides-interim-2023-core-17-sessa-href-00.pdf
+
+CB (p2): Applying finishing touches to the HREF document. We have been working on test vectors, and one point from Christian about using CRIs with CoAP, also on producing/consuming CoAP options when using CRIs (the possible trailing slash right after an authority needs to be handled carefully). We may also want to create analogues of some CoAP options: Proxy-Uri->Proxy-Cri and Proxy-Scheme->Proxy-Scheme-Number.
+
+CB (p3): Proxy-Cri has the same properties as Proxy-Uri, except for having format Opaque. The document states that for incoming messages the Proxy-Cri overrides the Proxy-Uri, and you must not send messages with both.
+
+CB (p4): Proxy-Scheme-Number has the same semantics as Proxy-Scheme, except for using a numeric value. Since we are using negative integers as numeric scheme identifiers in CRIs, and the CoAP option can only allow unsigned integers, we have a formula to compute optionvalue = -1 - schemenumber (so the -1 for CoAP becomes 0 as option value).
+CB (p4): Should we instead make values in the registry itself unsigned, use those as-is for the CoAP option Proxy-Scheme-Number, and then use 1's complement to compute the values for the corresponding scheme-id? That may be easier to explain, but it requires changes in the document.
+
+MT: For that alternative, the registry would include a value 0 to be used as option value for CoAP?
+CB: Yes.
+MT: So the formula for computing scheme-id would increment and negate?
+CB: Effectively yes, the formula would be the same (as on slide 4).
+ED: I think that sounds like a good idea. Why did you go for negative integers for scheme-id?
+CB: Because in CRIs, starting with an unsigned integer is a way to remove path segments (discard).
+ED: I see, that makes sense.
+
+CB: As a separate discussion point, currently we have no way to provide a Location-Uri with a different scheme than the one used for the request. This is a limitation of RFC 7252 (there was no coap+tcp or similar at the time). We may now want to fill this hole. Having a numeric way to specify this would be useful.
+MT: Any plans to introduce this also in the non-numeric version?
+CB: It seems clean to have both, but if we had had a scheme registry in 2013 we would have used the scheme number. Considering that we have this registry now, only supporting the numeric version can make sense.
+MT: These are good considerations to have in the document; someone will ask these questions anyway.
+MT: The proposed option numbers also look correct.
+CB: I was thinking about having them in the 1-byte range.
+
+MT: This is all intended for the next submitted version?
+CB: Yes. I will proceed with the mentioned steps and update the PR.
+MT: Looks good.
+
+MT: On the topic of producing CoAP options from a CRI, you would not have a reason to first convert the CRI to a URI, and then apply the procedures in RFC 7252, right?
+CB: Sure, but the two processes should really give the same result.
+MT: But the opposite process is left undefined, because the conversion from URI to CRI is left undefined, right?
+CB: Yes, for URIs, but not sure if we are defining it for CRIs.
+
+### AOB
+
+MT: Most likely, the interim meeting in 2 weeks will be canceled, unless something critical and urgent to discuss comes up. After it, we resume in January as already scheduled.
+
+CB: We have a WG (confirmation) adoption call ongoing for draft-tiloca-core-groupcomm-proxy. Shall we discuss anything about it? (If anything comes up, that can be a topic for the interim in two weeks)
+
+RH: I was going to reply on the mailing list. I have followed the document and worked on an implementation. I will follow up on the list.
+CB: Please do.
+
+ED: I am an author. Should I also reply on the mailing list? Sometimes authors do.
+CB: It makes sense if authors have useful information to share for the adoption call.
+
+CB: To clarify, it's a confirmation call. If nobody says anything, the document is going to be adopted.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
