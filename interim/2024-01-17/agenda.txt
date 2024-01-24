@@ -1,0 +1,28 @@
+CoRE Virtual interim - 2024-01-17 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* Long nonces in KUDOS for Cacheable OSCORE
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+   * https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/
+   * https://github.com/core-wg/oscore-key-update/issues/95
+   * https://gitlab.com/chrysn/core-cachable-oscore/-/issues/38
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-01/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=59d49daf-0c53-4f54-b543-dcaa9695e3eb
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-01-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core

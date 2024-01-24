@@ -1,0 +1,151 @@
+# CoRE Virtual interim - 2024-01-17 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-01/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=59d49daf-0c53-4f54-b543-dcaa9695e3eb
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-01-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+## Agenda
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+MT doing introductions.
+
+### Updates on documents in IESG processing
+
+* YANG Schema Item iDentifier (YANG SID)
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-sid/
+
+   * Before this interim meeting: "New State: Approved-announcement to be sent" 🎉
+
+   * During this interim meeting, the document has been approved for publication 🎉
+
+CB: This started 11 years ago, it has been the most difficult document that I participated in to get through latest stages. Thanks to those who helped.
+
+CB: New work in this space started this morning. See the CBOR WG mailing list at https://mailarchive.ietf.org/arch/msg/cbor/9SX3bZBNO36E7c-w2O2i6dGTZd0/
+
+### Long nonces in KUDOS for Cacheable OSCORE (Rikard Höglund)
+
+- https://datatracker.ietf.org/doc/draft-ietf-core-oscore-key-update/
+- https://datatracker.ietf.org/doc/draft-amsuess-core-cachable-oscore/
+- https://github.com/core-wg/oscore-key-update/issues/95
+- https://gitlab.com/chrysn/core-cachable-oscore/-/issues/38
+
+RH presenting
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2024-core-01/materials/slides-interim-2024-core-01-sessa-slides-kudos-core-interim-january-17-00.pdf
+
+MT: Authors considered CA's proposal, concretely on KUDOS but in the interest mainly of cacheable OSCORE.
+
+RH (p2): Status of the KUDOS draft; what is in there; what was split out and will be split out.
+RH (p3): Procedure recap: it is about exchanging nonces to enable the key update of OSCORE material. The nonces are placed in the extended OSCORE option, with their size and other feature-signaling flags.
+RH (p4): Issues by CA for the benefit of cacheable OSCORE, see the draft -core-cachable-oscore. This builds on enabling KUDOS to transport larger nonces, to be used as Request-Hash value in cacheable OSCORE.
+
+CA: Giving context: an original idea of cacheable oscore was to rely on the OSCORE Partial IV, but even the largest one is too short to achieve a secure enough binding between Deterministic Request and corresponding response. That is why the Request-Hash as a dedicated CoAP option to transport that Request-Hash value was introduced. Now I have thought of OSCORE-related nonces again, having KUDOS with its nonces.
+
+RH (p4): Proposal for nonces >16 bytes in KUDOS. Different ways of doing that, by extending the encoding of the nonce size in the extended OSCORE option.
+RH (p5): Points to consider from authors on encoding of nonce size, where exactly the nonces are transported, and high-level fitting and pros/cons for the two documents.
+RH (p6): Current vs. proposed encoding of nonce size (similar to that of the CoAP option number delta; it is doable and working, enabling *very* large nonces).
+RH (p7): Where to place the value, namely V? In the OSCORE option, or in the CoAP payload prepended to the OSCORE ciphertext? For KUDOS, either way works, because V is integrity protected anyway, as part of the key derivation input of both request and response. For cacheable OSCORE, V takes part of the key derivation only for the request, hence it cannot be in the CoAP payload, in which case it would not be integrity protected in the response. Therefore, the OSCORE option is a place where the value V can be transported for both documents, both in request and response, while also ensuring the required source authentication.
+
+CA: The value (the Request-Hash in cacheable OSCORE) does not need to be transported in the response.
+RH: You still need to integrity-protect it.
+
+RH: So the new proposal is a way of using KUDOS in full, not just reusing the fields of its extended OSCORE option -- this is a discrepancy between the understanding of RH/MT and CA.
+
+CA: The value still takes part in key derivation. And this is still about key update.
+RH: Do you have all the required properties in place, like freshness?
+CA: There is no freshness, that's a deliberate thing we have to give up.
+
+RH: The KUDOS draft does not talk about Group OSCORE yet.
+MT: CA, you might have been remembering about a small imagined fork of KUDOS in the interest of upgrading pairwise keys for two specific group members, but it is not part of KUDOS yet, nor it is anywhere else around.
+MT: Simply put, Group OSCORE is not related to KUDOS.
+
+MT: Like in slide 7, the secure binding between request and response in cacheable OSCORE would still work here (just in a different way), because, if the value is in the OSCORE option, the whole OSCORE option is integrity protected, since Group OSCORE puts the option in the external_aad when protecting the response.
+CA: But you can't elide the OSCORE option like we do in the current design of cacheable OSCORE for the Request-Hash option.
+MT: Right, which is about performance convenience, which comes in the next slide.
+CA: And we really want to elide it like we do now in cacheable OSCORE, also in the interest of its efficient use in -core-observe-multicast-notifications.
+MT: Agree; if the Request-Hash value is in the OSCORE option of the response per the new construction, we cannot really elide it. But we thought of the exchange of cacheable OSCORE as not really involving a key update with KUDOS (which is currently not related to Group OSCORE but limited to OSCORE).
+
+(p8) based on not considering that KUDOS would be really executed.
+RH (p8): Consideration on complexity of message parsing, because the messages would be marked as a message for KUDOS -- but, with the updated view of really doing KUDOS, that is maybe not so bad any more.
+RH (p8): Based on that view and those considerations, still preferred the current design.
+
+RH (p9): Other (non-cacheable-OSCORE) KUDOS points on the document status and next steps.
+
+CA: I'll have to look into KUDOS and how it can possibly be mapped into groups. Then let's see if properties match and things magically work. If "KUDOS for groups" worked, then cacheable OSCORE can follow-up more easily. But this requires KUDOS to work well for groups.
+
+CA: On when transporting nonces, I wonder if the Request-Hash option can be a sort of extension of the OSCORE option, which can instead remain compact. The OSCORE option would not have to express such a long nonce on its own, but semantically it can be there, and then still go into KUDOS processing (even though it's coming from an option outside the OSCORE option). That is, the extended OSCORE option of the Deterministic Request can still have a nonce field that can remain short, while still pointing to a separate Request-Hash option with the actual nonce, again to be fed into KUDOS key derivation.
+
+RH: If a potential, separate Group KUDOS was defined, it might simplify cacheable OSCORE.
+
+CB: Pointing out that, nominally, we are using CBOR. There are a number of special hacks for conveying structure that should be reigned in. I'm seeing us sliding down the path of where we invent a lot of binary syntax.
+CA: That is why I was advocating for avoiding magical things here. We need the bit fields for OSCORE's compactness, which CBOR cannot do -- adding either CoAP option stuff or CBOR stuff makes this overly complex.
+RH: The OSCORE option already has its custom structure, without relying on CBOR.
+CB: Just have to be wary about doing more of this kind of things.
+
+CA: If I remember well, the OSCORE option is a shorthand of some COSE structure. It is not good if too much of its content becomes an indication of Type-Length. In that case, it might make sense to have a separate CoAP option specifying that information, which would still be OSCORE-related but natural to encode in CBOR.
+CA: Not sure if this is a good idea here. But if we are ever tempted to do CBOR inside the OSCORE option, we should consider whether a path of doing "uncompressed" CBOR instead.
+
+MT: When proposing this new design for the benefit of cacheable OSCORE, did you have any particular reasons for getting rid of the Request-Hash option and using KUDOS and its concepts instead?
+CA: Both because implementations would otherwise need yet one more branch inside the OSCORE processing, and because it is easier from a security-review perspective.
+
+Next step: CA to go through KUDOS again and check what is needed also for the group direction.
+
+
+### AOB
+
+CA: Big round of updates to CoAP Rust interfaces is just happening; still not the model of CoAP APIs I would want it to be, but better than before.
+MT: Any pointer to share?
+CA: I will send links to the CoRE mailing list in due time.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
