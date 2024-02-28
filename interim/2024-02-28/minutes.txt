@@ -1,0 +1,135 @@
+# CoRE Virtual interim - 2024-02-28 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-04/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=b99f9f8c-f049-494f-ab0e-b8b9f25e66c4
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-04-core
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### Request for an ALPN for CoAP-over-DTLS. (5min, CA)
+
+See [list](https://mailarchive.ietf.org/arch/msg/core/MLTkAFXL-Yyo_02Xus7AdgtItaA). Without objections, CA will ask TLS experts to just assign "co" as ALPN for CoAP-over-DTLS. Not a WG action, but on its turf.
+
+CA: Will soon make the request to the TLS Experts; not possible at the time of RFC 7252, since ALPN didn't exist. This wouldn't change anything for the protocol, but it's useful for advertising and discovering, e.g., for DNS over CoAP. I will point to RFC 7252 as reference.
+
+MT: The proposed text that you sent on the mailing list looks fine to me.
+
+### Attacks on the Constrained Application Protocol (CoAP)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-attacks-on-coap/
+
+Overall status and point reminded by John, on fixing the use of Block-wise and Request-Tag, see [list](https://mailarchive.ietf.org/arch/msg/core/rY4oxlSq0BBBzWsgij8CaULPW7M/)
+
+Related material:
+- Mail thread: https://mailarchive.ietf.org/arch/msg/core/xol237i7KFXHNLQ1j7rmRUTYDlM/
+- Original issue: https://github.com/core-wg/attacks-on-coap/issues/3#issuecomment-1560728616
+- Interim meeting on 2023-07-05:
+    - https://datatracker.ietf.org/meeting/interim-2023-core-11/materials/minutes-interim-2023-core-11-202307051400-00
+    - https://datatracker.ietf.org/meeting/interim-2023-core-11/materials/slides-interim-2023-core-11-sessa-draft-ietf-core-attacks-on-coap-00.pdf
+- Follow-up issue: https://github.com/core-wg/corrclar/issues/28
+
+MT: A main open point to address somehow and somewhere was the use of Block-wise and Request-Tag. CA thought of a possible dedicated short document. The document -core-corrclar is an alternative venue to work on it.
+
+CA: No recent progress on that. Doing this in -core-corrclar works fine for me.
+CB: I have just submitted a revision of -core-corrclar, also to bring up again what has to be addressed. I started with a verified erratum now discussed in the draft. We need to do the same thing for covering all the other errata regarding CoAP. The Github repo of the draft has a roadmap on how to progress the document, shaped as Github issues.
+CB: The one I've done was simple; for the issues, we'll have to make decisions. It would be good to make progress, even if addressing all of them can take a year. Doing 1 issue per interim meeting would already be good progress.
+
+MT: We can indeed work on 1 or 2 Github issues per interim meeting after IETF 119.
+CA: +1.
+CB: Let's pick an item at least the week before, so people can be prepared.
+
+### Ongoing discussion on using mDNS for node discovery
+
+See https://mailarchive.ietf.org/arch/msg/core/1wCGflhT5VpVBYxiVhsAWd9rjQM/
+
+HTTPBIS work triggered this, Ted had concerns when it comes to constrained devices.
+
+CB: Not only you need mDNS to use it, but if you want to be seen, you have to be an mDNS responder, and that's a new quality about link-local usage. We should be very aware of what we are doing.
+
+CA: I'm not sure about the concerns from Ted on the list. I think that there was something along those lines that was usable in the mDNS ecosystem.
+CB: There is a section in that document about how to do it. You have to implement an mDNS responsder, then SRP to get less multicasting, and some discovery to find your SRP communication partner. It's a sizable amount of code.
+
+MT: Any planned input to the HTTPBIS discussion?
+CB: I just started a thread, then maybe the HTTPBIS people are not interested on the constrained side. Ted [mentioned](https://mailarchive.ietf.org/arch/msg/core/IDSAwEyWBj3elQmepaNHEXbhETc) an alternative protocol that they use for this.
+CB: Maybe we should renew the pointer there in the future.
+CA: I want to have a look at this again. Mozilla made a lot of work on this some time ago, with a lot done except on the security side.
+
+### Interim meetings after IETF 119
+
+To confirm/synch with the CBOR WG
+
+* W15 Wednesday 2024-04-10, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+* W17 Wednesday 2024-04-24, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+* W19 Wednesday 2024-05-08, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+SKIP on 2024-05-22 due to the Hackathon on Lightweight IoT Security
+   - https://parishackathon.lakewg.org/program/
+
+* W23 Wednesday 2024-06-05, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+* W25 Wednesday 2024-06-19, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+* W27 Wednesday 2024-07-03, 14:00-15:30 UTC / 16:00-17:30 CEST
+
+Cut-off deadline for IETF 120 on 2024-07-08
+
+MT: CA, any particular issue with this?
+CA: No, it works for me.
+MT: We will also check with Barry, and then confirm with the WG.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow

@@ -1,0 +1,37 @@
+CoRE Virtual interim - 2024-02-28 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+   * Note Well
+   * Chat + Minutes
+   * Agenda Bashing
+
+* Request for an ALPN for CoAP-over-DTLS
+
+   * https://mailarchive.ietf.org/arch/msg/core/MLTkAFXL-Yyo_02Xus7AdgtItaA
+
+* Attacks on the Constrained Application Protocol
+
+   * https://datatracker.ietf.org/doc/draft-ietf-core-attacks-on-coap/
+
+   * https://mailarchive.ietf.org/arch/msg/core/xol237i7KFXHNLQ1j7rmRUTYDlM/
+
+* Ongoing discussion on using mDNS for node discovery
+
+   * https://mailarchive.ietf.org/arch/msg/core/1wCGflhT5VpVBYxiVhsAWd9rjQM/
+
+* Interim meetings after IETF 119
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-04/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=b99f9f8c-f049-494f-ab0e-b8b9f25e66c4
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-04-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/21-core
