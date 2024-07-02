@@ -1,0 +1,243 @@
+# CoRE Virtual interim - 2024-06-19 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-09/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=22204f22-47de-4057-86c8-8ad14fa8bab2
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-09-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+MT doing introductions.
+
+### Announcements
+
+CB: draft-ietf-core-sid is now in AUTH48. We are working on the 57 questions from the RFC Editor.
+
+### corr-clar incremental progress (PRs)
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-corr-clar/
+* https://github.com/core-wg/corrclar
+
+CB driving the discussion through the Github repo.
+
+CB: Discussing the Editor's Copy. Section 1.1.2 specifies the intended process to work on this.
+
+CA (on chat): please adopt
+
+CB going through issues. We originally wanted to do 1 issue per interim meeting. We are behind schedule, so we try to process 4 issues today, through the corresponding Pull Requests intended to close those.
+
+#### PR \#31
+
+https://github.com/core-wg/corrclar/pull/31
+
+Intended to close [issue \#8](https://github.com/core-wg/corrclar/issues/8)
+
+CB: This issue was about fixing the names of the columns in the "CoAP Content-Formats" IANA registry. The fix to the registry happened, following an errata report. The text in the PR just describes this.
+
+MT: Pointing to the errata should be sufficient; that includes examples of what triggered the fix specifically.
+
+CB: Should the text also include links to the Github issues (that has discussion, even if that may also be misleading)? For PR \#34 about epochs, it does point there where the tracked discussion is actually useful.
+
+#### PR \#32
+
+https://github.com/core-wg/corrclar/pull/32
+
+Intended to close [issue \#7](https://github.com/core-wg/corrclar/issues/7)
+
+CB: This is useful to explain, as people get this wrong. The intent is to clarify. When RFC 7252 is revisited, we should add the relevant text from here.
+CA (on chat): People get trailing slash wrong *very* often.
+
+MT: Input on 3 corner cases, worth clarifying and highlighting:
+
+Case 1: Regarding the algorithm in Section 6.4 of RFC 7252, it cannot produce a single Uri-Path option that has an empty value.
+CB: Right.
+
+Case 2: Regarding the algorithm in Section 6.5 of RFC 7252, it cannot produce a URI with the empty path component (i.e., present component but with 0 path segments).
+CB: So after all the work in step 6, we add an extra /. For some reason we went for the single-slash.
+CA: But the two URIs finishing and not finishing with the single-slash are equivalent **in scheme-based normalization**.
+CB, concluding: It'll be good to add a few examples.
+
+Case 3: On the same algorithm in Section 6.5 of RFC 7252: the server may receive a request with a single Uri-Path option that is empty. This cannot be produced by the algorithm in Section 6.4, but a server might still receive a request made that way. Based on step 6 of the algorithm in Section 6.5, the rebuilt URI has a path component that consists of a single empty segment.
+CB: That's the same URI that would have been produced if that single Uri-Path option was not there. Question: Should the server be treating it the same way? I don't think we currently say this.
+MT: I can't notice any bad implications, but these corner cases are good to spell out.
+CA: I think there are implementations that have to take this into account when converting back and forth between URIs and CRIs. From a CRI point of view, a single empty segment is equivalent, but multiple empty segments would be different from a single one.
+CB: All of this is inherited from HTTP, we did not look into RFC 9110 about that.
+
+CB: → todo item -- add examples
+
+#### PR \#33
+
+https://github.com/core-wg/corrclar/pull/33
+
+Intended to close [issue \#10](https://github.com/core-wg/corrclar/issues/10)
+
+CB: The term "Request URI" should be defined, and is now defined in the text of the PR.
+
+MT: The definition looks good to me, it's consistent with the later text using it, especially on forward-proxies.
+
+CA: There is a caveat, from implementation experience. There are two concepts: the URI you request; and the base for resolving things in the response. These are different. We should clarify this difference (which is only relevant for responses to multicast requests).
+
+CB: So we should probably have another term there, and introduce that in the terminology. What is a good term for the base for resolving things in the response?
+CA: I am not sure, I am thinking in the direction of "tagged representation", but that's more on representations and less on resources.
+CB: Should it be added to draft-bormann-core-responses?
+
+→ For -corr-clar: Add distinction with base URI for response.
+→ CA: check draft-bormann-core-responses for whether this is needed there. (BTW, Request-For s/header/option/)
+
+#### PR \#34
+
+https://github.com/core-wg/corrclar/pull/34
+
+Intended to close [issue \#9](https://github.com/core-wg/corrclar/issues/9)
+
+CB: The object of this text is to point out that there is no inconsistency problem. The match boxing is well-defined for CoAP MIDs and for CoAP Tokens. In theory, there is no problem.
+CB: One observation: it is bad to throw away all that state on rekeying. Plus, there are examples in RFC 9006 on short-lived TCP connections that also have the problem of lost desirable state. Additional work may be required to fulfill those goals.
+CB: The current PR text says that, wherever we work on rekeying, that should be considered. For example, KUDOS in draft-ietf-core-oscore-key-update should not be as conservative as for (D)TLS.
+
+RH: KUDOS is already terminating CoAP Observations by default (see its Section 6.4), unless the two peers both agree on preserving their ongoing Observations across the key update.
+CA: I will have to review KUDOS for that, but it probably should be "any requests with pending observations".
+RH: It currently says "don't initiate while you have pending requests".
+CB: Who initiates KUDOS?
+RH: Either party can.
+CB: (...So this can be concurrent?) Then it's hard to decide.
+RH: Let's revisit the document to ensure we are not missing any corner case.
+CB: Packets could both be in flight at the same time.
+RH: So the client sends 2 requests, one of which triggers a rekeying initiated by the server...
+CA: I am relatively confident that we can generalize this to just terminate or not terminate any pending requests originating from the party setting the flag that asks to preserve the ongoing observations first.
+
+MT: Also on KUDOS, but back a bit to the main point of the PR:
+* OSCORE was never as strict as DTLS for the match boxing. KUDOS never changed any matching logic from CoAP, and neither did OSCORE.
+* See also Section 3 of KUDOS (which is now a full OSCORE update point), which fixes in a general way what is otherwise a security issue, related to the (non-)use of Partial IVs in responses across key updates. The problem was originally noted and fixed in Group OSCORE; then fix in KUDOS is generalized for OSCORE, and also in the interest of the actual KUDOS executions.
+  The fix is the mandatory inclusion of a Server's new Partial IV in the response, if the response is protected with an OSCORE Security Context different from the one that was used for protecting/unprotecting the request. (See https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-key-update-07#name-updated-protection-of-respo)
+
+CB: If people using OSCORE are using match boxes larger than periods-during-which-you-do-not-rekey, then do you have a security problem? Should we then say that OSCORE+section-3-of-kudos is more useful?
+
+CA: OSCORE without any rekeying mechanism usually does not do request/response matching between different OSCORE Security Contexts. Only with KUDOS or any other rekeying (including in groups) can one match across different Security Contexts in the first place.
+RH: OSCORE also has the key update defined in Appendix B.2 of RFC 8613, but the idea there seems to be to not do matching between different Security Contexts, so implying that Observations and any pending requests are terminated when doing a key update.
+
+CB: So can a response come in with regular OSCORE after a rekeying?
+MT: Yes.
+CA: No.
+CB: Let's make up our mind and write it up here.
+CB: The idea is valid, but we need correct examples to explain these.
+
+MT: Is the text in the PR addressing the original issue related to DTLS? Some people in the issue discussion were proposing to relax the matching.
+CB: Relaxing it would create problems. We do not even have a way to link new DTLS epochs uniquely to an old DTLS epoch. Someone might generate two epochs from the same starting epoch. You do not even know to which of those to send new messages. This text is about going beyond the consistent-but-not-very-satisfying state. Both communication sides need to be aware of the current state if they can do the linking.
+CA: I wrote an issue that also mentions signaling messages in DTLS, see https://github.com/core-wg/corrclar/issues/35
+CB: It could be an option.
+
+CA: What about possible differences from the DTLS 1.3 session resumption? Will we talk about that in PR \#34, or in a different issue?
+CB: The point 1 means that we must write material either in new works like KUDOS, or separately to make an enhancement. Without a DTLS 1.3 guide for CoAP, we have no reason for it to behave differently than DTLS 1.2. So we are stuck with undesirable behavior even though DTLS 1.3 could do better.
+MT: So the first paragraphs of the PR text are just a recap, but there is no intention to relax the strictness originally defined for DTLS.
+CB: Correct.
+
+MT: OSCORE has enhanced things then.
+CB: Epoch is a TLS-specific term; OSCORE might be different.
+CB: TCP connections in RFC 8323 are another type of epoch. We must say something about it.
+
+CA: This is request/response matching through CoAP tokens and CoAP MIDs. CoAP-based documents sometimes consider the source address or a security context as matching parameters, e.g., for Block-wise. Does that go in here?
+CB: Yes, it goes in here. Observe is mentioned as the most pressing example.
+
+CB: We need subsections on TLS 1.3, TCP connections, and OSCORE. All those are situations where you lose transport/security context and need to say how to continue after that.
+MT: If there is security at both layers, these should be independent without affecting each other, right?
+CB: I am not sure.
+CA: For CoAP Observations, if the lower layer switches over the response can either way not come through for lack of a continuous CoAP Token space.
+CB: Can some of the Token space be ported over (match-box linking)?
+CA: Looking into signaling messages can be good, as these are external to the Token space. (Or of course go out-of-band and work with TLS options).
+
+CB: We are already strict in DTLS. The question is, (how) can we securely get a linking between the match-boxes? The IV case of OSCORE is an interesting case for linking match-boxes.
+MT: Can we start with the DTLS and TLS cases first?
+CB: But we do not want to risk doing something that only works for the TLS case. All cases need to be kept in mind.
+MT: OSCORE Appendix B.2 did not discuss any matching issues at all.
+CA: At latest, with the implications of Section 3, it should be clear that OSCORE Appendix B.2 does a clean cut, nothing happening before affects what happens after.
+MT: Appendix B.2 does not require the added fix that we did in KUDOS for OSCORE (https://datatracker.ietf.org/doc/html/draft-ietf-core-oscore-key-update-07#name-updated-protection-of-respo). It displays the same property that triggered the need for the fix, but, due to its specific design and behavior, it is secure from the identified issue even if not adopting the fix. For simplicity, KUDOS just declared Appendix B.2 an exception to which the fix is not applied (after all, Appendix B.2 is going to be deprecated by KUDOS).
+CB: So Appendix B.2 assumes that there is no strict boxing?
+MT: I would have to re-run an execution of Appendix B.2 to get into the details, but we found it immune due to its particular sequence of creation and use of temporary OSCORE Security Context. Likely, this was not a planned byproduct, but the analysis at that time said it was fine, and in fact it is.
+CA: Appendix B.2 was always an example. KUDOS is making it clear that a proper incarnation of such an example would become KUDOS.
+MT: Even if only example, Appendix B.2 is mandatory-to-use in OMA LwM2M.
+
+CB: →MT/RH/CA, Could one of you make a PR on the PR? This will need more text.
+CA: Will try during my KUDOS review.
+
+MT: To summarize, neither OSCORE nor KUDOS take a stance on the CoAP Token/MessageID matching. Also, KUDOS enables preserving observations across key updates, and adds a general fix to OSCORE for preserving the security of responses sent across key updates. Like OSCORE, KUDOS is neutral on the matching logic.
+CB: Maybe we need to be more explicit about the scope of Token and MID there as well. DTLS limits the scope of Token and MID to the DTLS epoch.
+RH: OSCORE does not say anything on it. My understanding of the intent of Appendix B.2 is to terminate the epoch and not carry things over.
+CA: Thus not allowing it.
+CB: It is implied but not said explicitly. It should be said explicitly.
+MT: Yes, it should.
+
+CB: Can an OSCORE Security Context be forked?
+RH: You can build a new Security Context from and old one, but then you delete the old one.
+RH: KUDOS says to discard the old keying material when a confirmation of use arrives from the other peer.
+CB: If no confirmation arrives, can you start a different key update?
+RH: If the KUDOS execution fails (no confirmation to delete the old key material is received), you revert back to that old keying material.
+CB: Even in the group case with Group OSCORE?
+MT: There you have the Group Manager that decides to rekey the group, which is not triggered by the group members. KUDOS is not for groups either, it's only one-to-one.
+CA: The OSCORE group is managed by the Group Manager, so the group cannot fragment (and a distributed Group Manager would need to take care of it on its own).
+CB: What if the Group Manager crashes?
+RH: Then no-one can join the group and you cannot rekey, but you can keep the communication going among the current group members. If it crashes, you would need to restart it with the same state it had when it crashed, otherwise it is about re-establishing the group from scratch.
+
+CB: In the 90s, we were working on group communication, and we always simplified to say that you would have a manager, a central point. If that's lost, you are lost.
+CA: As far as I recall, you can make a journaling Group Manager to ensure that it restarts with the same state. You cannot just back up the Group Manager, but you can have a Group Manager with a distributed persistent storage that it commits to. Then, the recovery from a crash needs the larger portion of the backup.
+MT: In Group OSCORE, the fix for the security of responses through the PIV is done as in KUDOS. Also, Group OSCORE preserves observations across key updates. We just noticed and enforced these things in Group OSCORE first, before doing them also in KUDOS for OSCORE.
+
+CB: Please contribute with text about this.
+
+### AOB
+
+CA (on issue #35): Let's not reinvent the wheel too often, and make life easier for implementers.
+
+MT: We have one more interim before IETF 120. Then we plan to resume at end of August, alternating with the CBOR WG as usual.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+
