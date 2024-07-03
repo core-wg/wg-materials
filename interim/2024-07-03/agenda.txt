@@ -1,0 +1,26 @@
+CoRE Virtual interim - 2024-07-03 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* corr-clar incremental progress (PRs)
+
+  * https://datatracker.ietf.org/doc/draft-bormann-core-corr-clar/
+  * https://github.com/core-wg/corrclar
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-10/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=47f04466-563b-475e-9737-d50a53359259
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-10-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
