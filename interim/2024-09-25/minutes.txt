@@ -1,0 +1,152 @@
+# CoRE Virtual interim - 2024-09-25 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-13/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=568d577c-2f99-4b5b-bd83-5b0f8138a952
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-13-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+## Agenda
+
+MT doing introductions.
+
+### DoC over DTLS and CIDs/RRC
+
+- See also:
+    - https://mailarchive.ietf.org/arch/msg/core/Md4gV_0tUq7K6uyIwCjuRHSJOaA/
+    - https://github.com/core-wg/corrclar/issues/39
+
+CA presenting (no slides).
+
+CA: For DNS over CoAP (DoC), I think that we are good with respect to the references to DTLS 1.3 (RFC9147) and 1.2 (RFC6347). Doing the common thing of updating to the latest reference made it sound like we require DTLS 1.3, whereas we do not want to make a statement, especially not when the statement would be "it's complicated". So we refer to both versions 1.3 and 1.2.
+
+CA: On fixing the complicated things
+* At some point we may want to talk about DTLS 1.3 in a more general way. This includes what it means for the match-boxing of requests and responses, and what is the role-reversal address after a session resumption.
+* Text proposed for draft-bormann-core-corr-clar in the Github issue [#39](https://github.com/core-wg/corrclar/issues/39). That should help with the parts about amplification attacks that are already opened up by DTLS 1.2 (and more common in DTLS 1.3) on resumption.
+
+CB: In CoAP, we have the Echo Option and the challenge-response based on it.
+CA: That's the application-layer mechanism equivalent to Return Routability Check (RRC), see https://datatracker.ietf.org/doc/draft-ietf-tls-dtls-rrc/.
+CB: Are we saying to not use Echo? If we do not say what to use of the two, an implementor has the burden of implementing both.
+CA: It is up to us to make a preference and possibly a requirement. I am biased, but I would go for the Echo approach, because it works for all the security mechanisms applicable to CoAP.
+CA: So can I just say that?
+CB: Yes. Just check at the RRC cases that are not covered by Echo.
+CA: → update #39 to state that, and check whether RRT checks for anything that Echo does not cover. Then turn into a PR.
+
+MT: About adding text to the DoC document, it can be text in the security considerations to include: input from Thomas' comments, see https://mailarchive.ietf.org/arch/msg/core/Md4gV_0tUq7K6uyIwCjuRHSJOaA/ ; and reference to appropriate sections of draft-bormann-core-corr-clar.
+CA: Sounds reasonable.
+
+CA: → notify draft-ietf-tls-dtls-rrc on precise Echo
+
+CB: You do PR or I do?
+CA: I can do; where should the text be added in -corr-clar?
+MT: Section 2.5.1 of -corr-clar-05 can be a starting point to add this more specific content.
+CB: I will come back on that.
+
+MT: The reference from DoC to -corr-clar should be informative, even better if -corr-clar is adopted before DoC is shipped.
+CB: It's important to not restate things.
+MT: Thomas' point was to mention something in DoC as well, because DoC is a relevant example of a class of applications with certain requirements/expectations/preferences.
+CA: Some of it sure came from us referencing DTLS 1.3 just out of updating references, without thinking much of it.
+
+MT: There is still an open issue for DoC on the Github. It looks like the authors are converging. Please double-check, see https://github.com/core-wg/draft-dns-over-coap/issues/4
+
+MT: draft-ietf-core-coap-dtls-alpn is also adopted. There is not much work left expected on it. It can proceed in parallel with -dns-over-coap.
+
+### corr-clar-05
+
+https://www.ietf.org/archive/id/draft-bormann-core-corr-clar-05.html
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2024-core-13/materials/slides-interim-2024-core-13-sessa-corr-clar-00.pdf
+
+CB presenting.
+
+CB: Issue #8 was addressed, so I focused on the other ones. I submitted v -05. We're not done of course, but reviews would help.
+
+CB (p2): Issue #7 on the trailing slash. We said to include more examples so I added some more. Can I declare it completed?
+MT: It's completed for me.
+CA: Same.
+CB (p2): → take away "INCOMPLETE" marker from that section
+
+CB (p3): (Issue #10): Terms "request URI" now defined, but "base URI" causes "PENDING" in there.
+CA: (also note to self) Location will need to be considered there.
+CA: Precise ref to changes in HTTP?
+CB: They do not even use the same terms anymore. → Clarify what that item on the slide means.
+
+CB(p4): (Issue #9, match-boxing): The clarification here is: "Yes, we mean the nonsense we wrote in RFC 7252".
+CB(p4): The opportunity here is: "Fix that". For (Group) OSCORE, it looks fine now with the new text (based on the documents about KUDOS, OSCORE and Group OSCORE).
+CB: We also have existing documents (CID, see RFC 9146) that interact with DTLS 1.2/1.3 as discussed above. We may also say more about implementations. Someone mentioned cf matcher in Californium. We should either bless it or explain how it breaks.
+CB: Can we write something explaining how CID mitigates the effect of the original epoch text? There are 3 ways and venues:
+CB(p5): cf. DoC's reference, (1) -corr-clar, although not available right away to be used as normative reference. (2) A new document covering TLS 1.3 vs. CoAP issues at large, but we need to find authors. (3) -uta-tls13-iot-profile, which would be convenient but needs channeling this through UTA (also, the document is expired).
+
+CB: We should work on this in corr-clar, and think of whether 2 or 3 is what we want to do. We can talk to the -uta-tls13-iot-profile authors when it is well written up, so they know that it is not up to them to write much text.
+CA (chat): 👍
+MT: The text in current Section 2.5.1 of -corr-clar is ok with the theme and scope of corrections and clarifications. However, as already mentioned in that text, a full definition of an advanced match-boxing needs actual rules, and those would be beyond corrections and clarifications.
+CA: What then, RFC 7252bis?
+CB: DTLS 1.3 should not be the reason for RFC 7252bis. We should just have a CoRE document for CID and DTLS 1.3.
+MT: When it comes to CoAP, -uta-tls13-iot-profile is only about support for CCM8 algorithms, and the not possible use of 0RTT.
+
+CA: The text of issue #38 opens up for 0RTT, and -uta-tls13-iot-profile says no 0RTT when it is about CoAP. Can -corr-clar open that up, or would that go into a (2) document?
+MT: Sounds like better in a (2) document, because it would be an actual functional update rather than corrections and clarifications.
+CA: Then -corr-clar would say that 0RTT is impossible with (RFC 7252, -uta-tls13-iot-profile), but any document allowing it like a (2) document will open it up (with a cross-reference situation to be decided later).
+MT: Right.
+
+MT: Once items from today are ingested and digested, we could ask for WG adoption.
+CB: Can we ask on the current -05? The situation is stable, we have 30 issues to work on, we could just as well have the call here.
+MT: Yes, the scope is stable. Any more processing you want to do before then?
+CB: No.
+CA: Can text that is ultimately aimed for a standalone document live temporarily in -corr-clar without conflicting with the scope of corrections and clarifications? (Like the current text of issue #38, 2 paragraphs would get a remark of "this will need a dedicated document as it is neither corrections nor clarifications")
+MT: If it is a temporary placeholder with that remark and plan, that would work. As a temporary thing, it is convenient to have the rest of the document around that text in order to give context.
+CB: If it was not temporary, the document would not survive WG Last Call anyway.
+
+MT: We will start a WG Adoption Call on version -05, with a duration of 14 days.
+
+### AOB
+
+---
+
+*[AB]: Andy Bierman
+*[AF]: Alex Fernandez
+*[AK]: Ari Keränen
+*[AS]: Alan Soloway
+*[BS]: Bilhanan Silverajan
+*[CA]: Christian Amsüss
+*[CB]: Carsten Bormann
+*[DN]: David Navarro
+*[ED]: Esko Dijk
+*[FP]: Francesca Palombini
+*[GF]: Giuseppe Fioccola
+*[GS]: Göran Selander
+*[HB]: Henk Birkholz
+*[JJ]: Jaime Jiménez
+*[JPM]: John Preuß Mattsson
+*[JS]: Jon Shallow
+*[JT]: Jernei Tuliak
+*[KH]: Klaus Hartke
+*[KZ]: Koen Zandberg
+*[KZ]: Koen Zandberg
+*[LT]: Laurent Toutain
+*[MCR]: Michael Richardson
+*[MJK]: Michael Koster
+*[ML]: Martine Lenders
+*[MN]: Massimo Nilo
+*[MT]: Marco Tiloca
+*[MW]: Matthias Wählisch
+*[NW]: Niklas Widell
+*[RH]: Rikard Höglund
+*[RM]: Rafael Marin-Lopez
+*[ST]: Sean Turner (here)
+*[TF]: Thomas Fossati
+

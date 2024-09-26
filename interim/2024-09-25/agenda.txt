@@ -1,0 +1,33 @@
+CoRE Virtual interim - 2024-09-25 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* DoC over DTLS and CIDs/RRC
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+  * https://mailarchive.ietf.org/arch/msg/core/Md4gV_0tUq7K6uyIwCjuRHSJOaA/
+
+  * https://github.com/core-wg/corrclar/issues/39
+
+* corr-clar-05
+
+  * https://www.ietf.org/archive/id/draft-bormann-core-corr-clar-05.html
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-13/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=568d577c-2f99-4b5b-bd83-5b0f8138a952
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-13-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
