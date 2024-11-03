@@ -1,0 +1,160 @@
+
+# CoRE Virtual interim - 2024-10-23 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-15/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=d4cb88b7-830c-47f7-8c15-212ebdc81ae0
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-15-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+MT doing short introductions.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### corr-clar (Carsten)
+
+Work on accepting and merging a few pull requests.
+(Work from [I-D repo](https://github.com/core-wg/corrclar).)
+
+* [#40](https://github.com/core-wg/corrclar/pull/40) "Amplification and 0-RTT" (needed by DNS-over-CoAP)
+
+CB presenting (slides)
+
+Presented slides at: https://datatracker.ietf.org/meeting/interim-2024-core-15/materials/slides-interim-2024-core-15-sessa-corr-clar-pr-40-00.pdf
+
+CB: PR \#40 is the most suitable to address now. We might also cover other issues than \#39.
+
+CB(p2): Source addresses of requests are not reliable or possible to trust. They can also change. That prevents a stable preservation of Observations, and it opens for Denial of Service.
+CB: I think that we need to put text into that section that describes the problem some more (giving a more structured view also for people unfamiliar with it).
+
+CB(p2): We have RFC 9175 providing the Echo Option for mitigating this problem. There is also the Return Routability Check (RRC) mechanisms for DTLS. QUIC defines 3 as an anti-amplification upper limit (there's consensus on this being a good way to handle the issue when UDP is involved). CoAP does not consider negotiations on this topic.
+CA: How does what DTLS does relate specifically to session resumption on DTLS?
+CB: I don't know.
+CA: I will ask Achim / Thomas.
+CB: What matters is that there is a secure way to do this, which is an issue for RRC in DTLS. We also have to check how this happens in OSCORE.
+CA: For that, the Echo Option might not be the best choice.
+CA: We have a bit of text about it in transport-indication, but in general.
+CB: What would you do in OSCORE?
+CA: We can allow a party to express addresses that can be considered authoritative. E.g., a server can say something like: don't use any reverse-proxy other than one with this address, since otherwise there's something wrong.
+MT: The Echo Option can be both inner and outer for OSCORE. It is only outer if used for a purpose like that of RRC.
+CA: Yes, Echo can be outer for OSCORE. But if it's about capturing a triangle routing attack, it's a much harder problem and other things get broken.
+CA: More text might be useful, but this section may not be the right place. This section is what you have to do to ensure that CoAP and OSCORE are used correctly. Another section might be on "what if you want to know that no unintended proxies are in there?".
+
+CB(p4): PR \#40 covered also Section 2.6.1 on mitigating amplification and Return Routability Check, and Section 2.6.2 on replay protection.
+CA: Replay protection is more for when an endpoint has lost its state. I am not sure that things should be sold as tied together.
+CB: So how do we connect them?
+CA: You can somehow relate them through the same means for addressing both of them (the Echo Option), and get the outcome for both with a single round trip.
+CB: Ok, we need to add more context here.
+CA: → I can provide that.
+
+CB: We are also clarifying on the amplification attack mitigated through the cap value of 3.
+CA: It should be fine to simply point to RFC 9175 that already clarified and adopted that approach.
+
+CB(p5): Section 2.6.2 is on replay protection, but it's better if someone else helps fix this.
+CA: That's a clear situation.
+
+CB: So, we have to polish this PR more, see which other issues it closes, and merge it. Then we can resubmit the Internet Draft after the submission system reopens.
+MT: That would be Sunday morning, November 3, Dublin time.
+MT: This topic can also be brought up during the Hackathon with Martine, on aspects relatable to draft-ietf-core-dns-over-coap.
+
+MT: More issues to check today?
+CB: I would like to get rid of early issues; maybe until the Hackathon.
+
+CA: Issue \#41 needs some discussion,. We might also take it during the Hackathon. It's about what is needed to send a CoAP request, beyond a URI. It's useful also to make clarity for implementations.
+CB: The first thing to do is to answer the same question for HTTP.
+CB: HTTP requires a DNS server in practice.
+CA: At that level, would it also be "CAB Forum chains apply"?
+CB: Kind of, but organization dependent.
+CB: But it can become interesting and organizations try to keep it simple. With CoAP, we see that it's even more interesting.
+CB: I used to tell students that a URI doesn't need context to be resolved, but I'm not sure that this actually applies any longer.
+→ CA append issue
+
+MT: I also find [issue \#10](https://github.com/core-wg/corrclar/issues/10) interesting, on what "Request URI" means. The taxonomy sketched in the issue looks like a good start.
+CA: Yes, we can catch a few issues with one PR there.
+CB: The "Request URI" discussion should be combined with the discussion on the URI information model. With the CRI work, we have heightened the degree of attention for that. (Section 6 of RFC 7252 is essentially to extract information)
+CB: If no Uri-Host is given, there is an implied Uri-Host – not exactly something we have in HTTP.
+
+CA: At least, it's reasonably well-defined. It's more about being careful to have things defined well also in new transports.
+CB: There is another issue discussing URI scheme definition, i.e., whether we need a dedicated URI scheme for each transport.
+CA: Some text on that is in draft-ietf-core-transport-indication.
+CB: it's [issue \#38](https://github.com/core-wg/corrclar/issues/38)
+MT: Is CoAP over TCP restating things?
+CA: Not verbatim, but still re-introducing things that should/could have been said in general once and for all.
+CA: Ideally, after this, new transports just need to state what the default Uri-Host is and what the default/implicit value of the Proxy-Scheme Option is.
+
+CA: And by the way, it would be great if the Proxy-Scheme Option was always-implicitly-present with a default value in a CoAP message, rather than absent-or-present.
+CB: What would the default value be?
+CA: The scheme for the transport used for the message in question.
+CB: That transport can change in transit.
+CB: We can clarify that this choice would have the same result.
+CA: Would be great. → PR?
+CB: So, even if one deviates from the verbatim specification, it would implement something that still works.
+MT: So, it might even be that a hop that changes transport on the way removes the Proxy-Scheme that was present all along until then. This information is relevant hop-by-hop and assessed by the recipient endpoint.
+
+MT: Would Proxy-Scheme-Number defined in draft-ietf-core-href automatically inherit that?
+CB: We can't define that default value in draft-ietf-core-href.
+MT: I'm more thinking about, should draft-ietf-core-href point to the clarification on Proxy-Scheme, for it to be applied to Proxy-Scheme-Number just as well?
+CA: If we do this clarification, it will be beneficial to readers of -core-href to have a short reference.
+CB: So that can be a reference from -core-href to -core-corr-clar.
+
+MT: We just got a comment on PR \#40 from Achim.
+CA: So, it should be both about CID and session continuation.
+CB: Are they using "continuation" as a term? If not, we can introduce it.
+CA: In OSCORE, it's more a "recovery" following some state loss.
+CB: "Continuity" still applies.
+CA: OK.
+
+CA: I will work on a few items soon.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow

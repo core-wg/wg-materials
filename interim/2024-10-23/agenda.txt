@@ -1,0 +1,27 @@
+CoRE Virtual interim - 2024-10-23 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* CoAP Corrections and Clarifications
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+  * https://github.com/core-wg/corrclar
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-15/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=d4cb88b7-830c-47f7-8c15-212ebdc81ae0
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-15-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
