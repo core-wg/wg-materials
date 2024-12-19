@@ -1,0 +1,229 @@
+
+# CoRE Virtual interim - 2024-12-18 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-16/session/core
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=794f1a2e-c0b6-41e8-b3ed-2ff759ff229f
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-16-core
+Video: https://youtu.be/OUrYtVQMaPw
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+MT doing introduction.
+
+## Agenda
+
+### CoAP Transport Indication
+
+* https://datatracker.ietf.org/doc/html/draft-ietf-core-transport-indication
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2024-core-16/materials/slides-interim-2024-core-16-sessa-coap-transport-indication-01
+
+CA presenting
+
+CA: I will try to clarify what seemed not clear also at IETF 121.
+
+CA (p3): The goal is advertising available transports for CoAP that a server supports, and try to set the ground for avoiding having to define new coap+ URI schemes.
+CA (p4): Advertising new transports is simple. We can use the new rel=has-proxy on a link pertinent to the additionally supported transport. This builds also on the idea of seeing a server as a proxy for itself. All this has been stable for quite some time.
+CA (p5): Unlike for HTTP, we needed URI schemes like coap+tcp. HTTP can have connections and can switch protocol, and mostly runs over TLS that also has ALPN. Now there are also SVCB records, which we did not have when designing CoAP.
+CA (p6): Showing an example of using SVCB records for HTTP. SVCB records can provide descriptive metadata on e.g., what protocol/transport to use, what port number, etc.
+CA (p7): While usable in DNS specifically, SVCB can also be used outside of DNS, which thus serves us well when using DNS or not. There may be other resolution mechanisms also providing the same sort of metadata.
+CA (p7): The document also suggests a path towards future schemes and URIs for new transports, avoiding new coap+ schemes, building on ".arpa". CoAP over GATT (BLE) is a concrete case in point used as example.
+CA (p8): Open questions also raised in the past: format of information in the SVCB records; use of ALPN or SVCB parameters for advertising coap+ transports. We need an answer to these questions.
+CA (p8): Other open points that are sketched and might be slowing the document down: information related to EDHOC, OAuth/ACE etc. in SVCB records; information encoded together with IP literals. The current preliminary content on these points might even be removed from the document.
+CA (p9): Examples of using literals, as a proposal. Proper exploration will take time, likely beyond the hoped timeline for this document.
+
+ED: On IP literals that pack more information. Can that go into a URI?
+CA: URIs do not compose. They can in principle convey that information, but they open for the distinction between the information referring to a resource or a host.
+CA: Instead of the .arpa disambiguation that is mixed endianness, we can also use coap://[v3.urn:whatever:we:use:to:identify:an:endpoint]/.well-known/core
+ED: There can also be the username data in a URI.
+CA: That is deprecated and can still be put in other more appropriate fields.
+
+CB: I am not sure that we can use IPvfuture because the assumption was that the whole Internet is going to embrace IPvfuture, assuming that everyone will implement it.
+CA: I am not sure about that. What we do outside of that will create a long authority part. It might be good to break URI parsing library thus forcing users to consider alternative approaches -- rather than play whack-a-mole with other bugs resulting from long authority components.
+CB: Tail wagging dog. We would need a good solution that fits well in the authority component.
+
+CB: We fell for this earlier with coap/coaps.
+CA: The document does not favor anything in particular. We can have a single coap prefix in SVCB and then consider it also for coaps.
+CA: My position is that adding the "s" was a mistake in the first place.
+CB: Yes.
+CA: "https" is clear as to what expect in terms of security to justify the "s", but we do not have it in that universality and the application has to spell it out anyway.
+CA: We may have to live with "coap" actually being used securely, just with security not at the transport layer (e.g., following an EDHOC execution and using OSCORE).
+
+CB: We could say that, whenever we have SVCB information, coap/coaps is the same.
+CA: That could work. That also depends on the authority's willingness to create URIs.
+CB: The server does not have to provide URIs in this form. The goal here is only that the client does not have to distinguish the schemes if there is SVCB information available.
+CA: Generally, yes. There *are* situation where the client creates the URIs by constructing scheme plus IP address, but that one situation has no overlap with SVCB.
+CB: Relying on what we call "SVCB information" or similar also sets a good precedent in terms of approach for unifying URI schemes.
+
+CA: Applying this to the draft about multicast notifications can help us identify what to put in the "additional information". Service binding parameters are already used in other places than DNS responses. SVCB usage is already at thing outside DNS.
+CB: We can use link-format to map this.
+CA: For link-format, we need to pack all that information into a URI. In CoRAL, that information fits well in a literal, but it is not a viable option for the general model. The model should be URIs; in CoRAL, we can encode it in tag compressed CRIs.
+CB: Most important is to have a clear model of the information, and not entangle the model with representation formats that we need to create.
+
+CA: This set encompasses
+* SVCB parameters
+* A/AAAA records
+* TLSA records
+
+Next step: Describe better "set of things you need to have before starting a request"?
+CB: I am thinking about this as a link, and the URI is just a part of the link.
+CA: We can close that gap by putting that information into the URI again, only after we have found the exact way to do it and for what pieces of information.
+
+CA: There are still the other open questions, but for those there is now this meeting's material for other people to review and to promote discussion on the mailing list.
+
+### CoAP Corrections and Clarifications
+
+* https://datatracker.ietf.org/doc/html/draft-ietf-core-corr-clar/
+
+* https://github.com/core-wg/corrclar
+
+(moved up item)
+
+CB: PR \#40 was stuck. I merged it, and submitted the result as revision -01 (that is the only diff). Please review.
+CB: The overall discussion on the topic of that PR is not concluded, but version -01 of the draft is good enough, also for the reference to -corr-clar that was needed to include in -dns-over-coap.
+CB: Please continue the discussion on the Github/mailing list and open new issues. We will continue also during the interim meetings next year.
+
+CA: We will update DNS over CoAP at some point.
+ML (off-line): The reference to -corr-clar is already in the Editor's copy of -dns-over-coap. It will be in version -10 to consider for the WG Last Call.
+
+### 2nd WGLC of draft-ietf-core-groupcomm-bis ?
+
+* https://datatracker.ietf.org/doc/html/draft-ietf-core-groupcomm-bis
+
+ED: We decided to have a 2nd WGLC. We should kick this off. We have updated the draft based on Christian's feedback (that led to many changes).
+MT: Version -12 was presented in Dublin, including Christian's comments.
+CB: Version -12 is latest?
+MT: Yes.
+CB: Let's do the 2nd WGLC, I will do Shepherd checks in parallel. It is good to see that we are at only 60 pages in the document body now. We should be careful to not generate too much content in drafts in general. Let's set deadline around 8th of January.
+
+### Intended status for draft-ietf-core-coap-dtls-alpn
+
+* https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-dtls-alpn
+
+MT: The Chairs planned to update the WG milestones. As part of that, we noticed that this document had Standards Track as intended status. As it is only about an IANA registration, Informational is more appropriate (we checked and confirmed with Francesca). The draft was updated by the authors, now in version -01 with Informational as intended status.
+
+MT: New milestones have been created, waiting for approval by the AD. They should be approved soon.
+
+### WGLC prep for DNS-over-CoAP
+
+CB: IPR should be kept in mind for this draft. I sent a mail to the mailing list about this. See https://mailarchive.ietf.org/arch/msg/core/-8jgb0jpEOpPjfJyfkIcVcpx5F0/
+
+CB: CFRG are doing this in a different style with lots of patent dissection. It can be practical. *Do* we have WG members that have problems with reading what others say about a patent? I recommend people consult with their lawyers to see if the specification is implementable for their organization. This can be taken into account in WGLC comments.
+
+CA: So on path forward, if nobody talks about it and everyone says "I support this document in WGLC, given all I know of it", is that enough?
+CB: We can document that this has been raised and what, that said, the consensus in the WG is. I prefer that people clearly state if they have a problem or not. It suffices if they say at WGLC that they support the document, maybe with technical comments and maybe how they intend to use it.
+
+CB: We need to give time for people to talk to their lawyers and make an assessment. So the WG Last Call will wait a bit, but it can likely happen in January.
+
+### Resource type (rt) "core.srp" in DNS-over-CoAP
+
+* Possible addition for DNS-over-CoAP: a resource type (rt) "core.srp", which signals support for Service Registration Protocol (SRP) updates. This uses DNS messages.
+
+* More info:
+    * [WG mail](https://mailarchive.ietf.org/arch/msg/core/_LIgFoIJlMVHk-jmN5vw2-kHS88/)
+    * [SRP RFC-to-be](https://datatracker.ietf.org/doc/html/draft-ietf-dnssd-srp-25)
+
+ED: Explaining the mail.
+ED: I think it fits in -dns-over-coap, although it can of course be a separate draft. It should also be discussed in the DNSSD WG.
+ED: Does it fit in -dns-over-coap?
+CA: My gut feeling is that it fits. We need to be careful since DNS over CoAP intentionally does things different from DNS over HTTP. I do not think that those differences apply, and then we can say that it just works, but we will have to check.
+CA: And I suppose that a single resource for core.dns and core.srp is fine?
+ED: That is fine.
+ED: We will also need to check whether DNS updates were in scope for -dns-over-coap. Also, it uses specific DNS options.
+CA: Specific DNS options should be fine.
+CB: Many of us will not have had any thought on DNS update over CoAP; we will need to find out if implemented; opening a completely new box might lead to delays.
+CB: The motivation for doing it here is that core.* is under IETF review, so the draft registering the resource type needs to be for the IETF stream, and we as we already are submitting one the core.srp registration may fit as well -- but probably it needs a little bit of text, at least a reference (to RFC9665-to-be in AUTH48, hopefully not a delaying factor, but it is in AUTH48 already for 2.5 months).
+
+CB, summarizing: Do review work. There is risk of finding something due to which we want to change something -- it may be good if those changes improve the document in general, or bad if we need a lot of time figuring out what the solution is.
+CB: DNS over CoAP was done for the lookup use case. I would be happy with taking DNS update out of this doc if that allows us to finish it, and then do DNS update in a later separate document.
+ED: Another barrier can be the lack of an implementation. I will have a look at the CoAP over DNS draft to see how things can fit.
+MT: This has to be factored in before WGLC. Opening a Github PR with concrete proposed text would help.
+
+### Update to the IANA CoAP Content-Formats Registration Procedures
+
+* https://datatracker.ietf.org/doc/html/draft-fossati-core-cf-reg-update
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2024-core-16/materials/slides-interim-2024-core-16-sessa-draft-fossati-core-cf-reg-update-00.pdf
+
+ED: New draft to fix issue with registration procedure that Thomas identified. Identified 6 different possible problems that need to be checked on registration.
+ED: Showing proposed update to registration procedure.
+TF: Thanks for the work to all who helped. Want to progress this ASAP, many coming registrations are expected from the RATS WG.
+
+CB: Amanda from IANA commented on this. Did she see the latest split of ranges?
+TF: Yes.
+MT: The WG Adoption Call ended, we can adopt the document. Carsten had a PR on the latest version.
+CB: The new -00 can be the same from adoption call, then -01 includes the updates from the PR.
+
+CA (in chat): reg-update looks good
+
+### Using / updating the CoRE WG Wiki
+
+* Hosted in the [IETF community Wiki](https://wiki.ietf.org/group/core)
+
+  * Early summary: https://mailarchive.ietf.org/arch/msg/core/xkccRGWQkTXeazQt8KfB6uiqoQc/
+  * Moving over content from the [Github wiki](https://github.com/core-wg/wiki)?
+  * Adding an informative list of CoRE rt's and if's in use that are based on URNs?
+
+CA (on chat): Wiki migration, good to do that, just don't have resources to contribute there right now.
+
+ED: Showing the IETF Wiki and current content for CoRE.
+ED: Everyone please take a look at the current content and check if it is accurate
+ED: Can we remove CoRE Agile backlogs? It is old and redundant.
+CB: We do not need it, but external users might.  It could be on a separate page about historic information.
+CB: We need a good landing page for the Wiki.
+MT: We can review the current content in the 2 Wikis, with the intent to migrate to the IETF Wiki as the only one to use.
+
+### AOB
+
+MT: We resume with the interim meetings on Wednesday 2025-01-15, then every other Wednesday until IETF 122. Happy holidays.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow

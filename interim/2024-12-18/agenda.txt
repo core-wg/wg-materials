@@ -1,0 +1,55 @@
+CoRE Virtual interim - 2024-12-18 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* CoAP Transport Indication
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-transport-indication/
+
+* 2nd WGLC of Groupcomm-bis ?
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-groupcomm-bis/
+
+* Intended status for draft-ietf-core-coap-dtls-alpn
+
+  * https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-dtls-alpn
+
+* Resource type (rt) "core.srp" in DNS-over-CoAP
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+  * https://mailarchive.ietf.org/arch/msg/core/_LIgFoIJlMVHk-jmN5vw2-kHS88/
+
+  * https://datatracker.ietf.org/doc/html/draft-ietf-dnssd-srp-25
+
+* Update to the IANA CoAP Content-Formats Registration Procedures
+
+  * https://datatracker.ietf.org/doc/draft-fossati-core-cf-reg-update/
+
+* Using / updating the CoRE WG Wiki
+
+  * https://wiki.ietf.org/group/core
+
+* CoAP Corrections and Clarifications (if time allows)
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+  * https://github.com/core-wg/corrclar
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2024-core-16/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=794f1a2e-c0b6-41e8-b3ed-2ff759ff229f
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2024-core-16-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
