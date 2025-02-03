@@ -1,0 +1,29 @@
+CoRE Virtual interim - 2025-01-29 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* "Update to the IANA CoAP Content-Formats Registration Procedures"
+
+  * https://datatracker.ietf.org/doc/html/draft-ietf-core-cf-reg-update
+
+* "Constrained Resource Identifiers"
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-02/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=e9ba4a77-a513-4a6c-a253-c96197e511fc
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-02-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

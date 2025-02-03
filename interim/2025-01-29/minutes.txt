@@ -1,0 +1,232 @@
+# CoRE Virtual interim - 2025-01-29 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Links
+
+Video: https://youtu.be/SnDoxvCoODo?t=282
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-02/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-02-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+MT doing introductions.
+
+## Agenda
+
+### "Update to the IANA CoAP Content-Formats Registration Procedures"
+
+* https://datatracker.ietf.org/doc/html/draft-ietf-core-cf-reg-update
+    * Go through the [open Github issues](https://github.com/core-wg/cf-reg-update/issues/) - discuss resolution.
+
+MT: Context: authors want to go through open issues and related threads from the mailing list.
+
+ED: On issue #4, OK to close?
+CB: Decisions are made on the mailing list, or in interim meetings and then confirmed on the mailing list. But if you think that it can be closed, close it and tell on mailing list.
+
+ED: On issue #22 (media-type parameter values can be quoted or unquoted, they might be equivalent, some are the same, some need to be). CB mentioned finding a canonical form. (Also, `; ` always with space after semicolon)
+CB: We can't fully fix this, some things are already in registries. But we can come up with good common form for the future.
+CA: If they are equivalent, can't the registry be updated to use a normalized form? Or can consumers at least normalize on ingesting the IANA data?
+CB: I would list the deviated registrations that we have now, and how they are supposed to be read based on this document. I think that all the relevant COSE entries do not need the quotes, but I did not check to be sure.)
+
+ED: I am fine with CB interpretation.
+MT: The action to take on the document is clear.
+
+ED: Issue #23 could be solved by addressing the previous issue. The example in the issue lists different but equivalent strings. Using a preferred form would already help. It could be added as an example, it is something to look out for.
+CB: Aren't there rules such that those parameters can be case-sensitive?
+ED: It depends on the exact parameter and its meaning. It has to be checked case by case.
+CB: So we advise the Designated Expert to look up the detail and look up whether the parameter is case-sensitive.
+
+CA: In some cases, normalization does not apply. It would help to have an example making this evident by using an existing registered parameter.
+ED: Do you mean a real existing media type? I am not sure if we have such an example.
+MT: Otherwise describing the situation in general should be fine.
+ED: I will look for an existing case to mention as example, otherwise we can describe the hypothetical case.
+ED: I will add this as an example (myself or will delegate to TF).
+CB: After going down this road of examples for every nook and cranny, we need to continue with this approach.
+
+ED: Issue #24 was sent to CoRE mailing list. The idea is to have a new column in the registry, with the name of the associated media type, including a link that points to the relevant part of the IANA media type registry.
+CB: It is a bit weird because it is not us who fill the link; it is more a presentation issue, it can be described as such.
+MT summarizing list: It is fine to have the new column; for provisional media types, we open for the equivalent concept of provisional content formats. This is happening already (with the TEMPORARY remarks within the "Content Type" column); we just need to write clear instructions for IANA about what to do with a provisional Content-Format when the corresponding provisional media type becomes permanent or is deleted. Was the idea to have provisional Content-Formats for all the ranges in the registry?
+ED: I discussed with Thomas; it was considered a feature of the first-come-first-served range that entries in that range are not deleted. So it would be limited to the "IETF Review or IESG Approval" range since it is more managed.
+MT: So only for that second range?
+ED: Maybe for the first one too ("Expert Review"). An extensive check is done for that range.
+MT: Right, we need to say this officially also for that first range.
+ED: Sure, I think we had another issue open for that.
+MT: For either range, following a change for a corresponding provisional media type, IANA should update the reference in the "CoAP Content-Formats" registry to point to the main media type registry, or instead make the entry in the "CoAP Content-Formats" registry as Unassigned again (if the provisional media type was just deleted).
+ED, summarizing: Adding column is OK; we do not have to talk about translation/equivalence/normalization details. Would people fill in that new column?
+CB: IANA should fill in that column.
+
+ED: Issue #28 The "IETF Review or IESG Approval" range bypasses Designated Experts. Who will do the lightweight checks for that range?
+MT: Can't those be full checks instead of lightweight?
+CB: Yes please. I would delete "lightweight checks" from the 0-255 range.
+ED: You could say that in the first range the "lightweight checks" are included with something more, while for the second range at least the "lightweight checks" should be done.
+ED: We haven't changed that yet, we will be explicit.
+MT: So can we have a different registration procedure altogether for the 2nd range?
+ED: Yes, if that procedure exists.
+MT: It doesn't but we can create it, as long as we clearly explain what it means. It would be "IETF Review with Expert Review or IESG Approval with Expert Review". The IANA-related sections in RFC 9668 have a text that can be taken as inspiration (even though referring to a different, augmented policy). I will give you more precise pointers and can help out.
+CB: You can make a PR.
+MT: Sure, will do.
+
+ED: Issue #29 is about clarifying that TEMPORARY can happen for a Content-Format. This relates to issue #24.
+MT: Do we want to admit provisional Content-Format also for the first range ("Expert Review")?
+ED: Yeah, for first two ranges ("Expert Review" and "IETF Review or IESG Approval") but not for the third one ("First Come First Served").
+
+ED: Anyone can register FCFS for existing formats. If someone decides to beat IETF to it, we can register for new image formats.
+CA: I contemplated doing this, but for HTML with deflate decoding. It may not be used, but considered.
+ED: We might even already have some in. The requester decides the range, even if other people might want a smaller number. But that's the way it is set up, I do not see the need to change anything at this point.
+
+MT: The document has "WGLC" state at the moment. I will change to "WG document with issues to be addressed". The next version will be ready for the shepherd write-up. Appointed myself as Shepherd.
+ED: Yes.
+
+MT: Further comments?
+(none)
+
+### DNS over CoAP
+
+(shuffled in now that ML is also present)
+
+CB: Are we on same page about DNS Update questions? We had an interim where we concluded that we either need to include DNS update in the testing, or we have to say "we did not test it, so use this right now for lookup only".
+CB: I thought that the in-meeting decision was that we want to ship it now, so there are no extensive DNS-update tests, and the scope is limited to lookup, and we will likely have a short second document if it works.
+ML (technical issues with audio)
+
+MT: A question in the latest mail was if you were suggesting to remove Section 5.1, as a concrete action point.
+CB: That's DNS Push, which is yet different from DNS Update.
+CB: DNS Update is client-to-server. DNS Push is from server to client informing it about an update.
+
+ML (chat): Yes, we do not currently mention DNS Update in the Draft. Should there be some mention of that, that we currently did not consider it?
+CB: Yes.
+ML: I will prepare a change for that.
+
+CB: Thus we are getting WGLC ready! Any other impediments?
+ED: Is DNS Push now in scope or not (mapped to observe)?
+CB: I think so.
+MT: It will go in parallel with the WGLC for draft-ietf-core-coap-dtls-alpn.
+
+### "Constrained Resource Identifiers"
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+CB: presenting
+
+CB (p1): Recap on the CRI concept. New version -17 last week which I think closes the issues we can close. I want to check that we all agree on the approaches taken.
+
+CB (p2): Two sets of issues are still open: composability and test vectors.
+
+CB: Open issues:
+- test vectors (actionable item has been completed, revisit test vectors with implementations)
+- #93 on composability. To me, that's a whole can of worms. I am not sure that we need to do this for this document to be completed.
+
+CB: Do you think that we need to wait until we have good answers?
+CA: No, I do not think so. I raised the issue since it is unsolved, but it is technically trivial, although with implications about making things official. I am fine not to talk about composability. We can get the document out, and start experimenting with composability through CRIs' extension points, and establish practices.
+CB: This is best done through a few (official) hackathons, followed by a Wiki that explains results, and possibly an informational document on implementation considerations.
+CA: If we want to consider CRI templates, that could go together with considerations on composability.
+
+- #92 on CRIs in AIF example. PR #99 addresses it.
+
+CB: Section 8 is about CoAP and ACE, so I have added Section 8.3 about AIF as integration of the two.
+CB: It's about some obvious changes, it just needs to be done.
+MT: When you define AIF-CRI, you are using unsigned integers in general. Is that intentional? Do you actually mean uint or instead REST-method-set from the CDDL definition of AIF-REST in 9237?
+CB: Yes. Well, you could combine this Toid with a different Tperm, but the example is intended for this case. Good comment.
+
+- #91 Stand-ins
+
+CB: Stand-in tags and simple-values, also-known-as stand-in items.
+CB: The document leaves it to the application, there is no requirement about expanding them. Is this the right way to handle this?
+CA (chat): /me makes a note to read that issue in full again
+CB: New stand-in tags are invented every day. By saying "we include all hypothetical future tags" in the specification, we make life difficult. We cannot do anything but allow applications to decide which set of stand-in tags are of interest.
+MT: Editorially: the concept looks correct but I struggle to understand the part "to evaluate to the original item". Overall, the first long sentence would benefit from a simpler formulation.
+CB: If we think that this is technically the right approach, let's go on.
+
+- #90 IDNA considerations. PR #97
+
+CB: If we want to consider IDNA for this document, then it must be scoped to the use of DNS. The problem is that we are not using DNS, rather the schemes are. So implementations need scheme-specific knowledge.
+CA (on chat): I don't agree it is necessary, we should have let 7-bit systems just fail. But that ship has sailed.
+
+CB: I have found a document that has this text that we can add ("applications that have this knowledge that some schemes often use DNS in authority space may want to convert using to-ASCII procedure"). The ugly part is that the text this goes into is in the 1st step of a 2-step procedure for turning CRIs into IRIs. The second step is URI to IRI (3987), and doing to-ASCII before IRI conversion does not make sense.
+
+CB: I think that the issue is covered by mentioning this. We are not trying to solve the issues of IDNA. Summary: we can point out that if the next step is going to DNS, then to-ASCII is an option.
+CA: It sounds a sensible way forward. It would also be fine to say that it is a problem for the next layer. But if your suggestion is the better way, let's go with that.
+
+- #89 and #86 on zone identifiers. (PR #94 and #95)
+
+CB: RFC 6874 updates RFC 3986 to include zone identifiers.
+CB: This is weird because systems using RFC 6874 are running out. The PR points out the "swimming" state; we will react in time. We keep a place for zone identifiers in CRIs. (Next to an IPv6 address, a zone identifier has a good place). Non-URI applications have all they need.
+CB: Unfortunately, we still need test vectors -- it took one side for the vectors.
+CA (chat): Yay for the test vector.
+
+MT: Is this like saying "use zone identifiers at own risk"?
+CB: Yes pretty much.
+ED: Can the old style be converted to the new style?
+CB: Yes, you have to take a position on that. RFC 6874 is admittedly defective on that, so we are not replicating that issue in CRIs.
+
+- #82 determinism goals. (PR #96)
+
+CB: We need to disclose what we have in mind: Not to generate different CRIs for the same URI. It is not a promise, just a notification. The difficulty is that there are different types of normalizations: inside a CRI, and the general URI syntax-based and scheme-specific normalization ("protocol based"). These 3 together make it difficult to make useful statements, I did not try to force the issue.
+
+CB: What got added is the objective. That is an objective for CRIs, but not for CRI references. Depending on the base URI, different CRI references may yield the same URI after resolution.
+
+CB (summarizing action items): REST-Method-Set for AIF; unclear sentence on stand-ins; get version -18 out.
+MT: Then 2nd WGLC, it's getting closer.
+CB: Okay.
+
+MT: Thanks for updating the table in the appendix regarding new <del>media types</del>URI schemes.
+CB: I am doing it for every version, currently using perfect hashing. Considering new media types in the future, we cannot continue using perfect hashing, but we do not have to, since the registration mechanism should guarantee uniqueness.
+MT: It can't be the first case of this problem. We can check with IANA about their typical approach and recommendations.
+
+CB: I had discussion with IANA that led to additional note in URI scheme registry.
+MT: Someone needs to monitor things or have the appropriate script running.
+
+CB: Should the WGLC last 1 or 2 weeks?
+MT: I would go for 2 weeks. A lot happened since the first one, and it was a long while ago.
+CB: Do we want to advance the document before Bangkok? We are in a bit of a rush. But it is right that many things happened, so we may want to have it for 2 weeks.
+
+### AOB
+
+None.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
