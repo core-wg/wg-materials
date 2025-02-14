@@ -1,0 +1,25 @@
+CoRE Virtual interim - 2025-02-12 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* "DNS over CoAP (DoC)"
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-03/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=13e637fc-69ea-43e7-b227-f57d13607850
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-03-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

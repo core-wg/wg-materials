@@ -1,0 +1,165 @@
+# CoRE Virtual interim - 2025-02-12 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Video: https://youtu.be/1xWRn-UbvOQ
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-03/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-03-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+## Chat & Minutes / Agenda bashing
+
+### Agenda
+
+MT doing introductions.
+
+### "DNS over CoAP (DoC)"
+
+https://datatracker.ietf.org/doc/draft-ietf-core-dns-over-coap/
+
+Slides Presented: https://datatracker.ietf.org/meeting/interim-2025-core-03/materials/slides-interim-2025-core-03-sessa-dns-over-coap-updates-00.pdf
+
+MT: CB provided comments to the list before the meeting. They are archived at https://mailarchive.ietf.org/arch/msg/core/4vqP7brAAMsHQ6UdcKGypZ0zA48/
+
+ML presenting.
+
+ML (p2): Added proper reference to a section of draft-ietf-core-corr-clar.
+
+ML (p3): Added reference to DNS Update (RFC 2136). As per last interim, defined that this document does not cover DNS Update, but CB had comments on this already.
+
+ML (p4): Reflecting the recent comments and PR from Esko: amended security considerations on communication leg between the DoC server and the upstream DNS infrastructure, as to using encryption & DNSSec.
+
+CB (about his recent review):
+
+CB: This is nearly ready for WG Last Call. Re-spin it in next couple of days (Chair hat off).
+CB: The DNS Update discussion was useful, but it is not just OPCODE 5 that would be replied to as not supported.
+CB: The document should make it clear at the start that this is just about DNS queries at the moment (i.e., OPCODE 0 is the only one relevant). Then Section 4.3.3 is not needed anymore.
+
+ML: I agree regarding DNS Update, it is better to use a POST message. I am not sure if other OPCODES are already not covered.
+ML: If they only require the query-response pattern, this should work. Do we really want to restrict the draft to OPCODE 0, just because we did not implement and test it?
+CB: If it is not implemented and tested, we should not suggest how to do it.
+ML: If we find out that this is really simple, maybe later follow-up and just state that?
+CB: You probably have to put more content about security and do the mapping to existing security.
+ML: Then let's go for only OPCODE 0.
+CB: Where is the list of OPCODES?
+ML: https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5
+CB: I would rather not touch DNS stateful operations.
+ML: DSOs are what I described in DNS push, which could translate to normal queries. But yes, then let's stick with query.
+CB: There is also "status", I have no idea of what that is. I forgot some details since I implemented DNS.
+CA (chat): +1 for sticking with query unless we have a very good understanding of any other concrete \[op]code we know we can support.
+
+MT: So, if Section 4.3.3 is removed, its same SHOULD statement on responding that an OPCODE is not supported gets generalized and applied to every OPCODE different from 0 upfront.
+CB: Correct. It would be nice to have an example (it could be DNS update), and thus see what a response looks like.
+ML: For DNS Update, it is described in the RFC. So would we not just be restating that?
+CA: No, since that implies that the server understands what DNS update does. I would assume that it is something like 4.00.
+CB: Does it get a 4.XX response or a 2.05 response with a "valid DNS response"?
+ML: The wording is taken from DNS over HTTPS. They use terms such as "valid DNS response". We either use their wording or do something better.
+CB: Just because they did not get it right, it does not mean we cannot.
+ML: "Valid DNS responses" was meant to mean something that is parsable as a DNS response.
+CB: We should take care to define terms and I find no definition of "valid".
+ML: Yeah, so we should use different wording ("valid" is defined for DNSSec in RFC 8499).
+CB: We also have "re-validate" and such. It is better to avoid it.
+CB: We may want to use "DNS response can be created".
+
+CB: On Section 5.3, mostly an editorial comment. *What* is not recommended? As I understand, we do not want to do direct HTTP/CoAP mapping. I guess that it is about TTL stuff (TTL processing will not work right).
+ML: The next sentence says it, it could be spelled out.
+CB: No need to be extensive, but give a hint about why this is not recommended.
+
+CB: Last point on "unencrypted"/"unprotected". You mostly talk about integrity protection.
+ML: In Section 6, I mean unencrypted CoAP (no DTLS or OSCORE).
+CB: The important property is that it is not protected, that is more interesting than solely encryption.
+CB: It becomes more precise when talking about particular properties (integrity-protected, confidentiality-protected).
+
+CB: I created an editorial PR. I also have more editorial nits in the review.
+
+MT: On "can't really parse", what do you mean?
+ML: I need to look at the section. The sentence might indeed miss a comma. Content decoupling is about caching / cannot do in HTTP.
+
+CA (in chat): We don't happen to have any good example of non-encryption protection for CoAP.
+CB: Still we should get it right.
+CA: Yes, not contesting that.
+
+ML: What is the meaning of the comment for "algorithm to ensure the requirement for the DoC"?
+CB: No idea what the sentence is meant to mean.
+ML: About the definite article \[the DoC]: I do not use it in the draft. This needs more thinking.
+CB: The usual way is to talk about DNS as an uncountable concept.
+
+MT: Is it feasible to "re-spin" and have version –12 in the next few days?
+ML: Yes, probably not today but maybe. Latest, tomorrow morning.
+MT: I think that we can have the WG Last Call on that, in parallel with that on draft-ietf-core-coap-dtls-alpn-01, ending a few days before the cut-off submission deadline for IETF 122. That leaves some time available for revisions, even though maybe not completed.
+
+MT: We want the WGs DNSOP and DPRIVE in CC for the WG Last Call of draft-ietf-core-dns-over-coap.
+CB: Maybe not in CC, but a forward of the mail to CoRE is better, to avoid excessive mail traffic to them on CoRE-specific aspects. (But of course CC core@ on the forwarded mail. Maybe set Reply-To as well:-)
+MT: Okay, so waiting for version -12.
+
+CB: What is the shepherding status?
+MT: Not started (for either document). Anyone is welcome to volunteer for Shepherding.
+CB: There is still some time, but we will need to decide soon.
+
+CB: I have not checked draft-ietf-core-coap-dtls-alpn yet, but I will do a review during the WG Last Call.
+
+
+### AOB
+
+CB: Any general document status?
+
+MT: draft-ietf-core-oscore-groupcomm and draft-ietf-core-groupcomm-bis are proceeding.
+MT: draft-ietf-core-oscore-groupcomm was recently resubmitted and is back in Shepherd's hands (Christian).
+CA (chat): We had a successful interop finally on the most exotic parts of oscore-groupcomm
+MT: draft-ietf-core-groupcomm-bis is past WG Last Call. The authors are addressing comments from Carsten, who is the Shepherd and working on the write-up.
+MT: It would be good to send these two documents out in parallel.
+
+MT: draft-ietf-core-href is in WG Last Call until Monday. (It is also mentioned in DoC as to the encoding of path segments in CRIs). Please review.
+CA: I will review.
+CB: The Shepherd template asks if it is just a small group of people that want something or if the whole Working Group is behind the document. But for a 2nd WGLC, it can be more difficult to get answers from many in the Working Group. Spread the word to people that you know do like this
+MT: For this document, we already have a Shepherd, it is Thomas.
+
+CB, MT: Happy with the general progress.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
