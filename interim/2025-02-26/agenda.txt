@@ -1,0 +1,25 @@
+CoRE Virtual interim - 2025-02-26 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* CoAP PubSub
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-04/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=263a0d9a-2dc5-4d27-807c-7fc4c0caf7d9
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-04-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

@@ -1,0 +1,229 @@
+# CoRE Virtual interim - 2025-02-26 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Video: https://youtu.be/07J63U1-VIU
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-04/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-04-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+MT doing introductions.
+
+### CoAP PubSub
+
+https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/
+
+* Time planning: when to start WGLC, resolve open issues before or after it?
+* Use of a single term for "topic property"?
+   * Related PR: https://github.com/core-wg/coap-pubsub/pull/63
+* Which of the Link Format attributes are included in links in which cases?
+   *  Related PR: https://github.com/core-wg/coap-pubsub/pull/61  (was merged but later reverted)
+   *  Cases where the "/.well-known/core" resource is queried
+   *  Cases where the PubSub draft fully defines a resource that is queried, and returns Link Format query results.
+   *  Cases where the PubSub draft fully defines a Link Format resource as a list of links that is returned (GET). I.e., the resource representation itself is Link Format.
+
+ED giving a status update (no slides, working from the Github issue tracker)
+
+### PR \#63
+
+https://github.com/core-wg/coap-pubsub/pull/63
+
+ED: The new text reduces variation in terms. The wording is now unified to "topic property" and defined in the terminology section (previously, "parameter" was also used). The new text also includes some nit fixing, like consistent capitalization and clarifications.
+MT: Questions? (none heard)
+
+### PR \#61
+
+https://github.com/core-wg/coap-pubsub/pull/61
+
+ED: This made more significant changes, also affecting what goes on the wire. It removed some optional target attributes like "ct" from the examples. They can still be used, but examples should be compact and elide them when they can practically be implied.
+
+CB: This is exercising discovery as defined in RFC 7252, right?
+ED: Yes.
+CB: The discovered party decides what information to make available. RFC 7252 does not have this kind of optimization. Are these examples compatible?
+CA: I think so. RFC 7252 does not say that any particular resource (except /.well-known/core) would give a comprehensive image. It only says that the resource should give some image, not necessarily the whole story with all the information.
+ED: We need to adhere to the RFC 7252 rules. Since "ct" is optional to include in a link, not including it should be fine, and here the client does not need it.
+CA: Being more precise, if the query is to /.well-known/core, then there are some expectations. Eliding some parameters due to the way the resource was queried is questionable. But eliding them due to just not wanting to include them is generally fine.
+ED: A client cannot rely on the "ct" parameter being there, so not including it should be fine. Why sending bytes over the wire that will be ignored? (implementations cannot rely on the presence of that parameter)
+
+CB: So, does rt=core.ps.coll in the example imply ct=40?
+ED: Yes.
+CB: So, how do we handle evolution if revisiting RFC 6690? Do we re-do this from scratch?
+ED: No, you would include "ct", with appropriate values. Legacy clients will assume ct=40, and newer clients can parse "ct" and use their preferred format.
+CA: For a successor document, I do not think that we need to advertise ct=X for every resource. The client can learn this information from /.well-known/core or initial discovery. If that has ct=X, then other resources should too and the client understands that.
+ED: We probably need to advertise it somewhere. This example is the main example of pubsub capabilities advertisement.
+CA: Yes, but do it on the first resource queried.
+ED: Sure, no need to advertise on a nested resource, but at least on the top-level one.
+
+MT: If the discovery request was sent with the query parameter ct=40, would these links still be returned?
+ED: Yes.
+MT: And "ct=40" can still be omitted from them?
+ED: Yes.
+CB: Getting interesting...
+MT: So one thing is what the server knows about its own resources, and another thing is what the server tells as a subset of it in a discovery response.
+ED: Yes, I assume that for "rt", then "rt" is always included (although it could be suppressed). "ct" is defined as optional and can be omitted.
+ED: We may not have thought about querying for ct=40, and it is hardly used. It is more natural to query using "rt".
+CB: You would query using "ct=40" to get a site map. It seems likely for a management system to do that.
+ED: True.
+
+CB: We told people that /.well-known/core is actually ROM'able; for this kind of situation you would not do that optimization.
+MT: So if something is in the request as a query parameter, then it ends up also in the links included in the response?
+CB: No, if something is in ./well-known/core at all, then you would get it. We shouldn't go for "MUST optimize this away".
+ED: It's fine for the server to include all attributes or more attributes. It may not be fine for constrained systems though. What do we want to promote as a typical case? Do we need an appendix with more examples showing more attributes returned?
+CB: The server MAY leave off attributes. The server should act such that it does not create problems for the client, but it is hard to cover all cases. Let's say that servers MAY adapt their response to remove redundant information.
+ED: The RFC 6690 definition implicitly makes this clear.
+CB: We take the homework to re-read RFC 6690. We do not need examples of all possibilities.
+
+ED: So, is it fine to have "ct" omitted in the example?
+CB: Yes, if the MAY (from above) is stated before the example.
+ED: Let's do that and state that "ct" is optional.
+CB: Are there any attributes that are not optional?
+ED: Practically, only "ct". Some things are a bit in a grey area.
+CB: "rt" is also "optional". The question is what the client can make progress with, based on the response that it receives. We can state that "clients will typically rely on the rt attribute".
+
+(continuing through the PR)
+ED: More on the "ct" removal... There is big overhead savings by cutting repetitive information.
+CB: It should not look like the server is expected to leave out this info. The language about this must be clear.
+ED: Let's explain it. I hear that removing "ct" is fine in the examples, if we include an explanation.
+
+(Mixed input; summary): It is not clear what information is needed by which client in which situation; do we need a title? do we just enumerate topics?
+
+ED: There is a later example, not on /.well-known/core, but on a resource that can have its own rules. We removed "rt" and "obs" in the example. We know that only one "rt" is in that resource, and moreover, we query for it.
+CB: Does the reader know that this is omitted, and that things are omitted?
+ED: We can define the way the query should work in this document. Either by saying that it is like with /.well-known/core, or by explicitly defining it in text. A clarifying sentence could be added, explaining why some attributes are absent. The rationale was to not include attributes whose value is known and that just end up wasting bytes due to being repeated.
+CA: If we can make it so that the query-subsetting works like /.well-known/core or at least it is compatible with that, it would be good. Proposed rule: "Do not include obvious information in the response in the first place" (independently of which resource was queried). In the Resource Directory, we defined an extension of the /.well-known/core properties, to AND multiple properties together.
+
+MT: Another note: the response does not provide the client with a link to the topic resource associated with the topic-data resource, and that the client would have to access for retrieving the metadata for that topic. In fact, the original reason for querying the group collection was to retrieve links to topic resources (not to topic-data resources); then accessing a topic resource allows to retrieve the link to the corresponding topic-data resource and other metadata.
+
+(summary): This is as intended (for now). The client is skipping a discovery step on purpose.
+ED: Leaving potential fixes about this for WGLC.
+MT: I will leave a comment about this.
+
+ED: Continuing on the omission of "rt" from links in the examples... This is the most significant change, as it changed the data on-the-wire.
+
+ED: I will make a new PR to add the explanations and clarifications discussed today. Jaime is also planning updates latest on Friday.
+
+
+### BERT
+
+https://datatracker.ietf.org/meeting/interim-2025-core-04/materials/slides-interim-2025-core-04-sessa-bert-00
+
+CB presenting.
+
+CB (p1): Recap from RFC 8323. Block-size also scales index (bit optimization). For reliable transports, we want (the effect of) block-sizes larger than 1024.
+CB (p2): In 2016, we decided to limit RFC 8323 to reliable transports. This is a recurring IETF thing: push back a concept, cut down a work to its minimal size, then lose useful applications.
+CB (p2): Also, RFC 8323 has a negotiation mechanism for using BERT.
+CB (p3): We can do more today, to cover also unreliable transports. How would the negotiation work?
+CB (p4): I have two questions. 1 (technical): When we untie BERT from reliable transports (i.e., SZX=7 for everyone), how do we do the negotiation?
+CB (p4): 2 (procedural): In which document should this happen? This needs to update RFC 7959 (as RFC 8323 did).
+CB (p5): CA's [PR](https://github.com/core-wg/corrclar/pull/45) in draft-ietf-core-corr-clar has text.
+CB: Is draft-ietf-core-corr-clar the right document? It is intended to be Standards Track, but it is expected to be active for a long time (maybe 5 more years). More interested on this procedural side: is it the right place for things that are more than correction or clarification? (It is not, RFC 8323 said what was intended) This is a gap filling, so maybe it is not exactly the same as corrections.
+
+CA: I have no good input on the procedural side, but we may want a "gap filling" tag for issues for draft-ietf-core-corr-clar, e.g., see https://github.com/core-wg/corrclar/issues/35
+MT (as an individual): I see more sense in a separate document. My impression from BERT is that it was developed with what it says in mind, so it is "correct" in that sense. BERT for unreliable transport would be a new thing, not a correction.
+CB: The perception of 2016 is that it was hammered with pickaxe until it could be approved. For some of us, this *is* a bug. But, as CA says, we have more of those.
+CB: We could have a pattern where we work on this topic in draft-ietf-core-corr-clar for a while, and then spin-off a separate document that gets to be the new Proposed Standard. Any example of this pattern?
+CA: Another gap filling issue is issue \#35. Another example is that Notification Number is 0 for TCP and OSCORE. We can define some things as "this or nothing else". Then, that will already cover future developments.
+CA: The point is more about "stating that those really mean the same thing on all transports", and transports can then enable their discovery or whatever is needed for them. But first we need to have an update that ensures that the orthogonal closure is the closure that will be there (or no other).
+CB: That sounds like a cohesive little document.
+CA: I can drive that.
+CB: Let's keep developing this in draft-ietf-core-corr-clar and then split it out as a new draft.
+
+
+### HREF progress
+
+https://datatracker.ietf.org/meeting/interim-2025-core-04/materials/slides-interim-2025-core-04-sessa-href-00
+
+CB presenting.
+
+CB (p1): This document was in WG Last Call until February 17.
+
+CB (p2): Received major review from ED. A comment is about missing rules on precedences and combination of proxy-related CoAP options.
+CB: RFC 7252 does not say anything about these details. Preferences?
+MT: If RFC 7252 does not say, that is good for draft-ietf-core-corr-clar.
+CA: My preference is for the message recipient to break. It cannot ignore critical CoAP options like those in question.
+
+CB (p2): On IANA considerations, how should the "Reference" column be filled?
+MT: With a reference to what defined the registered scheme number?
+CB: That happens during registration, but the scheme number is meaningless except for its size.
+CB: It has little sense to have a reference to a document explaining the 1 or 2 byte choice for the scheme number.
+MT: If the registration of the scheme number is paired with a registered URI scheme, then the reference can be the link to the document registering that URI scheme. Otherwise, to the document provided at registration of the scheme number, but where is it going to be stored?
+CB: For ~ 1000 documents at start, we will not do that work. The entries will point to the -href document. If, later on, we have energy to do more, things become inconsistent.
+MT: We can present the "Reference" column as for the "inclusion of reference (if any)".
+CB: It can also include multiple references for the same entry.
+
+CB (p3): MT's review. There is a PR with the editorial nits (#112).
+
+CB (p4): CA's comments. Interesting discussion on indefinite-length encoding. We do not do that in the model, therefore we have to be careful. When someone does, please do that in CRIs too.
+CB (p4): Section 2 is a mixture of things. It needs reviews.
+
+CB (p5): TF's editorial comments resulted in a PR, already merged.
+
+CB: I am playing games with I-D versions, pointers, and references, in order to avoid the long appendix with the initial entries for the new IANA registry about scheme numbers. We do not need a table in the RFC, that is what the registry is for. Hilarity will ensue later in the process.
+
+MT: What if new entries to add pop up between now and when the registry is created and populated with what is frozen now? Is it about starting from what is frozen in version -18 of the draft and then add yet another set of entries to prepare by then?
+CB: No SLA here. We assume that this is the final list. The Designated Experts can build a first set of what came in between version -18 of the draft and that time.
+CA: If the Designated Experts can do that, why can't they do that for the whole list?
+CB: Correct, but for the IESG it is probably useful to have something there to look at.
+CA: Good point, thanks.
+
+MT: Is PR #112 ready for review?
+CB: Yes.
+MT: Do you plan a new version of the draft by Monday?
+CB: Yes.
+
+### AOB
+
+MT: We have a 2-hour CoRE session scheduled for IETF 122 in Bangkok. Interim meetings are planned to resume with the same cadence from April 9. We have synched with the CBOR WG Chairs, now we will confirm with CoRE before booking the series.
+
+MT: The documents draft-ietf-core-coap-dtls-alpn and draft-ietf-core-dns-over-coap are in WG Last Call until Friday this week. Please review.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
