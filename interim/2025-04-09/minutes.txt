@@ -1,0 +1,169 @@
+
+# CoRE Virtual interim - 2025-04-09 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://www.youtube.com/watch?v=-v4c16cvHDA
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-05/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-05-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+* draft-ietf-core-conditional-attributes-11
+
+   https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+   Define handling of future/unknown c.* conditional query parameters ?
+
+   *  Related email thread: https://mailarchive.ietf.org/arch/msg/core/pMwW3vVRVMjGiA7F91jM65QXxMc/
+   *  Also: Text needed in corr-clar about unknown query parameters in safe (unsafe?) requests?
+
+  Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-05/materials/slides-interim-2025-core-05-sessa-query-parameters-the-web-and-corr-clar-01.pdf
+
+ED: In the draft, conditional query parameters are defined, together with an IANA registry for them. The client can use them to provide the server with instructions on observations.
+ED: Main question: What if the client uses a conditional query parameter together with observe towards a server that does not support the parameter? What should the server do? 1. The server responds with an error. 2. The server ignores the unsupported parameter. 3. Other ways? (For example, other specifications like LwM2M can define a detailed behavior.)
+ED: Specifically the conditional query parameters could be recognized by their format ("c.X"). Discussion also took place on the mailing list.
+
+CB: Showing slides about corr-clar. Clarification on this topic is needed. To avoid confusion: This is about query parameters (content of Uri-Query CoAP options), not about target attributes (for which there is also a separate IANA registry).
+CB (p3): Recap of query parameters from RFC 7252. It states: "The query serves to further parameterize the resource". This is not an accurate statement, although another statement says "Uri-Host, Uri-Port, Uri-Path, and Uri-Query Options are used to specify the target resource of a request to a CoAP origin server".
+CB (p4): Per RFC 3986 (URIs), the query component of a URI is an actual part of the resource identifier. A different query component means a different resource. The same holds in RFC 9110 (HTTP semantics).
+CB (p5): Per BCP 190, it is up to a server to decide how a resource name looks like. Newly defined but not reserved/registered query parameters are under risk of collision. Using a prefix to indicate parameters as "special" may not be good.
+
+CB (p6): HTML uses forms to tell the client how to prepare requests. The client follows that guideline when preparing a URI (for GET requests) or the actual request content (for POST requests). Ultimately, the server is in control.
+CB (p7): Another thing is APIs, thinking of human-readable documents with information on how to create a request. This is not under the server's control. Question: are query parameters part of an API?
+CB (p8): BCP 190 does not really take the API approach, but really thinks of URIs as links. Sure it does not say specifically that IoT applications cannot think differently.
+
+CB (p9): The HTTP QUERY method has been in the making for a long time. A QUERY request can have a body like POST, but it is safe, idempotent, and cacheable like a GET request. This looks similar to the FETCH for CoAP.
+CB (p10): QUERY does not deviate from expectations and keeps thinking of the server as in control of the URI space. Every combination of QUERY parameters in the URI is considered a distinct resource.
+CB (p11): Do these principles (the server is in control) apply also to the "Thing Web", and not just the "Big Web"? I think that we need a good reason to deviate. It is good if the two worlds remain aligned, thinking also of possible cross-proxies that do not have to or cannot do miracles.
+
+CB (p12): What is here for corr-clar? For example, so far we have just implicitly inherited principles from the Big Web. Should we explicitly adopt and endorse those for the Thing Web too?
+CB (p13): Source of confusion: "query parameters" (in Uri-Query CoAP options, see RFC 7252) vs. "target attributes" for CoRE Link Format (see RFC 6690) vs. "conditional attributes" that are actually query parameters per a convention that can be described by the target attribute if=.
+
+ED: On the server being in control: the server can announce the way it sees things, and constrain acceptable URIs using if=.
+CB: Yes, except that if you use the server you must use what the server says. But the point of the target attribute is that the client knows that the server declares to have a specific behavior.
+ED: The server can still implement the query parameters from the draft and yet other query parameters for something different.
+CB: By saying if=X, the server indicates that it will not do something different but all the conditional query parameters that it offers fit in the API scheme.
+ED: Is this sufficient for the BCPs? The client can discover how to interact with the server, and the server is free to use it.
+CB: Strong statement in BCP190. By having the server declare the target attribute, it can assure the client that new conditional query parameters that the server does not support will be ignored.
+
+ED: Currently there is no discovery mechanism defined. By design, the client should know. This seems less compatible with the BCPs.
+ED: One proposal was to define an interface, for the server to announce the possible use of the conditional query parameters. The interface is signaled as value of the target attribute if=. That indicates supports for those query parameters and make things more flexible.
+CB: The interface attribute can be implied by the resource type attribute (rt=).
+ED: What to do with unrecognized query parameters? The most future-proof solution seems to be to ignore them. The client will get more notifications than it asked for, but Observe will work.
+MT: Defining the interface value for discovery sounds good. On the supported or not parameters: building on the interface, Christian proposed that the servers consider as "no-op" the conditional query parameters that it does not support. On what to do with other query parameters that are not conditional query parameters, that is left for somewhere else to define more in general.
+CB: The point of the "if=" target attribute is that the client knows that it can try new conditional query parameters without being punished. I think that we do not need a construct like "must support".
+DR: Good to talk about "must understand". Query parameters saying something like rate limit being ignored is different from ignoring a parameter that limits the scope of a query. If limiting parameters are ignored, it can make the response creation fail (out of memory), thus it can be better to explicitly let the client know that the query parameter was not supported, to let the client retry in a different way. Allowing the client to send a request with a "must understand" bit can be useful. So the parameters could be individually possible to indicate as "must understand" or not.
+
+ED: The draft is of course using the Uri-Query CoAP option as we know it.
+CB: Use "c." as beginning of the query parameter, but let "c" be upper case or not (initially joking, but maybe not really).
+ED: What about using CoAP options?
+
+CB: The server still has to rely on good default values, irrespective of the possible use of conditional query parameters, to be sure to not have to often fail and return 5.03 (Service Unavailable).
+ED: Some conditional query parameters may increase the rate of notifications, with risk of overload. The server should choose good default values.
+
+MT: For the conditional attributes draft, we have a way forward, by defining an interface for discovery and the no-op semantics for unknown conditional query parameters.
+MT: Thinking about other query parameters more in general, it goes back to -corr-clar. It seems good to stay aligned with the Big Web, so does that mean failing with 4.04 (Not Found) for unrecognized query parameters? After all, the resource identified by the whole URI as expected is not found by the server.
+CB: If a server decides that it understands all query parameters starting with "c." but the implementation chooses to ignore them, that is a choice that the server can do. But should we require servers to do that?
+
+ED: You mentioned 4.04 because the resource is not there. That can still be counterintuitive for people thinking that the resource is identified by the Uri-Path, while the Query-Parameters are "instructions". But maybe that is the wrong model.
+
+ED: What is the state for the draft?
+MT: Authors are processing the Shepherd review, plus the additional comments that came after the review.
+ED: So it's still in control of the Working Group.
+CB: At some point, we should decide if we want to have a second Working Group Last Call.
+
+MT: Do you see a reason for the server being able to tell the client which query parameters were not understood (like using concise-problem-details, see RFC 9290) ?
+CB: Yes, it makes sense, just for diagnostic.
+ED: Yes.
+MT: That would be about a new standard-problem-detail-entry.
+CB: Yes.
+DR: Absolutely. I vote for returning a 4.00 Bad request: "Malformed request syntax". It's not exactly "not found", unless you take a strict reading (although the documents may be saying this) which can be confusing. Then it is good to provide diagnostic information with the reason for the error, but do not be too fine-grained.
+CB: We have RFC 9290 defining concise problem details. It can be very compact in CoAP.
+ED: Do we also define how these go into CoAP error responses?
+CB: Yes. We should look into registering a standard key for reporting this particular type of error information.
+MT: The error information would be a list of unsupported query parameters, or at least the first one that made the server fail.
+
+DR: We enjoy the "parameter out of range" error code. That can be helpful. This is about not understanding the query parameter vs. understanding it but being able to indicate its value not being valid.
+MT: Which does feel more like a 4.00 in this case.
+CB: Concise problem details is orthogonal to the response error code, so that's ok.
+
+
+* draft-bormann-core-yang-sid-pen-02
+
+   https://datatracker.ietf.org/doc/draft-bormann-core-yang-sid-pen/
+
+   https://mailarchive.ietf.org/arch/msg/core/6BfvBlWNloqG4zq9V5LGhHt8roI/
+
+   WG Adoption Call?
+
+CB: Overview of the work. SIDs allow to get rid of text-based names of positions in the YANG schema tree, by replacing these with numeric identifiers. RFC 9595 define an elaborate registration system. This is all good, but some felt that the registration still was too complex and required too much effort to use.
+CB: To simplify this, we can Private Enterprise Number (PEN) that many people working on network management already have. That can help create SIDs for one's application, as one does not really have to do anything for their generation and can just use them.
+CB: This draft defines how one gets 100 000 64-bit SIDs from their PEN and 10 000 32-bit SIDs more for those with a lowest value of PEN. This is supposed to cover a long time frame.
+CB: I raised that I would like to request Working Group Adoption.
+
+MT: There has been a recent discussion on the mailing list, with positive feedback. Some wanted to reduce sizes, but then those comments were withdrawn. I think that we have enough critical mass and consensus to start a Working Group Adoption Call. Any objections? (Will continue on list)
+
+ED: Which Working Group should this belong to? It is about YANG and SIDs.
+CB: RFC 9595 defines the related SID management for YANG-CBOR, and it was from this Working Group, so I think it should be CoRE.
+ED: What was the size again? 1 million SIDs?
+CB: No, that would be too much. I think that it was 100 000 64-bit SIDs and 10 000 32-bit SIDs.
+MT: I think that the 10 000 more was intended only for those with lowest PEN value.
+CB: we might reach that limit in a few years, not immediately.  And then we can do something else if we find that we need to; even 32-bit SIDs are not at all nearing exhaustion.
+
+MT: We will have an Adoption Call on the mailing list.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[DR]: Dave Robin
+

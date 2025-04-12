@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2025-04-09 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* draft-ietf-core-conditional-attributes-11
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+* draft-bormann-core-yang-sid-pen-02
+
+  https://datatracker.ietf.org/doc/draft-bormann-core-yang-sid-pen/
+
+  WG Adoption Call?
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-05/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=dbc1306a-dc17-43ea-b5a2-b40ed22d6785
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-05-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
