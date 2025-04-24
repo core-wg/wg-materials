@@ -1,0 +1,130 @@
+# CoRE Virtual interim - 2025-04-23 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/R_DhnYZSo3w
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-06/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-06-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### Corrections and Clarifications for CoAP
+
+https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+* Handling of unknown query parameters
+
+
+PR: https://github.com/core-wg/corrclar/pull/47
+
+HTML: https://core-wg.github.io/corrclar/query-parameters/draft-ietf-core-corr-clar.html#name-rfc7252-5101-61-query-param
+
+Diff: https://author-tools.ietf.org/api/iddiff?url_1=https://core-wg.github.io/corrclar/draft-ietf-core-corr-clar.txt&url_2=https://core-wg.github.io/corrclar/query-parameters/draft-ietf-core-corr-clar.txt
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-06/materials/slides-interim-2025-core-06-sessa-query-parameters-01
+
+CB presenting
+
+CB (p1): Overviewing of issues, more for discussing, not really for deciding yet. Definition and expectations of query parameters in URIs, looking at RFC 3986 and CoAP (RFC 7252). The expected semantics is name=value or just a boolean presence.
+
+CB (p2): RFC 3986 treats the query component just like the path component, with the only difference that it is non-hierarchical. In fact, the query component is part of what identifies the resource. Good for caching, no plan to change.
+
+CB (p3): But then there is a practical view. Query parameters seem to serve for "parameterizing the resource" (verbatim from RFC 7252). Or does it actually mean parameterizing the resource name? It is unclear and a topic for correction/clarification. There is a practical use of query parameters not strictly in the sense of identifying the resource, but of providing additional request parameters for a single resource identified by up to the URI path. This is clearly inconsistent with the original idea, but its practical use does not hurt either, no real damage.
+
+CB (p4): Can we standardize these query parameters (treat similar as CoAP options)? Specifically, write a specification for syntax and semantics, and register parameter names?
+
+CB (p5): BCP190 differentiates between two types of specifications. 1. Okay for "applications" (specify syntax of queries for resources under their control). 2. "Extensions" MUST NOT constrain format of semantics of queries.
+
+CB (p6): This is relevant to draft-ietf-core-conditional-attributes (hereafter abbreviated as "cqp" for "conditional query parameters"), which specifies a set of query parameters controlling conditions under which a server sends Observe notifications. CoAP options could have been an alternative, but URI query parameters just fit well here. Is this about an Application or an Extension, from the point of view of BCP190?
+
+CB (p7): The server can use the target attribute if= to also indicate the interface that it supports, including a set of query parameters . That was also proposed to add to draft-ietf-core-conditional-attributes to aid the discovery of servers providing that functionality. It is expected to be added in the next revision of that draft.
+
+CB (p8): "ignore-unknown" is a policy that applications may have for all query parameters. What about a "cqp-specific" ignore-unknown policy? Does this mean that cqp parameter detection would be done by detecting the c. prefix of the query parameter name?
+
+CB (p9): This is also an opportunity to enable something like "must-understand" parameters. It is similar to what happens with CoAP critical options indicated as such in a fixed way by a bit in the option number, but that exact approach makes less sense here. Instead, the client would dynamically "set a bit" to indicate criticality of the query parameter in that particular request. The proposal is to indicate this by using "C." instead of "c." (uppercase "c"). Requests will fail if containing a query parameter whose name starts with "C." and that is unknown to the server. Both this and the issue on page 8 hinge on parsing the name of the query parameter.
+
+CB (p10): Regarding corr-clar [PR\#47](https://github.com/core-wg/corrclar/pull/47), it is about explaining the phrasing of "parameterizing the resource", which can be taken as "parameterizing the resource name". But this subject needs more discussion, which could be added in a number of places: 1) Specific to specification in draft-ietf-core-conditional-attributes-11; 2) Separate informational in draft-irtf-t2trg-rest-iot; 3) Explanations in draft-ietf-core-corr-clar. What makes most sense?
+
+MT: The easiest one is the content to add to draft-ietf-core-conditional-attributes for that particular protocol, saying what applies to that draft. For informational/clarification content, it seems best to start in draft-ietf-core-corr-clar and then move selected things out to draft-irtf-t2trg-rest-iot as the different aspects of the subject get clearer.
+MT: On slide 9 (using capital C): Can this be a general pattern, i.e., not limited to draft-ietf-core-conditional-attributes?
+CB: If we go for this, then it will set an example and people can follow.
+MT: That also sets the need for a query parameter name to start with a letter, but you may instead want to start with a number.
+CB: Sure, but then the trick does not work.
+CB: What does draft-ietf-core-conditional-attributes say about the names of its specific query parameters?
+MT: I think that they have to start with "c.".
+CB: No, not currently (in the IANA considerations), but it is mentioned in the security considerations.
+MT: Do we want to use the upper/lowercase convention in general?
+CB: Yes, for documents that can benefit of such functionality.
+MT: But it is something that a document specifying a protocol must state, right?
+CB: Yes.
+
+MT: Another point on if=, whose value in a link can indicate multiple interfaces separated by space. So it might indicate one interface as admitting a certain set of query parameters. But what about when it indicates multiple interfaces that have in common one query parameter with the same name, but with a different meaning for the different interfaces? This can cause conflicts and it may need considerations.
+CB: A prefix comes in handy here. It assumes that people watch what prefixes are in use. The server is indicating the interface types and it is its responsibility to make sure that they are not excluding each other or conflicting with each other.
+
+CB: Any implementation views from Jon?
+JS: I had been thinking about query parameters as being treated as application level stuff, so as additional information for accessing a resource already fully identified by the URI path. I was also thinking about FETCH where the payload provides an alternative. For implementations, you refer to libcoap and it treats the URI path as the resource name, not parameterized by the queries. Taking a caching proxy, then the cached entity would be the URI path together with the URI query, as the query can affect the resource representation. I see a lack of clarity.
+CB: The server can organize its routing and the way incoming requests are given to different handlers, in any way expedient for the server. No need to standardize that. My proposal does not preclude that. But it is good to have an explanation of things.
+JS: Code supports defining the URI path to point to a handler. Then the handler handles other things such as the URI query.
+CB: I would welcome a few lines of code from you that can help me to present this.
+
+MT: So the next step is updating draft-ietf-core-conditional-attributes, mostly regarding the definition of an if= value and the critical/non-critical use of query parameters.
+CB: I also have [PR\#47](https://github.com/core-wg/corrclar/pull/47) and would appreciate feedback about it.
+
+### AOB
+
+#### Quick review of core-yang-sid-pen adoption call feedback
+
+MT: The adoption call is ongoing for a few more hours. Three people have responded, all positively. There is an ongoing discussion on some technical points to work on and clarify as the document goes on. Michael, any input?
+MCR: It is important work and it is not controversial. Alex has concerns but addressing those can happen afterward. We need to ask for mega-ranges to be reserved (allocated).
+CB: We all have the same concerns. We seem to have a different view on what will happen after we agree on the specifics. We need to understand why predictions are different. It is a good discussion to have later.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+

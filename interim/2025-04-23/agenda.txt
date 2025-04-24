@@ -1,0 +1,25 @@
+CoRE Virtual interim - 2025-04-23 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* draft-ietf-core-corr-clar
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-06/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=b82c3b5a-1917-4d1b-8c07-0af97e58787a
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-06-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
