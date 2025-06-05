@@ -1,0 +1,161 @@
+# CoRE Virtual interim - 2025-06-04 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://www.youtube.com/watch?v=s8E4IYdiz9w
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-09/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-09-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### Technical approach for CoAP message aggregation (presenter: Carles Gomez)
+
+Related draft: https://datatracker.ietf.org/doc/html/draft-gomez-core-coap-bp-03
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-09/materials/slides-interim-2025-core-09-sessa-coap-message-aggregation-00
+
+CG presenting
+
+CG(p1): This idea has been around in the Working Group (WG) for some time; now we define message aggregation.
+CG(p2): Practically, concatenate messages in a single transport unit. Aggregation is appreciated by the WG, but it is unclear what the best technical approach to use is.
+CG (p3): Recap on the proposed CoAP Payload-length option as possible approach.
+CG (p4): A main point was raised by Carsten: it is inconvenient to parse all the CoAP options until the Payload-length option is reached. That's also to be repeated for each message in the message aggregation. Mentioned alternatives: indicate the payload length in the CoAP header, or use the CoAP option number 0 so that Payload-length is the first option in each message of the aggregation.
+
+CG (p5): alternative 1: length in header. We thought of this only for CoAP-over-BP, but what about supporting it on other transports such as UDP? (cf. coap-in-space). Do we want a generic mechanism that can work across transports?
+CG (p5): Thinking of the CoAP header, one can consider the first 2 bits composing the "version" field. That can be used for each message.
+CG (p6): If so indicated in the header, the "TKL" field can be followed by a new "Length" field. Some values give the straight size in bytes. Other (high) values indicate a following "extended-length" field giving the straight size in bytes. In either case, that size accounts from the start of the CoAP options until the end of the payload for the present message.
+
+CG (p7): alternative 2: low option number (e.g., 0) for the Payload-length option. Then there is no need to modify the CoAP header.
+CG: Is this case special enough to unreserve the reserved option number 0 or get another low number?
+
+CA: Generally speaking, updating the header will not work well across transports. Think, e.g., of high-bandwidth CoAP-over-QUIC between relay stations.
+
+CA: How does this work with proxies and what are the expectations from those?
+CG: We have not considered that yet; it was expected that the origin server processes multiple requests. I am not sure of what the implications are. Is it better if we consider the Proxy-length option with a low option number?
+CA: The specific option number does not play a role in that respect. On other aspects, it is not an issue as to creating unforeseen consequences. It can be handled by the book, using the right option properties (i.e., the option should be unsafe to forward, so that proxies have to understand it to proceed). I still do not have the complete picture here.
+
+CA: Do you expect commonalities across multiple messages in the same aggregation, e.g., the value of the Uri-Host option?
+CG: Maybe it makes sense to aggregate not-so-related messages. A proxy might receive responses, do we want to aggregate those too? Could a proxy chain aggregate in the middle?
+
+CA: Following a message aggregation conveying multiple aggregated requests, how are the follow-up responses related? What is the pattern according to which those responses are aggregated and sent together?
+CA: That is, are the responses still sent individually? Or are they part of a single aggregation?
+CG: It may depend on the application. Maybe it is better to not aggregate when the response is urgent. In other cases, the application may be tolerant to aggregation.
+CA: Then the response matching is a big open question and it becomes a difficult process. The request-response matching is based on Token values, which originally did not have this case in mind.
+
+CA: What is the sequence of events and the possible atomicity in processing requests and producing the corresponding responses?
+CG: The application should decide if the request processing is atomic. We have not thought this through yet.
+CA: I think that ships-in-the-dark / full-parallel is easiest to handle. It is easiest to see the aggregated requests as individual, to be individually processed and replied to.
+
+CA: Maybe it is easier to handle this not as a protocol extension but instead at the application.
+
+```
+POST /multi
+Content-Format: application/cbor+CoAP
+Payload:
+{
+    'sub1': coap'GET /foo' / 01bb46... /,
+    'sub2': {
+       coap'POST /bar, payload: ...',
+       / something we'll have to figure out for an unsolicited response /
+    },
+    'sub3': {
+        coap'POST /baz',
+        after-successful: 'sub2',
+    }
+}
+
+2.05 Changed
+{
+    'sub1': coap'2.00 Content, payload: ...'
+}
+```
+
+CA: POST could go to a proxy or to the origin server.
+
+CA: On request-response matching, check concepts defined in: https://datatracker.ietf.org/doc/draft-bormann-core-responses/ . Something like this will be needed if multiple responses are supposed to be sent to a single request message.
+
+CA: Wouldn't the bundle protocol allow for message aggregation through its native features without needing to extend CoAP for that?
+CA: (I see how it is relevant for coap-in-space / over UDP)
+CG: Bundle Protocol provides encapsulation (there is bundle-in-bundle ...). As I understand, it just takes what some application entity provides as payload and then it will transport that. The recipient takes the payload from the bundle and passes it to the application agent. I do not think that it has more logic than that. This would already be application-layer behavior. It is out-of-scope.
+CA: So, Bundle Protocol "bundles" multiple applications on a link, but still in separate messages?
+CG: Correct.
+
+CA: Something as explicit as thought here is for when having a transport like UDP underneath. If one has TCP, one can still end up coalescing multiple messages in a same transport unit.
+CG: I will double-check. From the sender point of view, Bundle Protocol would take some generated application payload, and that should be aggregated if that is what is intended.
+
+CG: Message aggregation was suggested in the DTN WG, and it was suggested to be addressed in CoAP-over-BP. This indicates that Bundle Protocol cannot do it.
+
+---
+
+MT: I agree on thinking of a single good solution that works on multiple transports.
+MT: On using a CoAP option, I do not think it is a problem to unreserve an option number if there is good reason. The specific option number 0 might be a problem here, because it does not match the intended properties of the Payload-length option. You want an odd number since the option is meant to be Critical (even before discussing the need to be unsafe-to-forward, which further constrains the pool of eligible option numbers to consider).
+MT: Parsing until the option is found is probably unavoidable. I have not checked what the first non-assigned eligible option number is with the desired properties.
+MT: Anyhow, intermediaries may change message sizes when manipulating options. If I understand correctly, do you count from where options begin?
+CG: No, just the size of the payload.
+MT: Sorry, I mixed up; that is instead the semantics of the header-based approach.
+CA: The payload cannot be processed before processing the options anyway. (So no harm in high option).
+
+MT, thinking of OSCORE: This does not affect the OSCORE processing, which would make the option as Class U  for OSCORE. Or, actually, the option even has to be added after encryption, because OSCORE adds/enlarges the payload that is ultimately transmitted, and the option has to indicate that final size.
+CA: If the origin is the same, it might make sense to encrypt all in a single go.
+MT: I need to see an example of that. At any rate, consider OSCORE and how this option is handled when using OSCORE.
+MT: In the interest of supporting multiple transports and transport translation by intermediaries, the approach based on a CoAP option seems to be the better way. After all, options are the intended protocol's extension point. The header is less convenient, also thinking of transport translations.
+
+MT: A different possible hack on the header (but more of a kludge) is on the "TKL" field. RFC 8974 defines its full semantics now, and has a reserved value 15. One might define the use of that value: if TKL=15, what follows is "the real TKL" field with the same semantics defined in RFC 8974. After that, you have your new "Length" field (of 12 bits to be aligned to the byte again), possibly followed by the "extended-length" field.
+CA: That would even enable per-message tokens, but I agree that it is a kludge.
+
+MT: Carles and Anna, please follow-up on the existing mailing list thread, see https://mailarchive.ietf.org/arch/msg/core/gtFMTUX_dog9Jkv8LkQ87X42w50/
+CG: Yes, I can start with summarizing the steps forward and open points from the discussion today.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[CG]: Carles Gomez

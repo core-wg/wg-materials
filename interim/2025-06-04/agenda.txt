@@ -1,0 +1,25 @@
+CoRE Virtual interim - 2025-06-04 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* CoAP message aggregation
+
+  Related Internet Draft: https://datatracker.ietf.org/doc/draft-gomez-core-coap-bp/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-09/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=97830c8b-848d-4da9-ab3c-0c0f266fbf77
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-09-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
