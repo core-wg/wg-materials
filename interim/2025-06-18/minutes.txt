@@ -1,0 +1,201 @@
+# CoRE Virtual interim - 2025-06-18 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/OZZvcT5HkaI
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-10/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-10-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+CB: Good to also add an item to discuss the AD review of draft-ietf-core-href.
+
+## Agenda
+
+### draft-ietf-core-href
+
+Two selected points from the AD review and the discussion around it.
+
+(The mail with that content was erroneously sent to an incomplete set of recipients not including the CoRE WG, which will be re-included when following up on the same thread)
+
+CB: Two weird things in there: Number one:
+
+> > (Mike Bishop: )
+> > I can see this has been the work of many years, which probably results directly in my biggest observation.  This document relies on a few now-obsolete documents, which may need simple pointer updates or may need more drastic changes:
+> >     • RFC6874 is being obsoleted by draft-ietf-6man-zone-ui, including reverting its updates to RFC3986. As 6.1 notes, the doc needs to be updated with the outcome of this "currently in flux" situation before it ships.
+>
+> (Carsten Bormann: )
+> I don’t agree.
+>
+> CRIs do not have the syntax problem that RFC 6874 has, so zone identifiers in CRIs (as problematic as these are considering the fundamentals) can be stable independent of the moving target of zone identifiers in URIs.
+>
+> An important part of draft-ietf-core-href is that of describing the relationship of URIs and CRIs.
+> RFC 6874 is being obsoleted (but hasn’t been, yet, IIUC).
+> It still does represent one form of zone identifiers in today’s real-world URIs, even if not implemented by major browsers.
+> I would say is the best URI form that we currently can talk about.
+> There should be enough text that qualifies those descriptions as in-flux.
+> There is no need to wait for the situation to stabilize (it may never do that) before publishing draft-ietf-core-href.
+> Implementers will get to the necessary changes together with those for whatever stabilizes for URIs.
+>
+> [MB] To be clear, I wasn't suggesting holding the document while we see whether the newest attempt is the end of the matter. Draft-ietf-6man-zone-ui is in the RFC Editor queue, so barring any unforeseen delays, it will be an RFC with its corresponding updates by the time this is released. I suggest that it be referenced as the outcome (or at least the current state) of that discussion.
+>
+> [MB] I don't object to keeping informative references to the older way of doing things in URI if you feel it's relevant, but as they're already referenced in 6man-zone-ui, I think a reference to that is probably all we really need.
+
+CB: We are in quicksand; things are moving around us, and we are trying to get things done. I do not think that we have to wait for it to settle, as it is clear how CRIs represent zone IDs. Just URI mapping is unclear. It could take 1 year to settle. RFC 6874 is currently still in force; the intention is to obsolete it, some think that it has been obsoleted. Even if it is deprecated, we need to have an answer for handling zone IDs.
+CA, on chat: Yes, pushback is justified.
+
+CB: Number two:
+
+> > (Mike Bishop:)
+> > • Given that RFC3490 is deprecated, is this still the best reference for ToASCII in Section 6.1? I would think there would be a newer one in the obsoleting documents, but I didn't find one on cursory inspection.
+>
+> (Carsten Bormann:)
+> Some other RFCs reference RFC5890 as the source of ToASCII, since that is the document that replaces RFC3490 and at least mentions ToASCII.
+> Unfortunately, this doesn’t define ToASCII (pointing to RFC 3490 instead), so we consider these references broken.
+> Instead, we reference RFC 3490, which is the document that actually does define ToASCII.
+> RFC 3987 (IRIs) references RFC 3490, too, kind of keeping it alive.
+> (I don’t think it is the job of this document to fix this apparent inconsistency.)
+> Since the whole thing occurs in an aside as a MAY behavior, I believe that dealing with this inconsistency as what it is is not harmful; we could add a note explaining this situation.
+>
+> [MB] Seems reasonable. Not your job to fix 3490, just making sure the downref is necessary.
+
+
+CB: IRIs have a ToASCII algorithm to be used to generate ASCII URIs from the IRIs. The interesting thing is that the doc that defines the ToASCII algorithms (RFC 3490) is obsoleted. We are normatively referencing an obsoleted document. An option is to take out ToASCII.
+CA: It seems like the reviewer is already happy with having that downref as long as it is documented. So, all is fine, right?
+
+CB: I can address the other comments from Mike in the next 5 days. Things are progressing well.
+
+MT: Please follow up with Mike on the list, with CoRE re-included in CC.
+CB: Will do.
+
+### Constrained Application Protocol (CoAP): Corrections and Clarifications
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+* https://github.com/core-wg/corrclar
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-10/materials/slides-interim-2025-core-10-sessa-corr-clar-00
+
+CB presenting.
+
+CB: The plan is to work on the issues on Github.
+
+#### PR \#47 on path and query
+
+CB (p2): PR [#47](https://github.com/core-wg/corrclar/pull/47/) is about query parameters.
+CB: According to URI specification, query parameters are not special and are part of the resource identifier, so different query parameters suffice in identifying a different resource altogether. But various server implementations have ways to install a resource handler for a given resource that reacts to a set of URIs differing only in query parameters. Neither perspective is going to go away.
+CB: People will not change their CoAP implementations, which would make it hard to respond to arbitrary query parameters. We describe this, which is a good end result. It may look weird, but that is because query parameters are weird.
+CB: Please review the PR.
+CA: I will have a look and review.
+
+#### PR \#45 on BERT outside TCP
+
+CB (p3): PR [#45](https://github.com/core-wg/corrclar/pull/45/) is about a shortcoming in documents where nothing is *wrong* or conflicting, but components cannot be as much as we want them to. This proposal is describing them as "gaps". This is a first example.
+CB: We want do define the use of BERT also for non-reliable transports.
+CB: Problem: to use BERT, you have to know that you *can* use it, and no protocol element outside reliable transports provides the means to learn that. Another problem is that, unless you have path MTU and sequence-preserving transport, you would have to consider doing something like fragmentation.
+CB: We need to clarify: draconian words about not using BERT outside TCP/WS; they say "we have not thought about it" but not "you are not supposed to use BERT for anything else than what originally defined".
+
+CA: Agreed, but the even more dangerous reading is that other transports can use the Block size exponent 7 for yet other things.
+
+CB: That is the clarification. Then it has no effect until we provide a way to actually use it.
+CA: We do not necessarily need to have official means defined to do that. The main use case is OSCORE, which has means for required agreements in band or out-of-band set up (e.g., in the ACE framework).
+CB: On slide 4, I state that BERT over unreliable transports can always be used by consenting adults. That is anathema for a protocol definition. We need to do this work and answer to: "How do you use BERT with OSCORE?" This needs to be written up.
+CA: Agreed.
+
+CB: We might even incubate that mechanism in this document.
+CA: The information can be sent together with all OSCORE parameters sent by an ACE AS to the ACE client.
+CB: Do we have an extension point for that?
+CA: There is one. I do not know exactly.
+MT: It depends on the details of what you want to do. If it is the OSCORE profile of ACE, there is a CBOR map in the response from the AS to the client. In the ongoing EDHOC and OSCORE profile of ACE profile, there is an equivalent CBOR map to use for that profile. One needs to define (structured) parameters to be included in that CBOR map to convey that info. That is for ACE, then we can think of EDHOC.
+CB: So for EDHOC one can use EAD items?
+MT: Yes, for negotiation in band, or otherwise rely on pre-knowledge, e.g., based on EDHOC application profiles and what they can say about it.
+MT: The latter might actually be not really viable, as EDHOC application profiles are meant to be about the EDHOC execution, not about what might happen next. So EAD items remain the viable option to use for an OSCORE setup with EDHOC.
+CA: I think that even that information can be part of EDHOC application profiles so they can leave room for this. Think of the EDHOC cipher suites that do belong to EDHOC application profile: they pertain to an EDHOC execution, but then they downstream on the OSCORE processing later on.
+MT: Yes, these shared concepts actually make sense to appear too.
+
+CB: We can add a few words to PR #45 and defining how this could be done.
+MT: I will check it.
+
+#### PR \#43 on the Proxy-Scheme option having a default
+
+CB (p4): PR [#43](https://github.com/core-wg/corrclar/pull/43/). We need to explain how this simplified forward proxying.
+
+CB: It is a change, so we need a normative document to make that.
+CB: draft-ietf-core-href advanced slightly too far, but we could still get it in there.
+CB: The interaction between Proxy-Scheme and Proxy-Scheme-Number could cover this. It would be an update, but an innocuous one.
+CB: We want a paragraph on why it is useful to have a default. Then we can point to draft-ietf-core-href as to why it is useful there. Eventually, it will be pushed into draft-ietf-core-href.
+
+CB: So we can incubate here but then push into draft-ietf-core-href.
+
+#### Issue \#48 on 4.05 and NON
+
+CB: This is ugly. Issue \#14 is similar. How do confirmable messages differ in what non-understood codes do?
+CB: We want to also allow a 4.05 or 4.02 if the server can figure out what the message may have meant.
+CB: In some cases replying with a RST message is fine, but what if we *want* to send 4.05? More text (p7) from Sections 5.4.1 and 5.8 of RFC 7252: "reject" means sending a RST message, but it mixes layers.
+CB: I think that the intention in RFC 7252 was to mean "you generate a 4.05 response and, if the request was CON, then you can send the response piggybacked to the ACK message, otherwise just send the 4.05 separate response" -- That is my interpretation.
+
+CA: My view is that this requirement of being piggybacked has not been enforceable from the beginning, due to proxies. Proxies can span multiple transports and have different timing requirements. It is not doable for a proxy to follow RFC 7252 if it needs to wait for the response from the origin server in order to send its own ACK to the origin client. Enforcing this would break a lot of CoAP. We should state that it is a non-enforceable constraint.
+
+CB: Sounds good to me. The hard correction simplifies the solution.
+CB: Great! I'm done.
+
+CB: In the best case, we will have 4 PRs merged and done (around 10%).
+
+### AOB
+
+MT: About draft-ietf-dns-over-coap, Mike suggested to informatively point to 6690 regarding the definition of "CoRE". That is already an informative reference. Is there a better pointer?
+CB: Not a better pointer, but RFC 7228 does something different. The definition of "constrained" is in RFC 7228, so I would use a combination of RFC 6690 and RFC 7228 (the former does not reference the latter).
+CA (chat): +1 on 6690+7228
+
+CB: Regarding our scheduling. The next interim meeting is on the 2nd of July.
+MT: Yes, that's the last one before IETF 123 in Madrid. I can only take the first 30 minutes of it.
+MT: We plan to resume the interim meetings after Madrid on August 27. That leaves room for 4 interim meetings before IETF 124 in Montreal.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow

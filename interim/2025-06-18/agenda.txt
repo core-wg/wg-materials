@@ -1,0 +1,27 @@
+CoRE Virtual interim - 2025-06-18 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Constrained Application Protocol (CoAP): Corrections and Clarifications
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+  https://github.com/core-wg/corrclar
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-10/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=7d323bdf-476c-47b2-8352-7ab054e5d6e6
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-10-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
