@@ -1,0 +1,176 @@
+
+# CoRE Virtual interim - 2025-09-10 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://www.youtube.com/watch?v=FoLes1aDnGY
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-13/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-13-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Marco Tiloca
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### Short Paths in CoAP
+
+https://datatracker.ietf.org/doc/draft-amsuess-core-shopinc/
+
+CA recapping and giving updates in version -02
+
+CA: What is done: Option name changed; intended status as Standards Track; confirmed intention of option number 13
+CA: What is not done: "append strings is default behavior" for non-first occurrences of the option. Should it still be the case, given that EST might do without it?
+
+CA: Instead of compressing /.well-known/est and then add more instances of the option to reflect an EST sub-resource "crts", now I would prefer to compress the whole path /.well-known/est/crts at once. That's the case for three EST sub-resources. If we do that, we could generally reduce repeated options to an afterthought at all.
+
+CA: See PR \#18 and \#14 at https://github.com/chrysn/shopinc/pulls
+
+MT: Regarding the plan for default behavior of repeated option: the closest thing in the draft now is leaving the semantics of non-first option instances undefined, to avoid breaking changes in case of updates.
+CA: The idea was just to suggest a default to authors of other documents, as to what is going to happen if no semantics is defined.
+ED: I have not fully followed the discussion on default behavior.
+CA: As I see it now, if nothing is specified in the registry entry, then no repetition of the option is allowed. The registration entry could say "default behavior applies". But, if single abbreviations for EST work, I kind of prefer to keep this simpler.
+
+ED: In general, it can be useful to have more instances of the option to append URI path segments. Then it is up to the person doing the registration to have it defined.
+
+CA: It is considered in the PR \#14. After better understanding the EST case, we do not seem to have a compelling example requiring concatenation of path segments leveraging this option.
+ED: We should be asking whether it is common *in a CoAP context* for EST to do that. It is not in cBRSKI at all. So I would not worry too much. It is nice if it is possible.
+
+ED: You also discussed registering a complete path as a single abbreviating number. If you do that, then there may be issues with extending.
+CA: Abbreviating the complete path makes it easier. If need be, another entry can be later registered for another resource.
+ED: When later another resource is added.
+CA: Then a new, different number should be registered.
+ED: Let's say that an EST server does not support a new number. Then the client gets an error that does not say whether the abbreviation for that resource path is not supported or whether the whole of EST /.well-known or the whole option. It makes it more complex.
+CA: I would recommend registering a number in specifications that define (the use of) well-known resources and to mandate support on the server side. It would already be an option for cBRSKI.
+ED: From an error response, the client does not know what to do next. Should it try again with the complete URI path using Uri-Path options? Should it partly compress the path?
+CA: I still prefer not to register an abbreviation precisely for /.well-known/est, considering the complexity that can result from using arbitrary labels in the  URI path, unless there is a known use for /.well-known/est/ArbitraryLabel
+
+CA: Generally, the fallback is costly in traffic and code complexity. I would recommend using the abbreviation mainly when the client knows that it will work with the targeted server.
+
+BS: Interesting document. Does this shorten the URI path?
+CA: No, it replaces the URI path with an abbreviated identifier.
+CA: It is a serialization thing, not a URI thing.
+BS: What are the cases?
+CA: It was kicked-off by BRSKI. Then it comes back with the CoRE RD and /.well-known/core. We also know about /.well-known/edhoc. It is all about trimming bytes on the wire.
+BS: I wonder of the complexity as an alternative to send the whole URI path with Uri-Path options. It has to be a big saving in terms of communication overhead.
+CA: That's for making a request really short. I have to include that kind of examples in the document. I also have CoAP over Bluetooth in mind.
+BS: There might be many registrations made in the new registry at some point.
+CA: A client might still never use this. A server supporting this needs to know only the codepoints abbreviating the well-known resources that it hosts.
+CA: I would expect a constrained implementation to use this if it is certain that the server supports this too, or, as an extreme case, just go for the full URI path. I plan to implement it soon.
+
+CA: For the server, if that helps, I can produce a before-after picture for flash.
+
+BS: What about going up in RFC 3986 terms?
+CA: There is no "going up" in navigating the URI path. The new option is mutually exclusive with the Uri-Path option. The repeatability of the new option does not seem something asked for by use cases, but it can stay for possible future cases and I do not expect it to be used/supported by constrained endpoints.
+BS: Have you considered query parameters?
+CA: They are deliberately not covered by this. Related: the requested option number is 13, as fitting with the option property and coming before the option number of the Uri-Query option, which is often expected to be present when GET-accessing a well-known resource.
+CA: So queries stay exactly as they are.
+CA: → Check that Designated Expert sanity-checks for question marks.
+
+BS: Can we maybe pick up a nicer name? "ShoPinC" as name?
+
+ED: Can we just define the option as non-repeatable?
+CA: That's possible and somehow taking the extreme of what is suggested in the PR \#14. I think that I prefer that. The draft can have the option non-repeatable, with a warning that things might change one day with an update and, if deemed relevant for future cases, implementations should not make a potential future change hard.
+CA: Also, it results in a shorter document.
+ED: That would mean that implementers of today would send an invalid option.
+CA: Correct implementations of a non-repeatable version will already behave correctly towards clients that understand a later repeatability.
+
+CA: So, shall we go for extend-later-if-ever-needed?
+ED: Sounds good to me.
+CA: I will have that in version -03 and shorten the text by 1 page.
+
+ED: Does this have any use in responses? E.g., to signal support of the option for the server?
+CA: The option is critical; it cannot be elective in responses only.
+ED: So that signaling would only be possible with a different option number.
+CA: That's excessive, I think.
+
+MT: Please keep commenting in WG Adoption thread on the mailing list.
+CA: Please also mention any use cases you have.
+
+### CoRE Parameters Registry Group and RFC 6690
+
+TE screensharing IANA considerations of BRSKI-discovery (draft-ietf-anima-brski-discovery)
+
+TE: This draft in the ANIMA WG does own registrations and has a CoRE signaling option.
+TE: There is a discussion about core-parameters. How to capture that there are more core rt= requests that extend brski and that the requirements are captured?
+TE: There is a table defining registration ranges for the "Resource Type (rt=) Link Target Attribute Values" registry in the "Constrained RESTful Environments (CoRE) Parameters" registry group. This is not content, but it is related to RFC 6690. New entries there would require an update to RFC 6690. This is what we propose here: new explicit ranges.
+TE: brski.p. is an escape hatch into the FCFS registration policy.
+
+CA: If updating RFC 6690, just fix it once by allowing registering prefixes or to register that prefix with a different policy.
+TE: Adding a range to the registry has not been done yet. That requires updating RFC 6690. Is it better in the BRSKI-discovery or in a separate 1-page document?
+CA: I think that altering it in an appendix of BRSKI-discovery is fine, unless someone has complaints.
+TE: So we do a general extension of RFC 6690 so that the registry accepts range entries which are marked with `*`, which allows specifying requirements for any actual entry. And it is in appendix because it does not relate to BRSKI really. And then the IANA considerations just exercise this.
+CA: Precisely.
+
+ED: What would the review procedure be for adding a whole range? "Specification required" or "IETF Review"?
+CA (on chat): +1 on Specification Required on ranges. They effectively do that already.
+TE: A range entry should require "IETF Review". That allows us to better establish and capture requirements. Requirements need to be such that CoRE parameter list can process them.
+CA (on chat): Right. IANA could not act on those possibly.
+ED: I am also thinking about avoiding multiple updates to RFC 6690 every time that a new range is needed.
+
+TE: I also asked about making the range a proper IANA registry. The problem with a main table is that, like with any IANA table, it can be sorted by any column.
+CA (on chat): Ranges in a separate registry would work as well.
+
+TE: The way it is now, a range is part of the notes. I was originally confused as to whether that's registry content too.
+
+TE: One challenge is that RFC 6690 already specified ranges to be the same for both the rt= and if= registries. Right now, that's not relevant for BRSKI, but one can note that the range structure is aligned between the two registries.
+ED: So a new registry dedicated to the ranges themselves can be used by both the Resource Type and Interface registries.
+TE: And then the notes would say that assignments need to comply with the registration procedure in the "registration procedure" registry.
+ED: The current way is simpler for a casual reader, there is no separate table for ranges. The question is, which one is better or more flexible.
+TE: If we go with CA's proposal of having additional range entries in there, then it still has an impact on a simple range table. E.g., if BRSKI said "requires specification", that overrides the "all other values" part. You are like saying "the longest prefix has the rule".
+
+CA: I prefer TE's proposal with a dedicated table over mine (where there is potential for confusion).
+TE: For next time, I can come up with a text proposal.
+CA: Maybe also check with IANA if they are happy with a registry about ranges.
+TE: I am also waiting for replies about other points.
+
+### AOB
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[BS]: Bill Silverajan
+*[TE]: Toerless Eckert

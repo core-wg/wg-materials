@@ -1,0 +1,225 @@
+
+# CoRE Virtual interim - 2025-08-27 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://www.youtube.com/watch?v=06uIZryGTjM
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-12/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-12-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Marco Tiloca, Christian Amsüss
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### Short Paths in CoAP (ShoPinC)
+
+https://datatracker.ietf.org/doc/draft-amsuess-core-shopinc/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-12/materials/slides-interim-2025-core-12-sessa-short-paths-in-coap-00
+
+CA presenting
+
+CA: This topic was briefly raised a few years ago.
+CA (p2): The issue at hand is that well-known URI paths are often used but are also quite long and resulting in overhead on the wire.
+CA (p3): This document proposes a new CoAP option with value of type unsigned integer that abbreviates a URI path. The option is critical, safe-to-forward (main difference from Uri-Path that is not), and repeatable.
+CA (p4): Overview of interactions with itself and other options. The expected use of query parameters (hence Uri-Query with option number 15) should justify using the option number 13 here. It is delicate to define how it relates to the Proxy-Uri and Proxy-CRI options. The co-existence with the Uri-Path option is currently forbidden, but maybe it makes sense to enable it (e.g., to support prefixing).
+
+CA (p5): Set of open questions.
+
+CA: Option number 13 justified?
+CB (on chat): Yes
+
+CA: Promoting too much .well-known-ness?
+
+CA: Register here an integer for /.well-known/edhoc?
+
+CA: Any default behavior for processing the non-first occurrences of the option?
+
+CA: Does there have to necessarily be a registered well-known URI in that registry? (foreign key constraints on another IANA registry)
+
+CA: More on bike shedding: option name (maybe uri-path-short); document name; timeline (considering draft-ietf-anima-constrained-voucher that might benefit of this as a normative reference)
+
+CB: On the timeline, we can do an adoption call quickly. We actually touched this topic before RFC 6690.
+CB: The proposal now is good about avoiding that complexity; I am not unhappy, we should be able to do this quickly, now we are 12 years in.
+CB: Regarding the name: it is not paths that are short. It is not "shortest path" as in routing. Let's nail down a good name before adoption, both for the CoAP option and for the document name.
+CB: On the first open questions: 13 is justified as option number (again, 12 years in). We need to spend some time on considering the unsafe bit. The draft says "Uri-Path should not have been". Let's talk more about what nodes on path can do. If that is fine, then 13 is good as option number.
+CB: Regarding EDHOC, good question. No answer at the moment.
+CB: Regarding the multiple occurrences: definitely define a default behavior.
+CB: IANA considerations? Could be machine-readable, then default is even better.
+CB: IANA interactions. What was it?
+CA: The Designated Expert can also allow a registration for non-.well-known exports.
+CB: Then help the expert.
+CB: Regarding IANA interactions, unless people feel pain of 11 characters .well-known, there is no encouragement needed for people to register.
+CB: Can you submit a version -02 with a few of those questions answered? A few days after, we can have an adoption call and see the technical comments that we get during it. If all goes well, we could have a WG Last Call in September.
+
+CA: So, would the name be Uri-Path-Short?
+CB: Better if we use a different word for Short.
+MT: Concise? (which is not a concise word)
+
+TE: How often is normal resolution through .well-known necessary? The validity of a shorter one can be only for a connection.
+CA: There is no negotiation. The client tries to use the short version of the URI path first. If it does not work, the client can try again with the long verbatim version of the path.
+MCR: Toerless is talking about core?rt=... properties learned through /.well-known/core
+TE: I am trying to understand the larger context. If it avoids the trouble of doing a lookup that *returns* a short path and you have to keep that path's validity, it makes this document more valuable.
+CA: To my understanding, /.well-known/core has a Max-Age (60 seconds by default, possibly clamped to DNS TTL).
+TE: So, if we stick with the discovery through /.well-known/core and use a long Max-Age, we can use that long.
+TE: There is still the trouble of the round-trip and client needs to remember the answer.
+
+TE: Another question: /.well-known is not used just with CoAP but also with HTTP. Are you adding a new registry here?
+CA: Yes, just providing integer abbreviations for /.well-known paths.
+TE: Why two registries in total?
+CB: You do not abbreviate paths with HTTP.
+TE: So for new path I register two things, into the well-known registry and in the new registry?
+
+CB: Well-known is used for many things, only a few of which are used in CoAP, and some are not for discovery but rather for different and very specific things. E.g., ni: access (RFC 6920).
+CA: And that one would use a binary expression.
+
+TE: I just wonder what the HTTP world thinks about this.
+CA: This does not really apply to the HTTP world. It's just a compression mechanism through a shortcut. HTTP doesn't care about it.
+CA: /.well-known/foo is something. You can also have binary representations of paths, in the non-first occurrences of the option.
+TE: That is great, it resolves one of the concerns why I was asking. People using some functionality for CoAP and HTTP would so far use short path components and HTTP people find that obfuscated. With a binary representation, you can pick a good descriptive one for the HTTP audience and then have the binary representation used here. Cool.
+TE: This is how cBRSKI started, we duplicated BRSKI path components from BRSKI into cBRSKI and that was annoying. Why have distinct ASCII strings? So this way, this can be sold to HTTP people.
+CA: We can just say that you can design the path that you want. No need to make HTTP people particularly aware of it.
+TE: So when someone is thinking simultaneously about HTTP and CoAP (which we want to encourage), to them it is helpful.
+
+MT: Agree with CB on the answers to the open question. Just two complementing points.
+
+MT: On prepopulating with an entry for /.well-known/edhoc: that would be quicker and safer to do, in the interest of the timeline. I have read the alternative you propose as to updating the semantics of the EDHOC option (as taking this purpose when not used with the OSCORE option). That should also work but requires more thinking and I do not think it was part of the discussion in Madrid. Trade-off with speed of document completion.
+CA: It also depends on whether there are other benefits to defining EDHOC option w/o OSCORE, or if that creates other issues to be handled.
+MT: Right. The easy/lazy way is to prepopulate and be done with it.
+
+MT: On the next version -02 to consider for WG adoption: right now, Informational is the displayed intended status . I believe that you mean and would better be Standards Track, right?
+CA: Yes, it's probably an oversight building on the template used.
+MT: Right, we do not want this document to be a downref for other documents using it. The WG adoption call has to be on something with the right intended status.
+MCR (on chat): Yes, it has to be standards track.
+
+CB: I looked at the EDHOC situation. It sounds like it fits.
+CA: The option is 3 byte then (the EDHOC option is empty)
+MCR: The calculation might be off if there is a previous option.
+
+MCR: Regarding TE's comments, I think that it is fine. I do not mind going in that direction. It is simpler for both clients and servers.
+TE: I just wondered about the need for that complexity. I would have liked to avoid it from the beginning. Removing complexity would help avoid people wondering when to do what.
+
+CA: From that discussion, it might be good to register /.well-known/cbrski
+TE: What do you call string option, and what are other parameters? They are not URL parameters.
+CA: You may register multiple entries, which all have in common the first part of a URI path but are individually abbreviated by different integer numbers.
+TE: In cBRSKI we have a few static ones, all with crazy shortened strings. The table in Section 6.3.2 maps them ("../es" etc), it is 9 entries for BRSKI and EST.
+
+TE: If we wanted binary for EST, that would need an update.
+CB: I would simply define /.well-known/est and leave the rest as is.
+TE: With something informational in this document stating that this could have been avoided.
+MCR: That is a good example.
+CA: If that is the authors' opinion, happily so.
+
+MT: Do you have enough material for the next version -02?
+CA: Yes; it probably helps to have examples involving proxies and Proxy-Uri. Please provide any input on support in implementations.
+
+CB: Proxy-Uri is for representing something that you cannot represent with the other set of Uri-* options together with the Proxy-scheme option.
+CB: A relevant example includes path or query components that are not in UTF-8.
+
+MT: You need a chain of proxies to set up an example like that, right? That explains a proxy that "composes a Proxy-Uri option" like the draft says.
+CA: Yes. And using multiple proxies is not a bad thing per se.
+
+### AOB
+
+#### Constrained GRASP
+
+https://datatracker.ietf.org/doc/draft-ietf-anima-constrained-grasp/
+
+TE: I presented the constrained GRASP work at IETF 123; it was suggested to bring this up in an interim meeting. Any opinions about the 3 options that I presented?
+- extract reliable message layer from CoAP
+- more CoAP methods (e.g., multicasting)
+- GRASP as an application
+
+MCR: Like multicast observe responses
+TE: Thinking of the client sending individual requests to the different intended recipients, but then leveraging a shared buffer.
+
+CA (chat): I'll have to look over the longer form of the question, don't have a good answer right now
+
+CB: It is obvious that GRASP and CoAP have different semantics. You cannot map them too well. The message layer can fit very well. What is the southbound interface of GRASP, and how can it interact with the CoAP message layer? Is the CoAP message layer missing something that it would then be necessary to add?
+
+TE: I understand that CoAP uses methods similar to HTTP; there is an exchange of request and response in an atomic way. GRASP is different, with a sequence of back and forth that can succeed or fail. That exchange and its outcome play a role in the semantics of what is exchanged.
+
+CB: We need a collection of things that you want to support. Then you need to say how you want to achieve security (for multicast, you cannot with DTLS).
+MCR: After negotiation is done in GRASP, you currently often use TCP for a session. And now people ask "can I do *anything* with it?".
+TE: GRASP has not been very successful. It would have been better if we had an existing protocol to build on. It would not have worked with HTTP because of multicast and multi-round-trip. With CoAP, it looks clearer.
+TE: Multi-hop multicast is the pain point. mDNS multihop was tried and did not work well. Hop-by-hop TCP is overhead intensive.
+
+CB: The fun part will be the incision of separating the message layer out of the request-response layer. That is the surgery that you need to do at this point. It simplifies GRASP a lot, as described in terms of message layer interactions. Maybe we need to extend the message layer, e.g., to support reliable multicast.
+TE: That is where options differ. By extending, it could reuse full CoAP but mapping a method to trigger multiple reliable messages.
+
+TE: Next steps?
+CB: Describe the interactions that you want.
+TE: So describe a proposal for methods?
+CB: Do not do the methods. If you couple it to preconception, you will have a suboptimal design.
+
+CA: What is the problem with mapping against CoAP by using some CoAP options? At any rate, I can go through GRASP and evaluate how well it can work as an application.
+TE: GRASP considers itself a framework for doing network layer protocols in a router area, which does not know URIs.
+CA: There might be another incision point that is viable: using both the message layer and the request-response layer, but just not using what does not apply (URIs), and introduce options for things you need (Location-Path-like)
+CA: If you write up the interactions, we can move on from there. Happy to explore that incision point from there.
+
+VV (on chat): Wouldn't be BLOCK transfer useful here?
+CB (on chat): block-wise helps with cutting up large payloads into multiple packets. This is somewhat orthogonal to what GRASP wants.
+MCR (on chat): yes, block transfer replaces the TCP part of GRASP.
+
+#### Constrained Resource Identifiers (HREF)
+
+https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+CB: The document was in AD review, CA gave comments now under processing. After that, we'll have covered the AD review.
+
+CB: Then we have a review saying "can you provide more examples" (but is that productive?).
+CB: What would be useful is to look at the response that I will send after the meeting and to think about examples.
+CB: I do not want to use my own examples. Which examples help understand the document? Could you send PRs with your examples? Unless people prefer to spend 2 months on examples.
+
+MT: Anything relevant to be updated in the Shepherd write-up?
+CB: Probably not, but I will check.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[VV]: Vojtěch Vilímek

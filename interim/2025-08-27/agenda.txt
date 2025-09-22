@@ -1,0 +1,25 @@
+CoRE Virtual interim - 2025-08-27 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Short Paths in CoAP
+
+  https://datatracker.ietf.org/doc/draft-amsuess-core-shopinc/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-12/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=5f64d159-69b4-4615-87df-57c734c5f64f
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-12-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
