@@ -1,0 +1,183 @@
+# CoRE Virtual interim - 2025-09-24 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/lFflQ1somn8?t=250
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-14/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-14-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other. (This includes being nice to the chairs.)
+
+MT doing introductions.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### [CRIs](https://datatracker.ietf.org/doc/draft-ietf-core-href/)
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-14/materials/slides-interim-2025-core-14-sessa-carstens-slides-00
+
+CB presenting.
+
+CB (p1): This document left the Working Group, then it got the AD review now addressed in version -24.
+CB: There are a few comments from the ARTART review left open, with two open PRs towards the next version -25:
+
+* https://github.com/core-wg/href/pull/138 + https://github.com/ietf/wiki.ietf.org/pull/110
+* https://github.com/core-wg/href/pull/139
+
+CB: On issue \#138, we are adding a pointer to the IETF CoRE WG Wiki for more examples (wiki.ietf.org has a PR merged that makes it point to the CoRE WG wiki at GitHub, which has a page pointing to the draft source repository; things might move behind the indirection).
+
+CB (p2): On issue \#139, this is more complicated: this open point is about registered names used as hostnames in a CRI.
+CB: When plugging those into DNS, one might need to use ToASCII (or maybe also use a variant of DNS that does this for us).
+CB: We do not want the onus (e.g., full Unicode tables) on every CRI user. The PR addresses this as "you may need to use it but it is out of scope here" (i.e., it is not governed by this document as it is not part of the CRI concept).
+
+CB: Is the WG happy with this resolution? Then we can ask the AD to check and move forward.
+MT (as an individual): I have checked the PRs. They look good to me.
+MT: CA review?
+CA: I will check after this meeting.
+
+MT: Anyone else, please take a look.
+CB: We might be able to have this moving forward this week.
+
+### [SID-PEN](https://datatracker.ietf.org/doc/draft-ietf-core-yang-sid-pen/)
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2025-core-14/materials/slides-interim-2025-core-14-sessa-carstens-slides-00
+
+CB presenting.
+
+CB: (p3): There has been discussion on the mailing list months ago; not sure if people feel that their concerns are addressed.
+CB: (Context: SID requires numeric identifiers for schema nodes; easy for the IETF, but we would like it to be zero-effort for a 3rd party). For any owner of a PEN, this document automatically sets up a corresponding SID range.
+CB: Setting expectations, there are no normative changes. Is that enough to address the discussions? Can we have WG Last Call.
+
+MT: MCR asked for having WG Last Call as well. It sounds to me a good step also to check if the discussion points have been addressed. Shall we have it on version -02 once available?
+CB: That was the plan.
+MT: Then, we will have WG Last Call on version -02.
+MT: Also, we will have to look for a document Shepherd soon.
+
+### Link Format size optimization for discovery: using the IPv6 / IPv4 unspecified address
+
+See email thread: https://mailarchive.ietf.org/arch/msg/core/LhmQBDK40Y7L1wpADPKTeaJHZu4/
+
+ED presenting (screensharing from the above mail):
+
+ED: This comes out from work in ANIMA about discovery and constrained BRSKI. A proxy helps a device to onboard into a network.
+
+(going through the example in the mail)
+
+ED: The response in CoRE Link-Format includes a link where the authority component is an IPv6 address that is actually not used in a follow-up request; a different address is used, so the first one yields unneeded overhead.
+
+ED: An alternative would be to not have that first address as-is, but instead replace it with a compact sentinel value "::", for the sake of remaining compatible with the URI semantics but avoiding the unneeded overhead. This is a stands-in for "unspecified address".
+
+ED: Does this need some action related to RFC 6690? In general or specific to the BRSKI protocol? Comments or ideas?
+
+CB: Interesting. At design time, we noted that it is useful in Link-Format to have a link implicitly referring to the host of the /.well-known document. This looks similar, but we cannot rely on existing URIs.
+CA (chat only): 6690's optimization also went horribly wrong
+CB: Maybe not wrong, but very limited in the set of circumstances it works for.
+
+CB: `coaps://[::]:8454>;rt=brski.jp` already has a meaning: speak to an unspecified address (yourself).
+CB: So this is trying to give a different meaning to the same thing, which would be a backward compatibility issue.
+CB: Having an optimization here makes sense, especially for the port number. RFC 3986 does not help us here, as it only has one operation: "resolve URI reference" (relative to that URI).
+ED: Localhost is not same as this. Is that what the stack makes out of "::" as destination address?
+CB: That is how it works in a browser.
+ED: That is a possible implementation choice, but it can work differently and still be interoperable. From specifications, I assume that "unspecified" means "context will tell".
+CB (on chat): ```http://[::]:7991/``` goes to the local web server at port 7991
+ML (on chat): shouldn't that be ```http://[::1]:7991/``` ?
+
+ED: It might still work limited to BRSKI because there is enough context to interpret "::" as intended, but out of that it can admittedly create issues.
+CB: There is large number of cross-protocol attacks built on unspecified addresses. Maybe I can find a document with details. Here you actually care about getting the port number from the link and combining it with an IP address obtained from something else.
+CB: It would have been a valid abbreviation, if added back then.
+
+CA: How is the address not used?
+ED: It can be used.
+CA: A link is supposed to be used. Why sending it otherwise?
+ED: It can work. So there we could have an abbreviation that refers to the actual address to be followed in the next request.
+CA: If it is not using that address, it is not really link-format here (not even a link). If you think about extending RFC 6690, just use an own media type right away. If you wanted to special-case "::", in my opinion that would need to be a feature of RFC 3986.
+CA: Since you care about the port number, you can use a different media type in /.well-known/core. You can build on that to discover only a port number, using a GET with a dedicated CoAP Content-Format. You still achieve the compression that you want, without compatibility issue. Of course, the server that you query has to support this. But you can make it a requirement of that server in BRSKI.
+ED: I do not have a query defined by default here, but it can be done.
+CA: You need a media type for that anyway, which you can discover with /.well-known/core. It is still a compact representation, just better fitting with what you need.
+
+ED: Can CoRAL help here? Also, we can have multiple links.
+CA: CoRAL will help with the deduplication of multiple IP addresses. It won't help with multiple references when different schemes are involved. But you can instead rely on tags to define a reference resolution switching scheme and port. That would work in any CRI and CBOR-based format (although it is perhaps an odd thing to do).
+ED: It makes sense.
+
+ED: So it seems that we can conclude that, to be on the safe side, that notation proposed in the mail should be avoided.
+
+CB: The other half of my reaction: that is a nice hack. But we have to examine whether a hack will be interpreted justifiably before the hack is introduced. I think that the danger is too high for that.
+CA: Trying locally, I see something different happening on a browser (http://[::]:8081/ effectively redirects to http://[::1]:8081/ even though the loopback server does not issue any 30x codes)
+ED: There is probably a redirection going on.
+CB: Well, it is an unspecified address. That means any IP address that is local on any link that is supported. For example, one can have a link-local address (most often available and chosen) and a Wi-Fi interface address. So it is not even a redirection.
+
+ED: On discovery, it is good to use CoAP discovery when possible instead of inventing something new.
+CB: The nice thing about link-format is you can have several links. But if the semantics is not about links but about port number, then a different media type fits.
+ED: We need to distinguish also what is on this port, like for versioning. It would have been in a link-format attribute. Also, for enrollment, we could use another protocol than EST; it calls for more than just port numbers.
+
+CA: I am still not sure whether what you are trying to discover makes sense to be expressed as a link or not. You are looking for a service, somehow it can be expressed as a link. The main question is: is it justified to use another format?
+ED: It is good to consider CBOR, which is already used in BRSKI.
+CA: It is still a new format, even if based on CBOR. Along that path, we can probably do something based on problem-details in the interest of compression. The main question is if this is needed.
+ED: It is good to not have too many variations.
+CA: For CoRAL, we are gathering examples to get to a good serialization. Nothing there yet where it is possible to commit to some CBOR to be valid and have a certain meaning.
+ED: So it is a simple profile of CoRAL that does not need to support all the features available.
+
+ED: Example, Mesh have a proprietary discovery protocol where you get information about the port number. For CBRSKI, we could use link-format as baseline. That way, we do not introduce more incompatible discovery methods.
+
+### AOB
+
+MT: Adoption call ended yesterday for "Short Paths in CoAP", draft-amsuess-core-shopinc-02
+MT: There were more comments and ~5 messages of support. We can declare it adopted.
+CB: Agree. Just do not use "short", the path is abbreviated.
+
+MT: So what about the document name?
+CB: Someone called it Uri-Path-Abbrev.
+CA: We can change it. I do not care.
+*: So, -Abbrev.
+
+MT: Yes, let's go for -core-uri-path-abbrev
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+

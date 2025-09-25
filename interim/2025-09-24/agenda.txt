@@ -1,0 +1,33 @@
+CoRE Virtual interim - 2025-09-24 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Constrained Resource Identifiers
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-href/
+
+* YANG-CBOR: Allocating SID ranges for PEN holders
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-yang-sid-pen/
+
+* Link Format size optimization for discovery
+
+  https://mailarchive.ietf.org/arch/msg/core/LhmQBDK40Y7L1wpADPKTeaJHZu4/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-14/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=4dd8bd78-4ff1-4135-b9ed-797824fa1468
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-14-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
