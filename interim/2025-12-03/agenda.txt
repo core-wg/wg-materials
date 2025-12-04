@@ -1,0 +1,39 @@
+CoRE Virtual interim - 2025-12-03 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Corrections and Clarifications for CoAP
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+  https://github.com/core-wg/corrclar/issues/
+
+* URI-Path abbreviation in CoAP
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-uri-path-abbrev/
+
+* CoAP over GATT
+
+  https://datatracker.ietf.org/doc/draft-amsuess-core-coap-over-gatt/
+
+* Non-traditional responses
+
+  https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-16/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=18341d8e-618c-4074-b1dd-dcd2ece31f7a
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-16-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

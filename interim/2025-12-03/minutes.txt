@@ -1,0 +1,234 @@
+
+# CoRE Virtual interim - 2025-12-03 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/Op_V-fj9GCk?t=274
+Material: https://datatracker.ietf.org/meeting/interim-2025-core-16/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2025-core-16-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss, Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+MT doing introductions.
+
+### Corrections and Clarifications for CoAP
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+* https://github.com/core-wg/corrclar/issues/
+
+Looking at [the issue-52 branch](https://core-wg.github.io/corrclar/issue-52/draft-ietf-core-corr-clar.html#name-rfc7252-541-critical-option):
+
+CB: This is the promised text addressing the issue; ultimately, it should go into draft-ietf-core-uri-path-abbrev (UPA), as it is the likely next Standards Track document out of the group and a formal update to RFC 7252 is needed to make this correction.
+CB: This is about the process for negotiating the use of critical options, which currently does not work for Non-confirmable CoAP messages.
+CB: This may be a symptom of having neglected a part of a standard that was not considered important; that comes back now.
+CB: The idea is to replace the current single case including the mistake with instead same separate cases as for the confirmable messages. (It could be editorially refactored; it is slightly ugly at the moment, but very explicit and hard-to-get-wrong).
+CB: Placing this text in the UPA document might make the IESG requesting a separate document that updates RFC 7252 for this specific fix. If that happens, we can still split.
+MT: Yes, it is worth trying having this content into the UPA document first.
+CB: Text exists regarding how to handle "the damage" on the server side and client side. The normal situation for non-supporting clients is to reject the message. So the damage is limited and will get increasingly low with time.
+
+ED: So, is the idea to port the proposed text into the UPA document?
+CB: Yes, it could become appendix or section. A section would be better, considering common opinions on appendices.
+ED: It should be fine unless there are objections.
+
+ED: Currently, the UPA document has also a machine-readable version of error-related information, in contrast with diagnostic error payloads.
+CB: RFC 9290 does not provide a diagnostic payload. Details about this are somewhere else in the UPA document, but the SHOULD in the proposed text about using a diagnostic payload has become less compelling due to it.
+ED: So one can have Both human- and machine-readable error-related information?
+CB: Both are possible.
+CA: It becomes "should unless we have a better idea" and now we have the better idea.
+
+CA: I would prefer to have a WG consensus statement and to avoid slowing the UPA document. Input from W Chairs and implementers?
+JS: From the 4.02 error perspective, I am for it. In terms of diagnostic message, it would be nice to have clarity but it does not need to be in the UPA document.
+MT: It sounds good to have the proposed text in the UPA document. Are there any objections?
+CB: We can do a poll.
+
+Poll: "Do we agree with making this change?" (moving the proposed text into the UPA document)
+* yes: 8
+* no: 0
+* no objection: 0
+
+MT: Christian, please submit a new version of the UPA document including the text from the -corr-clar [PR \#53](https://github.com/core-wg/corrclar/pull/53); also remember to mention the update to RFC 7252 in the header and abstract. We are going to have a WG Last Call on the new version, hopefully later this week.
+
+
+### URI-Path abbreviation in CoAP
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-uri-path-abbrev/
+
+(On top of the related discussion on the previous agenda item ...)
+
+Recent review from [Esko](https://mailarchive.ietf.org/arch/msg/core/J_z24Oiv9IE5ulmJ3frar_bUbyE) ([PR](https://github.com/core-wg/uri-path-abbrev/pull/31)): Editorial.
+
+ED: To my taste, some things were not clear enough, so I did the PR with my review.
+CA: The document was written quite quickly; the PR makes good changes. I can import already in the next version.
+
+MT: Yes, please. If we have the new version this week, we can have the WG Last Call completed before the Christmas break.
+
+CB: Some more comments.
+
+* Section 2.4: if the Uri-Path-Abbrev option is used together with Uri-Path, the response should say could-not-be-processed on Uri-Path-Abbrev (current text does not say which option is not understood). I would prefer to nail this down.
+
+* Section 2.4 paragraph 3: It talks about appending to the URI path. Why?
+  * CA: Imagine a reverse proxy that does not support the Uri-Path-Abbrev option but takes coap://foo.example.com/anything to coap://backend.example.com/foo/anything . It is weird to have /.well-known in there, but technically it is. (But it needs better wording in that it only affects servers that put themselves behind reverse proxies that do this, and that *is* a server choice).
+
+CA: I will point out the "append situation" explicitly in a mail accompanying the next revision's changelog.
+
+ED: Could it happen that the origin client uses Uri-Path and then the proxy introduces Uri-Path-Abbrev?
+CA: If the proxy has no knowledge of the server, then it will not introduce the Uri-Path-Abbrev option.  It is only possible for proxies that know the server and its support.
+CA: I need to expand that section. A reverse proxy may do this. I can write it as a guidance to the server operator to avoid it altogether.
+ED: If the proxy does not know this option, will it leave it in?
+CA: Yes, if the client pushes it there, it will hurt. Don't push there.
+
+
+### CoAP over GATT
+
+* https://datatracker.ietf.org/doc/draft-amsuess-core-coap-over-gatt/
+
+Recent reviews:
+* [Carles](https://mailarchive.ietf.org/arch/msg/core/ch3XyhBPM2BWQdIh_WMCYUldkhA)
+  * SCHC
+* [Marco](https://mailarchive.ietf.org/arch/msg/core/LkVepJXzxSazzL1suEOLpU0e4-A)
+* [Mikolai](https://mailarchive.ietf.org/arch/msg/core/QZKcBsxufqT1ov9XqSRTfeQcFoo)
+
+Largely editorial; some technical aspects to work through:
+* Unordered writes over mesh BLE (realistic? understood?)
+* Will the RFC Editor treat CoAP as a well-known term before RFC 9999?
+* Level of normativity in several places.
+* Precision around the 1-bit MID
+
+CA: Comments from Carles covered aspects of SCHC. One could use SCHC or, in theory, you could use SCHC to retcon a regular GATT property to be viewed under the lens of a CoAP resource. However, this has some issues.
+
+CA: I would love input from people who worked with BLE (on unordered writes over mesh BLE).
+CA: Can we convince the RFC Editor of the fact that CoAP does not need to be expanded in the title?
+CB: We may want to get IESG support and take that to the RFC Editor. Maybe we should do a survey.
+CB (on chat): There are 21 RFCs that have "CoAP" in the title; so far it is always expanded
+
+CA: On the comment about normativity: I will check.
+CA: On the precision around the 1-bit MID: I will check. That's largely based on some editorial overlooking. Input is appreciated on how to better present it.
+
+CA: On the 1-bit MID, this enables a few weird optimizations, but spelling them out just creates the risk to get things wrong.
+MG: This adds possibilities of extended usage/tricks, but then we do not want people to use those. Why put them in then?
+CA: I am happy if people use it. But if we put it in the main document, people will think that they need to implement it. I can elaborate in an appendix regarding niche applications. (For example: observe notifications, updated observe requests, idempotent requests).
+MG: I am favor of spelling out explicitly; state that it is not mandatory to support it.
+CA: Ok.
+
+MT: We will start a WG Adoption Call.
+CB: Adoption says that it is something that we want to work on, and that it is in the WG Charter.
+
+### Non-traditional responses
+
+* https://datatracker.ietf.org/doc/draft-bormann-core-responses/
+
+Recent reviews:
+* [Marco](https://mailarchive.ietf.org/arch/msg/core/hDo3pc8fc0J02FhCiVWaO0ce1FI/)
+
+(More were promised and should come)
+
+CA: Thanks, I will work them in.
+MT (as an individual): To reiterate what I said at IETF 124: this is a good document to have, we would have needed this earlier. It writes down common-ground concepts that somehow have emerged in other documents using those. It's good to have them collected in a single place, to not reinvent the wheel risking making mistakes.
+
+MT: Any objections on considering this as WG item?
+(heard none)
+
+MT: We will start a WG Adoption Call.
+
+### "me.arpa" for CoRE Link Format
+
+ED: Screen-sharing an example.
+
+```
+REQ: GET coap://[ff02::fd]/.well-known/core?rt=brski.jp
+RES: 2.05 Content
+  Content-Format: 40 (application/link-format)
+  Payload:
+    <coaps://me.arpa:8485>; rt=brski.jp
+    </resource >; rt=something
+```
+
+ED: A CoAP server replies with a response whose payload in link-format includes a link to the server itself, but on different scheme and port. In this context, me.arpa in the authority component of the link would mean the source address of the endpoint sending the response (i.e., of the server). (This is replacing the trouble of previously suggested approaches based on an unspecified address that created ambiguities).
+
+CB: There is an IANA registry for special-use domains. I should check it and the referred documents.
+ED: I did not plan to use the registry.
+CB: We have to register something there. I have to check the RFC that established the registry. So this is for the ANIMA WG?
+ED: Yes, it is useful there, but it is also more generally applicable.
+
+CB: Nice aspect: ``/.well-known/core`` stays ROMable. \[https://en.wiktionary.org/wiki/ROMable]
+CB: it is good to make it available in a general way, not just for cBRSKI usage. If someone asks for splitting the document, we can split it then.
+
+CA: I am a bit conflicted on this. For compressing many coaps:// links, consider the transport-indication document in CoRE -- other formats than that of RFC 6690 just have their way to set a base URI.
+CA: For a registration precedent, look at CoJP.
+CA: Any benchmark-before-do? How much do alternatives not work here? (Compared to fe80::1234, which is realistic in managed 6lo networks).
+ED: I had a comparative presentation for the ANIMA WG. This is more about the need to encode efficiently without repeating an address.
+MCR (on chat): yeah, it's not the size exactly, but the fact that the address "me", rather than figuring out what address matters, and for the BRSKI pledge/join/discovery, the client needs to know it's not relevant. Maybe this applies to other proxy situations.
+CA: So we are back to restoring a base URI. Decoupling from URI is useful here but needs integration. Does it have a meaning for non-IP transports? For proxy interaction?
+MCR (on chat): It's okay, the server will have SAN="*" :-) \[subjectAltName]
+
+CA: Also, what about you.arpa for role reversal? (something shamefully ignored often) Provided that there are no extra complications.
+CB (on chat): The "deictic" hostnames
+ED: We have not seen the case for that yet.
+CA: We kind of have it in the CoRE Resource Directory: implicit base address "you.arpa".
+
+MG: You said that if the resource is on the very same host with the same scheme and port, then you can omit it. But otherwise, you cannot.
+ED: It would just be `</resource>`, but if it changes scheme, it has to be a full URI.
+MG: Can we extend link format and fix that?
+ED: It would be an update to link-format, which sounds like a big project. We do have link-format follow-up formats; I am not sure of their state.
+CA: It is all in CoRAL as current work-in-progress, also building on base URIs/CRIs. CRIs could grow a CRI-reference format that does the scheme-port-but-not-hostname resolution, I would like that. However, the container format that expresses link-format semantics but uses CRIs (CoRAL) is not there yet.
+ED: Link-format is used because it is available. It is not necessarily the simplest and most efficient way.
+MG: I am not even sure of what it would mean to update link-format. It looks like you are trying to solve a problem by doing something unrelated. It might work, but there can be a better solution.
+ED: The target was link-format (possibly to be updated), but the workaround might be useful also in other contexts.
+
+CA: If defined, it should work outside of RFC 6690 too. This might still not be an update to RFC 6690, but it is desirable to be applicable beyond link-format.
+
+### AOB
+
+MT: The next interim meeting in on January 14th, at the same time. Then we continue with the same cadence.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[MG]: Mikolai Gütschow
