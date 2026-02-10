@@ -1,0 +1,33 @@
+CoRE Virtual interim - 2026-01-28 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* RFC 9595 procedure for .sid file publication
+
+  https://www.rfc-editor.org/rfc/rfc9595.html
+
+  https://datatracker.ietf.org/doc/draft-ietf-anima-rfc8366bis/
+
+* YANG metadata
+
+  https://datatracker.ietf.org/doc/draft-bormann-cbor-yang-metadata/
+
+  https://mailarchive.ietf.org/arch/msg/core/kJv2KW4---KfxPC0jiNYpYfh1E4/
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-02/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=3c2352cc-c1d6-4f2d-8da6-a7183bb71169
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-02-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

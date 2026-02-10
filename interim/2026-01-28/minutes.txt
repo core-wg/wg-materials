@@ -1,0 +1,174 @@
+# CoRE Virtual interim - 2026-01-28 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/bE2xskPtbYA?t=251
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-02/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-02-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+## Agenda
+
+### RFC 9595 procedure for .sid file publication (Esko Dijk)
+
+Recording: https://youtu.be/bE2xskPtbYA?t=358
+
+* https://www.rfc-editor.org/rfc/rfc9595.html
+* https://datatracker.ietf.org/doc/draft-ietf-anima-rfc8366bis/
+
+Clarification of the RFC 9595 procedure for .sid file publication
+
+* The draft-ietf-anima-rfc8366bis includes YANG modules for which .sid files are required - SIDs used in the cBRSKI protocol.
+
+* There are some unclarities on the exact process steps to get from draft .sid files to final/approved .sid files in some IANA hosted database.
+
+* Some discussion on this could help to clarify!
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-02/materials/slides-interim-2026-core-02-sessa-core-rfc-9595-discussion-interim-00
+
+ED presenting
+
+ED (p1): I wanted to confirm my understanding. Do we need to inform the RFC Editor?
+CB: Yes. Once the draft is approved and we can extract the SID file, the RFC Editor will remove it. So, it is good to put the SID file as an appendix (even best as last, so that any reference to other appendices does not change).
+CB: Part of the required work is on the tools. We have a YANG tooling mailing list \[yang-tooling@ietf.org, subscribe at https://mailman3.ietf.org/mailman3/lists/yang-tooling.ietf.org/].
+ED: The difference between type 2 and 3 is that type 2 is aware of SIDs and can give heads-up to experts.
+CB: Consider the case where there was a SID file already used for development/experiments. In that case, one has to talk to the developer and see if that file can be kept.
+ED: Let's say that we want to reuse existing values.
+CB: It is fully in your control for type 1, not for type 2.
+
+ED (p2): We are using type 1 for draft-ietf-anima-rfc8366bis. We are missing a note to IANA (remove upon publication).
+CB: There is an RFC XML feature to mark a section for removal upon publication ([removeInRfc](https://authors.ietf.org/en/rfcxml-vocabulary#removeinrfc-1)).
+ED: Does it have an official name or not?
+CB: It needs to have range allocated.
+ED: We do have that. Should we mention that there needs to be a stable SID file produced and handed over to IANA?
+CB: You are doing that. By the time the document is approved, you would have a section in the IANA considerations about the range and a reference to the appendix with the SID file.
+ED: There is a tool for converting draft .sid file to final .sid file.
+CB: What you get approved should be a final .sid file.
+ED: There should be a flag in pyang to have the .sid file published \[--sid-finalize].
+CB: There is also the distinction between stable/unstable and published/unpublished. One can add SIDs but not remove them without causing backwards compatibility problems.
+CB: Where in the procedure is the document in ANIMA now?
+ED: Completing WG Last Call. We do not have not seen the official results. There were some questions about IPRs, which were answered.
+CB: So, it is still in the WG. You can submit something to the IESG that looks right.
+
+ED (p3): Some opinions from Andy Bierman. He says that it is a tooling problem and that automation is needed.
+CB: How does one extract .sid files? For instance, with `kramdown-rfc-extract-sourcecode`. How to make .sid files IANA ready? You need to get the range, then run the tool with correct flags to generate a new .sid file respecting the previous allocations. How does IANA publish .sid files? There are means to publish ranges. How does IANA allocate ranges? Like they typically do. How do users update and manage .sid files? They write a new draft and hopefully put a .sid file in the draft respecting the previous allocations.
+ED: Regarding how to extract .sid files, there is the line wrapping to handle.
+CB: It is handled by kramdown-rfc.
+ED: Also comments were used.
+CB: They are handled as the tool looks at the XML.
+ED: Line mentioning line wrapping goes away? Is it a standard line?
+CB: Yes [RFC8792](https://www.rfc-editor.org/rfc/rfc8792).
+ED: We need to fix the dates.
+CB: There is the tooling that the IESG uses for documents that have YANG modules. May need to touch that tooling.
+CB: Things do not have to be unstable if the identifier is the same. We need to look at it.
+ED: .sid files for old versions were not approved.
+CB: Interesting question is if people are using them. If they are, you need to tweak them carefully.
+ED: So, tools should also be able to do the right matching against dates for extracting.
+CB: We can bring it up to the tooling list. The .sid file has to point to the right module. It is simple, but to be done.
+ED: We can continue on YANG tooling mailing list.
+
+MT: Can you upload the presented slides to the Datatracker entry for this meeting?
+ED: Yes.
+
+### YANG metadata (Carsten Bormann)
+
+Recording: https://youtu.be/bE2xskPtbYA?t=1847
+
+* https://datatracker.ietf.org/doc/draft-bormann-cbor-yang-metadata/
+
+* https://mailarchive.ietf.org/arch/msg/core/kJv2KW4---KfxPC0jiNYpYfh1E4/
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-02/materials/slides-interim-2026-core-02-sessa-yang-metadata-00
+
+CB presenting.
+
+CB (p1): This draft was brought up previously. This is about the YANG metadata feature. It is well supported in YANG-XML, and is rather complex for YANG-JSON. This draft is extending YANG-CBOR to support YANG metadata. There is also a discussion happening in https://github.com/core-wg/yang-cbor/issues/147
+
+CB (p2): We can use a new tag in place of an instance representation where we want to attach metadata fo that instance representation. (Showing example.) It should be possible to implement this in an afternoon, as an addition to one's YANG-CBOR implementation.
+ED: You can have SIDs in metadata. Is that intentional?
+CB: Yes. The meaning of the metadata must be defined somewhere. We need a description and a type from the YANG module.
+
+ED: This format is using an array, so the interpreter needs to understand the format.
+CB: Yes; this is coming in a later slide.
+
+CB (p3): .sid files have namespaces for 4 different types of names. We need to add a fifth namespace to this enum. It is actually not a problem for backward compatibility. Existing .sid files will work. (In the slide, "enum data" should instead be "enum annotation")
+
+CB (p4): Some attributes do not have YANG modules, which is wrong. Is it possible to now write YANG modules? Is there a list of metadata attributes somewhere?
+ED: What exactly is missing with YANG modules? Metadata attributes? Then how are they used?
+CB: You just set the XML attribute and hope for the best. We need to learn more about what those are. If there is a stable/closed list of these attributes, we can write a YANG module for them.
+ED: These sound like questions for another Working Group.
+CB: Yes, NETMOD.
+
+CB (p5): There are some real backward compatibility issues. Current YANG-CBOR implementations do not know how to handle the propose CBOR tag 109. My proposal is to accept this. If we want to solve this, we can define a way to stash information in a YANG-CBOR instance that old implementations do not stumble over. That will be complicated. If the CBOR 109 and the structure that it indicates are understood, then the actual minimal implementation work is to replace the tag 109 with the second array element, which provides backward compatibility.
+CB: Question is if we want to add a parameter to the media type, to signal that metadata is present. This needs to be discussed with application owners.
+ED: The idea was that constrained devices would be the ones producing the data. So they can either use the old or new model. Will some less constrained process will interact with it?
+CB: What could happen is that you have a constrained agent which controls the data it sends back (e.g., for a fetch). But it may also want to take configuration information from a capable YANG client. One thing to manage is whether the server will be able to accept that metadata. That will probably be addressed in draft-ietf-core-yang-library.
+ED: Regarding the media type and Content-Format, my impression is that you need a new corresponding CoAP Content-Format ID?
+CB: Yes, and we get the usual combinatorial explosion related to the possible combination of media type parameters and their values.
+MT: Also thinking specifically about CoAP traffic, unless the use of that Content-Format is implied by the application or specification used, you may be forced to use the CoAP options Content-Format and Accept in the CoAP messages conveying that format.
+CB: Yes.
+MT: I wonder if, building on the new CoAP Content-Format, there can be a use for the corresponding CBOR tag number that is automatically registered as per RFC 9277. I do not have an example of clear use in mind, but maybe there would be a purpose to label data that has that structure (i.e., that includes metadata), e.g., for storage or something else.
+CB: Great question.
+
+CB (p6): My plan for moving forward is: WG Adoption Call in CoRE; handle issues; WG Last Call; profit.
+ED: For the WG adoption, it would be good to see practical examples or proof-points that the metadata is used. It is also good to highlight the use of it for constrained devices, which is the target of CORECONF.
+CB: I take that as an action item. We have 3 examples already, from RFC 7952. I am not sure if those are IoT-related. I would also like to remind people that YANG-CBOR is used also outside the constrained space. It makes sense to find an example of constrained use case and add it as a fourth example.
+
+MT: I noted interest from Andy and Michael on the mailing list. Personally, I think it is good to develop this in CoRE, also to take advantage of the expertise of its participants about CORECONF and YANG. Since the document was first brought up in the CBOR WG, I prefer to check with CBOR Chairs in case they have any concern, although I do not expect so. It should be quick to check.
+MT: Do we first want a revised version of the draft to fix some errors anyway?
+CB: I was wondering if we could do the WG Adoption Call with the current version -02 first, but enough things have come up that we should instead first do some update about the format and for answering about legacy attributes.
+MT: Okay. So you can produce a new version of the draft, and in parallel I will check with the CBOR Chairs.
+
+### AOB
+
+Recording: https://youtu.be/bE2xskPtbYA?t=3390
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+
