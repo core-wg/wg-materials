@@ -1,0 +1,238 @@
+# CoRE Virtual interim - 2026-02-11 - 15:00-16:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=252s
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-03/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-03-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Rikard Höglund
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+### Chat & Minutes / Agenda bashing
+
+ED: What is the status of draft-ietf-core-uri-path-abbrev?
+MT: it is still where we left it at the interim meeting in December 2025. We are waiting for Christian to submit a new version, incorporating content that is now provisionally in -corr-clar, and mentioning in the document header that it will update RFC 7252. The plan is to have WG Last Call on that new version.
+MCR (on chat): As a co-author for uri-path-abbrev, and given Christian's time constraints, I'll see if I can process the issues into a PR.
+
+## Agenda
+
+### Discussion on YANG and RFC 9595 / 9254 - gathering more insights
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=395
+
+
+- Related discussions happened on the [yang-tooling list](https://mailarchive.ietf.org/arch/browse/yang-tooling/)
+
+- Float some ideas for what could be potential new errata/changes (if applicable)
+
+- Getting the terminology right is quite difficult in YANG discussions - maybe we could educate each other on this.
+
+- Also discussed in the RFC 9595 [erratum](https://mailarchive.ietf.org/arch/msg/core/L5md7N1QtwrCdV5QUK_FOznpQVE/)
+
+ED: We are converging to using SIDs like in the examples in RFC 9595. We are updating the formal text and working towards that direction.
+CB: We need to agree on more details.
+ED: We need to understand in what way we want to apply the changes. It could be through errata or a follow-up document.
+
+(Shortly switched to the next topic where technical details are discussed)
+
+### Ongoing work on draft-ietf-core-comi
+
+https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=557
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-03/materials/slides-interim-2026-core-03-sessa-carstens-slides-00
+
+(draft-ietf-core-comi was not really discussed. The discussion was largely about identifiers in YANG, RFC 9254, RFC 9595)
+
+CB (p1): The focus will be on identifier issues in YANG-CBOR. Later, we also look at the status of draft-bormann-cbor-yang-metadata.
+CB (p2): Identifiers are complicated in YANG, for two reasons. The system is based on XPath and we are not just working with tree-based data. Concepts from RFC 7950: Schema tree, schema node, and schema node identifier.
+CB (p3): Regarding the data tree, it consists of data nodes. It is not a data tree node, but a schema node that can be instantiated in a schema tree. Confusion exists around the terminology and that it has been used.
+CB (p4): For real YANG-servers, there is an array-like data. There are two array types: Leaf-list and list (difference not so important). What is important is that we cannot have schema node identifiers that point to those data tree nodes. The schema does not know the network interface a YANG server will have. The server will tell you, but not the schema.
+CB (p5): How is this mapped to RFC 9254? Retain name-based identifiers, with a slight change. Note that choice in what giving names to. Name-based "NID", almost like an instance identifier plus some schema nodes. SID-based predicates are kept separate (describing detailed example). Removing all indexes from this will render a "NID". We see no problem in RFC 9254, but it left a gap: how to manage those SIDs? How are the registries run to allow a global unique SID space?
+CB (p6): RFC 9595 defines the .sid file for this. Maps a certain range of SIDs to the NIDs. Uses a YANG data structure (for data in flight). RFC 9595 also defines "schema-node-path". We might have picked up the wrong data type for NIDs.
+CB (p7): Showing concrete example from RFC 9254. Now what is the solution? There is nothing wrong with SIDs. The issue with NIDs is that we did not give them a name. There is something wrong with the description text in the IETF .sid file YANG module.
+CB (p8): Plan forward: generate an errata report for schema-node-path in the YANG module of RFC 9595. If that is verified, we should get back to a consistent situation. Except for a small issue in P-YANG (use version used to generate the examples). Should we write this up somewhere? There is the meeting recording, of course. Perhaps, we can first write in a Wiki.
+
+ED: We do have the CoRE WG Wiki. One concern: usually people file an erratum and then put five things in the proposal that may be incorrect, but you cannot fix a filed erratum.
+CB: An AD can change it.
+ED: it is good to discuss erratum text on the WG mailing list.
+CB: Yes, we can first generate a draft errata report text and then get feedback. When all are happy, we submit it. The AD can verify, or we get more feedback (then the AD can change it)
+CB: The errata process is not good, but we have no other process.
+
+ED: A question about constrained devices: would they need to store the complete YANG model? I was thinking that a constrained device does not need to be aware of the whole model, if it only implements one particular case of choice. As a server, it could always send the same SID number and some data item.
+CB: The YANG server that provides operational data gets to decide what goes in it. The server must know that it cannot provide both a time zone name and a time zone UTC offset. For constrained devices (using partial implementations) then you are better off to only implement one of them. Mutual exclusion must be represented somewhere.
+CB: If this were config data, then the client makes the choice, which puts the server in a more complex situation. The server must validate that the client is not giving it conflicting information.
+ED: In some cases, the implementer can pick the case.
+
+MCR: I am less keen about filing an erratum. I think that this must go into an RFC that updates RFC 9595, and maybe also RFC 9254.
+MCR: Anther point: I do not think that you are proposing that NIDs are in a separate number space than SIDs.
+CB: NIDs are just the text that a numeric SID points to.
+MCR: I am happy with that, so not creating a new number space.
+CB: There is nothing that we would change in RFC 9254, except rewrite. We do not do rewrites until we need to.
+MCR: I do not object to an erratum, I am just less enthusiastic and I see it as less fitting. It is more important to have the text about how to make the fix.
+
+VV: Why don't we want SIDs for the case and choice nodes?
+CB: We could do that. It means reopening RFC 9254, but it would invalidate everything that people have implemented. I would not be happy about this. The whole problem is discussed in RFC 7950.
+MCR (on chat): The choice node does not represent anything concrete.
+MCR (on chat): The fact that you ought not transmit both 1739 and 1740 is a semantic thing. It would not be syntactically wrong.
+
+VV: I understand that choice and case are never instantiated. But you give SIDs to other things not really in the model, like the identities feature. Why excluding these schema nodes? From my perspective as an implementer, it is simple to have everything numbered, but I understand that choice and case nodes eat up the number space.
+CB: The item identifier as defined in RFC 9254 includes more than data tree nodes. The reason is (in some cases) that you need to provide this info somehow. So, putting a SID on it seemed the simplest way to provide that info. Some other things like feature identifiers are used in the -yang-library document.
+
+ED: Not just in the YANG model description, but in two RFCs where "the following items are identified with YANG SIDs". But it does not say that other things are not identified by YANG SIDs. That was not clear.
+CB: See the words that I put in the chat. (Latin for "If you mention something, it does not just mean you have mentioned it, but also that you have _not_ mentioned the other cases"). That is how I read this. We could include it in an erratum report (not a change but a clarification).
+
+ED: Why does the module get a SID? So there is something to refer to the model with
+CB: In YANG communication, you must talk about modules when providing meta info about what the server implements.
+
+VV: If, in the future, we want to let choice and case to have SIDs, it would be better to do it now to prevent interoperability problems.
+CB: That is a big if. I do not think that we will ever want to do that.
+
+MCR (on chat): The problem with the full XPath stuff is that it is probably missing from a partial (constrained) implementation. Quality of implementation I guess.
+
+ED: There is also a possible clarification about what gets assigned a SID. 6 items are mentioned in one RFC, and 7 in another one. There is some difference there regarding YANG data structures.
+CB: The extension.
+ED: Why does RFC 9595 not mention that?
+CB: That can be another part of the erratum. If we want to continue describing data in flight using YANG, we must support YANG data structures. That is an omission.
+
+VV (on chat): We also miss XPath constrained alternative that would be simpler than the string representation and more powerful than the raw SID-based 'instance-identifier'.
+CB: We would need resources to do that. Generally, it is enough to rely on name-based identifiers instead of on instance identifiers.
+VV: You would benefit if you use the constraints toolchain in high-performance computing.
+CB: Yes, but you can do this with name-based requests.
+VV: I do not like instance identifiers. They cannot point on the whole schema item. The schema knows the list, but the instance tree knows only the instances.
+CB: We need an example. I cannot point to a specific case, that is true.
+VV: I want to use the SIDs outside instance identifier.
+CB: Please build a few examples that we can use to think about it.
+CB & MT: Please share the examples on the mailing list.
+MT: Depending on how this evolves, it can develop into a design team meeting, but it is early to say if that is going to be the case.
+CB: Yes, and we may need to involve NETMOD.
+MCR (on chat): I would love to solve this problem; please articulate some concrete use cases, as I come to YANG in a round-about way.
+CB (on chat): +1
+
+MT (on chat): On where building the tentative text for the erratum, there's indeed the GitHub repo at https://github.com/core-wg/yang-cbor  --- Perhaps just start a new file there?
+ED (on chat): good idea!
+CB: Good idea.
+
+CB: So, we do the editorial processing of Andy's proposal in the YANG-CBOR repository. In parallel, we examine the examples coming from VV and others.
+VV (on chat): +1
+
+### -yang-metadata
+
+https://datatracker.ietf.org/doc/draft-bormann-cbor-yang-metadata/
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=3697
+(continuing on the same slideset)
+
+CB (p9): On yang-metadata: One gap that we discussed is that we need a solution for YANG metadata for RFC 7952, which was left out of scope. Version -03 of this Internet Draft is published now, to update CBOR-YANG with metadata. It should be complete enough to do a WG Adoption Call.
+CB (p10): About providing new tag CPA109 to wrap instance representations with a metadata map.
+
+CB: Can we start the WG Adoption Call? It is about agreeing on doing the work, then we would have to do work in the WG. This is just a starting point.
+MT: I think so. It was also cleared with the Chairs of the CBOR WG, where this document started.
+ED (on chat): ok to start the adoption call!
+
+MM (on chat): Don't we need then explicitly signal whether the other side supports metadata?
+VV (on chat): I think that this is closely coupled with the YANG-CBOR.
+
+ED: There will be technical discussion while doing the work in the WG. For example, on the exact way to represent metadata.
+CB: Not all aspects have been fully considered yet. Right now, it is simply a proof-of-concept.
+
+VV (on chat): I think the clients should only use things from modules. So if the metadata is in the module, the client may use it. Double tree is too heavy
+CB: That is in line with thinking about negotiation of capabilities. One approach can be such that things break if there is no common support among client and server. It might not be beautiful, but it would be practical.
+CB: The starting point is a module where metadata are possible in the first place.
+ED: So what you can use is pre-defined.
+
+VV (on chat): I would like to see a process that could restrict a use of metadata for e.g. a subtree, This is maybe better to discuss on NETMOD
+MM (on chat): +1 to the restriction requirement
+MM (on chat): also: imposing the metadata on top of an imported module looks like a major implementation problem if one wants to delegate parsing of such data trees to another module ... but that's more of a concern about RFC 7952 itself
+VV (on chat): I am also not sure if the RFC 7952 forbids to add metadata to metadata
+
+### CoAP Corrections and Clarifications
+
+https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=4311
+
+Focus on two open issues:
+
+* https://github.com/core-wg/corrclar/issues/51
+* https://github.com/core-wg/corrclar/issues/54
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-03/materials/slides-interim-2026-core-03-sessa-carstens-slides-00
+
+CB (p12): on issue \#51. Basically, one should not use the CoAP option Proxy-Uri unless it is really needed. (Related: there's interest in making a bis document of RFC 1112, due to the several level of supports). Relatively simple point here: proxies limit themselves, unless they really need to do obscure things.
+
+CB (p13): on issue \#52. When the server receives a request with a method that is not understood/supported, should the server reply with a response with error code 4.05 or 5.01? The text also says to always reply with a piggybacked response.
+CB: In fact, the response can piggybacked only if the request is Confirmable.
+CB: This is material for an erratum, and for clarifications in the draft.
+
+MT: In RFC 7252, it is not really about an ambiguous preference between 4.05 and 5.01. There is a pretty clear MUST about always using 4.05. So when can 5.01 be legitimately used without violating the requirement?
+
+MCR (on chat): Not having implemented exactly... if I know the code (it's in the RFC), but I don't do it, then 4.05. If it's some new code that I never heard of, then 5.01.
+
+CB: I would design from scratch in the way MCR says. Maybe what we have today is a bug that requires an actual fix.
+MT: That was also my understanding of 501 in HTTP, but it seems that, in CoAP, 4.05 overtook that area of error handling and 5.01 is never actually usable. If it is about updating the error handling to actually use 5.01 in some cases, that feels like a separate issue to open.
+
+MCR (on chat): If I thought about supporting PATCH or OBSERVE, and decided not to, (or if the code was compiled out due to code space), then I would know about it.
+CB: PATCH is a method, Observe is an Option.
+MT: Not supporting Observe would be handled with a 4.02 error response.
+
+MT: on issue \#51: addressing the issue also plays a role for completing and progressing to publication draft-ietf-core-uri-path-abbrev, where some text is currently intentionally open about what can be expected to happen at a proxy.
+
+### AOB
+
+Recording: https://youtu.be/C8RaX4XCRvE?t=5287
+
+VV: On RFC 9254, YANG-CBOR has gaps for leaf-lists. I wrote a draft regarding this. I will put in the chat. It can be useful for the erratum.
+MT: Thanks, please share, better on the mailing list.
+CB: Specific text from you was difficult to read when I understood the identifier types. Please check your text once more, in the light of what was discussed today. It would help.
+MT: Thanks all for the meeting.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[VV]: Vojtěch Vilímek
+*[MM]: Maria Matejka

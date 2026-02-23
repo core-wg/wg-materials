@@ -1,0 +1,40 @@
+CoRE Virtual interim - 2026-02-11 - 15:00-16:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Discussion on YANG and RFC 9595 / 9254 - gathering more insights
+
+  https://mailarchive.ietf.org/arch/browse/yang-tooling/
+
+  https://mailarchive.ietf.org/arch/msg/core/L5md7N1QtwrCdV5QUK_FOznpQVE/
+
+* Ongoing work on draft-ietf-core-comi
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+* CoAP Corrections and Clarifications
+
+  https://datatracker.ietf.org/doc/draft-ietf-core-corr-clar/
+
+  Focus on two open issues:
+
+  - https://github.com/core-wg/corrclar/issues/51
+  - https://github.com/core-wg/corrclar/issues/54
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-03/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?group=2c81db3f-cc6a-4253-8a3a-a6ffc6e3912b
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-03-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core
