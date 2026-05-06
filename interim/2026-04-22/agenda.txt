@@ -1,0 +1,49 @@
+CoRE Virtual interim - 2026-04-22 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* Conditional Query Parameters for CoAP Observe
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+  * https://github.com/core-wg/conditional-attributes/issues/59
+
+* RFC9595 YANG SID Issues
+
+  * https://www.rfc-editor.org/rfc/rfc9595.html
+
+* YANG-CBOR 'instance-identifier' for config false lists
+
+  * https://datatracker.ietf.org/doc/draft-vilimek-yang-cbor-inst-id/
+
+* YANG-CBOR Stand-in Tags
+
+  * https://datatracker.ietf.org/doc/draft-bormann-cbor-yang-standin/
+
+* Maintenance of WG Pyang Fork
+
+  * https://github.com/core-wg/pyang
+
+* CORECONF
+
+  * Event stream subscription creation
+
+  * Instance data iterator
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-05/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?session=35352
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-05-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

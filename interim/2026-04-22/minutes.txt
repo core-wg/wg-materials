@@ -1,0 +1,401 @@
+
+# CoRE Virtual interim - 2026-04-22 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/ZVsRT_ZTf04?t=236
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-05/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-05-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Christian Amsüss
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+## Agenda
+
+### Conditional Query Parameters for CoAP Observe
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-conditional-attributes/
+
+* https://github.com/core-wg/conditional-attributes/issues/59
+
+* https://mailarchive.ietf.org/arch/msg/core/jATPdQUo2ZE66JAMvY1mZfhj8nc/
+
+* Related discussion at past CoRE interim meetings
+
+  * https://datatracker.ietf.org/doc/minutes-interim-2025-core-05-202504091400/#agenda
+
+  * https://datatracker.ietf.org/doc/minutes-interim-2025-core-06-202504231400/#corrections-and-clarifications-for-coap
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-conditional-query-parameters-for-coap-observe-00
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=344
+
+BS presenting
+
+BS (p2): Status recap: this document completed WG Last Call addressing received feedback; I have recently re-opened issue \#59 about defining an if= value.
+BS (p3): Showing the re-opened issue.
+BS (p3): There was prior discussion with Esko, Christian, and Carsten. Should there be an if= value that can be used by a resource supporting conditional query parameters? Currently, no advertisement through if= is required, but future specifications may define one.
+BS: I feel that this draft is not the best place to define an if= value.
+
+CA: This treads on the URI namespace if not gated by some opt-in mechanism. No matter what prefix we come up with, it can be in use already with different meaning. There is no /.well-known/ for query parameters.
+
+CA: Observe could be that opt-in point if this document updated RFC 7641, but it does not and I think it should not, because Observe is a core CoAP mechanism and can happen implicitly at a proxy or in a library (converting polling into observation). The solution is to just define that if= parameter. Users can use it implicitly in many places. (Especially LwM2M can do that, just as they have /rd).
+
+CB: Not citing the right BCP here \[BCP190], it would be good to have a way to indicate this behavior. It should be optional to indicate it. I do not think that the fact that you *can* announce it creates a *requirement* to announce it.
+
+BS: I do not want to create situation where conditional query parameters are different from other query parameters. If we define a resource with rt= and provide these parameters, and someone does not announce observability, what happens then? And if the server may silently drop requests coming in, what happens?
+BS: My concern is that it is a valid point that query parameters could be described in if=. I just think whether that is the case for all query parameters.
+
+CA: Query parameters are already treated that way. For example, in the Resource Directory, rt= sets up expectations.
+
+BS: Will this require a new registry or do we have one?
+CB (on chat): We already have a registry for if=
+BS: One registration per query parameter?
+CA: No, a single registration about one interface type.
+
+Chat:
+CB: does the existence of an if= cause a requirement to announce it?
+CA: IMO not. I guess that in many cases (LwM2M) it can be implied.
+CB: if= does not change REST...
+CB: (if= is just the multiple-inheritance version of rt=)
+MCR: Coming to this completely fresh, didn't even know about the document, if this thing squats on ? Uri-Query(15), maybe we need Uri-Query-Generic option, which does not squat on people's lawn. But, I guess that is the opposite direction of unifying all query parameters.
+
+BS: So would if= be for every parameter?
+CA: No, if=core.condparam would imply that all ?c.* mean whatever is defined in this document.
+
+MT: From previous discussions on announcing support or not through an if= value: what should the server do when receiving a request with a query parameter that it does not support? The idea was to treat that query parameter as "no-op"; it is worth writing that down explicitly.
+CB: Through if=, the server would promise that it ignores all query parameters of a certain shape that it does not understand.
+
+BS: If it is just one value, I am not sure that it is that descriptive.
+CA: If there is need for more discovery, that is an orthogonal problem. This is not about announcing support, this is about avoiding conflicts.
+
+MT: About the milestone in the CoRE WG for submitting this document to the IESG, the Chairs were thinking to update it to be October 2026. Would that be ok?
+BS: Yes, that works.
+
+(chat only:)
+CA: Also, I'd like things to be taken up in -interfaces, but I wouldn't like to block this document for -interfaces continuation.
+CB: +1
+BS: draft-ietf-core-interfaces seems to be a good followup after this, indeed.
+
+### RFC9595 YANG SID Issues
+
+* https://www.rfc-editor.org/rfc/rfc9595.html
+
+Based on mailing list discussions.
+
+* https://mailarchive.ietf.org/arch/msg/core/ht8Z5IJ0msf1IXLX08-wxGqwSfc/
+
+* https://mailarchive.ietf.org/arch/msg/core/QmLtMb5b5Ay1mvwWuA_6LqY06ls/
+
+* https://mailarchive.ietf.org/arch/msg/yang-tooling/Sr-AMBFO-WBoHcIog7iaMDqS2I4/
+
+* https://www.rfc-editor.org/errata/eid8629
+
+* https://github.com/core-wg/yang-cbor/pull/171
+
+* Missing filename convention (with sid-file-version)
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-core-interim-05-vilimek-02
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=1487
+
+VV presenting.
+
+VV (p3): Recent issues and their resolutions.
+VV (p4): Are there conventions for SID files? The SID file version is not part of that convention.
+CB: We need different names for different revisions *if* we need to address them. Do we need to address old versions?
+VV: It is needed because all files should have the same name (think of previous assignments).
+CB: You can replace the old file with the new SID file. Is that wrong? Do we need to address old versions?
+VV: So, is it a non-issue?
+CB: I am trying to find that out. Should I use the new version?
+VV: The server's minor version might tag some assignments as obsoleted.
+CB: What does it mean that an assignment is obsoleted? Is it about the data item being obsoleted? Then it should not have an entry in the SID file.
+MCR: I was confused by the comment "the file does not have a revision in the name".
+VV: YANG is one axis of versions and the SID version exists orthogonally.
+MCR: And for the same YANG version we cannot refer to different SID versions.
+VV: All SID files should be named the same.
+MCR: I think that this only happens for developers of the specifications. If I revise my YANG module and I do not update the YANG module version, it is only happening on my desktop. If I need the old version, that's what version control is for. If I am publishing Internet Drafts on that, tough luck. But when published, we should not have a SID file with more than one version unless our tooling is broken.
+MM: I am quite sure that we are going to botch some releases and then release patched version. 3.5.1 will be using one SID, 3.5.2 an incompatible version.
+CB (on chat): We wanted to keep it possible to make mistakes in a .sid file. update .sid without changing revision of .yang
+MCR: If they are incompatible and you do not change the module version, you have a problem then. You should update the version too and that is another problem.
+MM: If my bad tooling generates a SID file, it becomes effectively incompatible between 3.5.1 and 3.5.2. So when there is a SID file with an incompatible change, we should revise the YANG.
+MCR: That is what I am saying, yes. You have to be sure that the YANG modules are fixed.
+
+VV (on chat): the problem is the SIDs are trying to create perfect mapping between SID and the path
+CB (on chat): We have a strong requirement not to impact the .yang from .sid. a .sid file should not make an "incompatible" change
+
+CB: Agree, but only as one of options. We shouldn't have to change YANG to fix the YANG-CBOR representation. We should be able to fix mistakes in .sid side without affecting YANG.
+MCR (on chat): Yeah, tail (SID/BIRD) wagged dog (YANG) is a bad situation, but it happens.
+CB: When in BIRD situation, everyone is aware. It is fine, do that.
+MCR: Exactly. In some cases, wind up with a SID file with a SID allocated for the *wrong* one, marked as obsolete.
+CB: It is easier to discuss over an example to understand the implications.
+
+VV: The phases of a SID allocation are: unstable, stable, and obsolete. SID try to have perfect mapping.
+CB: We want a "perfect mapping" because that is what we are trying to get. We are fine spending multiple SIDs to avoid collisions across NIDs. We are ensuring that avoidance has a cost.
+CB: Mapping to and from SIDs?
+
+VV (p5): Can we finalize the reported erratum EID 8629?
+CB: Any need to change something there?
+VV: Change example JSON around input and output nodes.
+CB: Where is this erratum?
+VV: In the IETF system.
+CB: We cannot edit it conveniently. On the GitHub, we have sketched a new erratum.
+VV: The erratum talks about similar things (text/example inconsistency), we may ask the AD to revise the existing erratum, and, if need be, create a new erratum.
+CB: Before submitting an errata report, let's discuss that with a GitHub draft errata report (we did this about case/choice). We could have another errata report for input/output -- it's similar but unrelated.
+VV: There is already a PR, in the CoRE WG GitHub repo for -yang-cbor, see https://github.com/core-wg/yang-cbor/pull/171
+
+VV: I have also fixed the pyang implementation, building on previous work from Laurent Toutain.
+CB: We have multiple repositories with fixes ongoing. We will have to merge those conflicting contributions soon.
+
+CB: Let's wait for the new errata report until we have fixed the code, right?
+VV: No, fix text and then do implementation.
+CB: But when do we *submit* the errata report?
+VV: When done.
+CB: I will have a comment "is this implemented?".
+VV: I think Andy Bierman is also working on it, but I am not sure.
+CB: We need to work together on the merges, with someone double-checking.
+
+
+### Maintenance of WG Pyang Fork
+
+* https://github.com/core-wg/pyang
+
+* Tests on `core` branch: https://github.com/core-wg/pyang/pull/24
+
+And other pending PRs.
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-core-interim-05-vilimek-02
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=3065
+
+VV (p14): Asked upstream in Pyang master. Next release will contain this code. (MBJ4668). As implementation proceeded, the code was split into different parts, and we had 3 PRs.
+
+CB: Some offline discussion is needed. The submodule situation is really ugly. We need to understand how to manage vestigial complexity.
+
+MCR (on chat): never heard of used submodule. Ick. Yeah, sidfile does not take that into account. Glad we used extensible JSON :-)
+CB (on chat): We want to IGNORE submodules as much as we can.
+VV: In short, submodules do not work well.
+
+
+### YANG-CBOR 'instance-identifier' for config false lists
+
+* https://datatracker.ietf.org/doc/draft-vilimek-yang-cbor-inst-id/
+
+* https://github.com/vvilimek/draft-vilimek-yang-cbor-inst-id
+
+* https://vvilimek.github.io/draft-vilimek-yang-cbor-inst-id/draft-vilimek-yang-cbor-inst-id.html
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-core-interim-05-vilimek-02
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=3360
+
+VV (p6): Simple example.
+VV (p7): Example identifiers for that example.
+VV: If something is not a single-instance node, it needs to also contain the keys. All keys are put into string format, both in XML and JSON. Port has integer type, but is "80" not 80. It works simply.
+VV: What is a NID?
+CB: We have instance identifiers. These use one SID and then a path of keys. We have SIDs and NIDs. SIDs are simple numbers; a SID file maps a SID to a NID. A NID looks like a name-based instance identifier, except that it leaves out the stuff in brackets.
+VV: So it is the schema path, with left out choice and case nodes? And then you have a NID?
+CB: Not sure that it is always true, but that is the idea.
+VV: On RPCs and actions, there is no parent, and there are 2 types of branches (input and output nodes).
+CB: Some examples in RFC 9254 are mostly correct, but we may need to identify possible errors and then generate errata reports. If RFC 9595 does not say that you need to create SIDs for the name-based identifiers for RPCs and actions, that may be lacking discussion in RFC 9595, but RFC 9595 does not define those.
+
+VV (p8): Example of sorting in non-covered cases.
+CB: We only need instance identifiers if we have a use for them.
+CB: How would accessing those work in RESTCONF and CoRECONF? If we cannot get to them, we do not need to access them.
+VV: You can have a list of users, then in other place have a type instance-identifier, and then a leaf would be typed "instance identifier". Runtime content is a pointer to some users from the list.
+CB: But there you can only use an array index. Brittle.
+VV: Yes. You can also have duplicates: "not defined which one is targeted".
+CB: We use X path as additional component to generate the name-based side of this.
+VV: We have array indexes. If a list does not have keys, then XML/JSON looks like this.
+CB: But we do not use something like this in CBOR.
+CB: You can call it a gap, I call it a deliberate omission. What does the bigger damage? I am not sure that the gap needs to be filled in.
+VV: It will be better to fill it, to have complete YANG parity. Why is it not possible in CBOR if it is possible in JSON?
+CA: It helps to have an example where indexes make sense in the model. (They make no sense here, but this does not rule out models where it makes sense).
+CB: Good examples are about things in use.
+CB: Damage of "there are YANG models without CBOR representation" would indeed be bad outcome.
+
+VV (p9): Use of integers in string representations.
+
+VV (p10): At an interim meeting before the latest IETF meeting, we discussed invalid identifiers. Here is an example. It may be a remedy for XML shortcomings where there is no enclosing tag.
+CB (on chat): So there are no "collection identifiers"...
+VV: Exactly.
+
+CB (chat): You need collection identifiers, and you need pagination...
+VV: We may introduce a new type of identifier.
+
+CB: When we finish CORECONF, we need to be sure that the needed identifiers are in place. Ultimately, do that for RESTCONF as well.
+VV: Yes, but arrays are not addressable. You should target only the instance.
+MM (on chat): we should make collection identifiers and call them CIDs (but pronounced KIDs to avoid confusion)
+
+
+### YANG-CBOR Stand-in Tags
+
+* https://datatracker.ietf.org/doc/draft-bormann-cbor-yang-standin/
+
+* https://github.com/cabo/yang-standin
+
+* https://cabo.github.io/yang-standin/draft-bormann-cbor-yang-standin.html
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-core-interim-05-vilimek-02
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=4390
+
+
+VV (p11): History from XML, almost everything is based on string types.
+(chat: "stringly typed languages")
+VV: We want a set to be extensible.
+VV (p12): Stand-in file describing identity. It means that you always replace some given type with some given stand-in rule, for specific schema nodes.
+
+VV (p13): Proposing change. YANG unions are weird. Enum in union must use string names; designed that way.
+MM (on chat): the main question here is whether standins should become recommended or mandatory part of coreconf, or in other words, whether anybody actually wants to implement all these string ip addresses and datetimes in the constrained devices
+VV: I think so, it should be a MUST.
+CB (on chat): +1, yes
+MCR (on chat): I just want the binary version, and I don't want to parse strings, ever. So I think it's pretty important that we get this done quickly, so that there is no need for multiple formats.
+CA (on chat): +1 on "don't want to parse strings, ever".
+
+CB: We will have a stand-in file to be in the CORECONF specification.
+VV: I thought that this would be stand-alone and reference, but either way I am OK with it.
+CB: Defining that what is in the stand-in file is in the stand-in document.
+CB: Defining value to be applicable for CORECONF would be valuable for CORECONF. For, like, the first 5 years it would be good to have a first static stand-in file. It would be a major achievement.
+MM: Look over models for RFCs, there's a walkthrough in RFC. We would need to make a survey.
+CB (on chat): +1 Maria: survey is needed, not just 9911...
+MM: It would be good to adopt the stand-ins draft in the CoRE WG.
+MM: So we can't make CoRECONF an RFC without making stand-ins an RFC, right?
+CB: Yes.
+
+VV: Dotted-quad is in and used heavily.
+
+CB: I have looked at IANA YANG modules. There are 3000 occurrences of "union". An LLM might help here.
+
+VV: We talked with MM about BGP-YANG; unions are weird there.
+CB: General agreement about it.
+MM: And other funny things there, like string-heavy definitions. "Well we wanted a string", and indexing by remote addresses is wrong too. String collision problems. Very fun.
+
+VV: Is Pull Request \#15 good?
+CB: I have not checked this in detail yet, but steps in that direction are worth the effort.
+MM (on chat): my stance on this is "do binary and don't care about collisions"
+CB (on chat): +1 Maria
+VV: It would not work, it is ambiguous for the server.
+MM: If there is a collision, then the YANG is bad and should be fixed. It is normal that things should break in that case.
+VV: It makes sense, but then it is such a big change that it needs a bis document instead of an erratum.
+MM: Then let's not be intrusive, let's go for an erratum now, and think of a bis document later.
+
+CB (chat): We could *require* standins in coreconf
+MM: I would love to.
+CB: But then be careful about not all the kitchen sink, but date-time and IP. Dotted quads too, but limit it a bit. And then go ahead at 3000 cases of unions, understand the criteria.
+VV: Do we really want to do that?
+MM (on chat): i'm ok with checking the unions myself, actually
+
+### CORECONF
+
+It is in good shape.
+
+* Event stream subscription creation: [email from archive](https://mailarchive.ietf.org/arch/msg/core/LtQqOfyKArItebz6TgI45_bJY0s/)
+
+* Instance data iterator:
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-05/materials/slides-interim-2026-core-05-sessa-core-interim-05-vilimek-02
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=5056
+
+VV (p15): almost complete implementation. Only stumbling point: GET with Observe.
+VV: Constrained node creates notification once a day; when a device boots, it does not have anything to say yet, hence there is an empty list.
+
+CA: CoAP Observe can delay indefinitely until there is a notification to actually send, but, for stability, it feels better here to just send an empty list.
+VV: The option of empty list is relevant when creating the subscription. Otherwise why? Maybe to test the connection.
+VV: "multiple notifications" means "YANG notifications", not "CoAP notifications"
+VV: I propose that the initiating request can be empty, otherwise the reply must carry at least one.
+CB (on chat): Sounds like we need a PR allowing empty YANG notification lists.
+CA: Careful about risking to leak something. Observe notifications are quite liberal about not needing to be strict in sending every single resource state as a response.
+VV: So "any number of" is OK, and an implementation is discouraged from sending an empty list if there is no reason to.
+CA: Fine by me.
+CB: Keep-alive?
+VV: Not aligned with CORECONF.
+CA: Not up to CORECONF to influence this. The CoAP layer is free to send notifications according to some timing not 100% aligned with changes in the resource representation.
+CB (on chat): +1 Christian
+VV: Can CoAP wait indefinitely? I am not sure if that is true.
+CA: It is really up to the transport, it depends.
+VV: I think that we have come to a solution there.
+
+VV: Limits of UDP transport throughput.
+MM: The 16 bit long CoAP Message ID practically limits the maximum rate. I am not sure if that is good. The document can define limits and make suggestions (it can recommend which way to resolve it, e.g., using TCP)
+CA, CB: There is CoAP-over-TCP for that.
+CB: The current text says "CoRECONF uses UDP", but instead it can say something about transport options: "It's the usual way to use UDP in constrained environments, but there is also support for other transports". We may need to think a bit more about how to actually do this, but it is a normal thing to do. It is more about turning the question "What is CoRECONF?" to "What are the transport options?"
+MM (on chat): yup as long as the transport options are not limited to CoAP/UDP, i'm fine
+CA (on chat): If (!!) anyone is interested in high <del>performance</del><ins>throughput</ins> and no head-of-line blocking, talk to me about CoAP-over-QUIC.
+
+VV: Do you think of separate extensions?
+CB: Just a different section in the document, saying that you normally use CoAP over UDP, but there are alternative transports for CoAP in the interest of high performance.
+
+VV (p17): The list of data gets large easily. I am considering CORECONF right now, trying to get any resource of the list, get the parent or one instance / several instances listed explicitly. But I need to know which you want. Without the list of interfaces, you have to get a large piece inefficiently. I want pagination as a soft requirement.
+
+CB: Something like pagination is needed for nontrivial servers. CORECONF was developed assuming that the server is constrained, while the client is more capable. Declaring that the server is not able to process a 10k entry response is important.
+CB: We have something similar in block-wise: the client can limit the size of the message to be thrown there, then the server can ignore it as long as it is under that limit. It would be a model for a less intrusive pagination.
+VV: The iterator pattern is good fit. When we have the ability to restrict the number of nodes in a packet, we can do reuse of the message size.
+VV: With a simple model with a list, it gets painful when instantiated entries are not known.
+CB: This is a subject for a dedicated interim meeting or an off-list discussion. We have the [Series Transfer Pattern](https://datatracker.ietf.org/doc/html/draft-bormann-t2trg-stp-03). Think of this in that pattern's context.
+
+
+VV: Can we adopt these drafts?
+CB (chat): Adoption: Too early... But soon.
+
+VV: I would expect a better cooperation between the WGs working on these topics at large.
+CB: We need to get better at that. Of course, we need to build on people involved in both groups and there are a few of those.
+CB: In general, we can always write Internet Drafts analogous to what is proposed in NETMOD, but relying on CBOR.
+
+CA (on chat): I like the work here, but I am not familiar enough with CORECONF to have an informed opinion.
+
+### AOB
+
+Video: https://youtu.be/ZVsRT_ZTf04?t=6796
+
+* draft-ietf-core-uri-path-abbrev is in WG Last Call until May 4th. Please review.
+
+  https://www.ietf.org/archive/id/draft-ietf-core-uri-path-abbrev-04.html
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[VV]: Vojtěch Vilímek
+*[MM]: Maria Matejka
