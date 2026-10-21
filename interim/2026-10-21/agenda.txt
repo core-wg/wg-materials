@@ -1,0 +1,31 @@
+CoRE Virtual interim - 2026-10-21 - 14:00-15:30 UTC
+
+
+* Administrivia
+
+  * Note Well
+  * Chat + Minutes
+  * Agenda Bashing
+
+* CoAP Response Code 2.06 No Content (Carsten)
+
+  Expected new document
+
+* CORECONF update (Carsten, Alexander, Vojtěch)
+
+  * https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+
+  * https://github.com/core-wg/comi
+
+* AOB
+
+
+=== Meeting Information ===
+
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-14/session/core
+
+Meetecho: https://meetings.conf.meetecho.com/interim/?session=35704
+
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-14-core
+
+Zulip: https://zulip.ietf.org/#narrow/stream/core

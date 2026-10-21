@@ -1,0 +1,162 @@
+# CoRE Virtual interim - 2026-10-21 - 14:00-15:30 UTC
+
+Chairs:
+
+* Marco Tiloca, RISE
+* Jaime Jiménez, Ericsson
+* Carsten Bormann, TZI
+
+## Remote instructions
+
+Recording: https://youtu.be/0zeGIMy2zV0?t=255
+Material: https://datatracker.ietf.org/meeting/interim-2026-core-14/session/core
+Notes: https://notes.ietf.org/notes-ietf-interim-2026-core-14-core
+Zulip: https://zulip.ietf.org/#narrow/stream/core
+
+Minute takers: Marco Tiloca
+Chat monitor: Marco Tiloca
+
+### Note Well
+
+Remember that the [note well](https://www.ietf.org/about/note-well/) applies, for [IPR](https://tools.ietf.org/html/bcp79) but also for [WG processes](https://tools.ietf.org/html/bcp25) and [code of conduct](https://tools.ietf.org/html/bcp54). Please be nice to each other.
+
+## Agenda
+
+### CoAP Response Code 2.06 No Content (Carsten)
+
+Expected new document
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-14/materials/slides-interim-2026-core-14-sessa-no-content-00
+
+CB presenting
+
+Video: https://youtu.be/0zeGIMy2zV0?t=380
+
+CB: We got an AD review on draft-ietf-core-coap-pubsub. It raised some complexities in the design, which triggered this new proposal. A new draft is in preparation to be submitted soon. It's about a new CoAP Response Code 2.06 (No Content).
+
+CB (p2): Besides in the CoAP pubsub architecture, a new Response Code 2.06 is useful in general, if a resource does exist but has no content at all yet. There are concrete examples of that. The Response Code 4.04 does not have the same meaning and it terminates Observe registrations (RFC 7641).
+
+CB (p3): Walking through resource states, assuming that the Response Code 2.06 existed.
+
+CB (p4): In the CoAP pubsub architecture, having 2.06 would allow simplifying the lifecycle of a topic-data resource, by removing the HALF CREATED state of a topic in the case that no content has been published yet.
+
+CB (p5): Comparison with other Response Codes.
+
+CB (p6): Considering additional dedicated media types introduces complications.
+
+CB (p7): Prospective semantics of 2.06.
+LT: I don't understand the use with POST.
+CB: It makes sense that a 2.06 response is cacheable. A client overrides a cached response if it gets a more recent one.
+
+CB (p8): Expected use with Observe.
+
+CB (p9): There are a few things to address/define for ensuring a good transition when incrementally adding this new Response Code. It is already the case in CoAP that a proxy that does not understand a Response Code does not cache the response.
+CB (p10): Analysis of what an endpoint does when receiving a 2.06 response without understanding the Response Code.
+CB (p11): CoAP-to-CoAP proxies should be well handled already. An HTTP-to-CoAP Proxy can map CoAP 2.06 with HTTP 204 (No Content). More thinking is needed for a CoAP-to-HTTP proxy, but there is a good direction already.
+
+CB (p12): There are some design decisions to make on the server's behavior when using the new Response Code. At this time, an Appendix can collect a number of rejected design alternatives.
+
+CB (p13): Open issues.
+
+CB (p14): Based on the feedback received, we plan to submit version -00 of the Internet Draft before the cut-off deadline. The work on draft-ietf-core-coap-pubsub will happen in parallel; the result might require a new WG Last Call depending on the changes that happen there.
+
+MT: Let's say that there's no resource. Then a PUT request with no payload is sent and is processed successfully. As a result, the resource is created with content that is empty, right? That should be the case already. If it is not or if it is a gray area (which feels strange), the new 2.06 Response Code might be a fix for it.
+
+MT: Other than the gray area of a PUT request above and a POST request (a POST handler could do really anything), the only other way to create a new resource with no content should be some internal processing at the server that cannot be triggered by some other type of incoming request (which is the case in the CoAP pubsub broker).
+
+MT: If there is a resource without content, a PATCH/iPATCH request on that resource should return an error response, but with which error code? Simply 4.00 (Bad Request), or something else?
+
+MT: I think that this document would be updating both RFC 7641 (at the moment, only 2.05 or 2.03 are possible successful Response Codes to an Observe request) and RFC 8132 (on defining the error code for a PATCH/iPATCH request to a resource that has no content).
+
+DR: When mapping with HTTP 204, then ETag is possible in a response to PUT. So think carefully when designing the CoAP-HTTP mapping, e.g., when it comes to ETag.
+
+
+### CORECONF update (Carsten, Alexander, Vojtěch)
+
+* https://datatracker.ietf.org/doc/draft-ietf-core-comi/
+* https://github.com/core-wg/comi
+
+Presented slides: https://datatracker.ietf.org/meeting/interim-2026-core-14/materials/slides-interim-2026-core-14-sessa-coreconf-update-00
+
+Video: https://youtu.be/0zeGIMy2zV0?t=2474
+
+CB presenting
+
+CB: Ongoing work on draft-ietf-core-comi, largely by Alexander Pelov and his team.
+
+CB (p2): Overview of open issues on the GitHub. Most interesting are actually the PRs that resulted from those issues.
+CB (p3-5): Overview of open PRs on the GitHub, 7 of which are editorial (although not trivial).
+
+CB (p6): Open point on expected atomicity of iPATCH.
+
+CB (p7): Open point on encoding SIDs in URI path segments.
+VV: URIs are used to discover data models on the server. This uses a format that is required for discovery.
+CB: The way of working of YANG is entangled with the way XPath works. With RESTCONF and CORECONF, that is not a good fit anymore.
+LT: I have an implementation and I am able to do a fine-grained discovery. I am not sure why you need this.
+VV: Link-format uses the primary identifier of a URI.
+LT: A base64-encoded identifier in the URI is pretty heavy.
+CB: So you are saying that we do not have to use CoRE link-Format for discovery. The question is if we want to force people to do that or not. Do we want to support deep linking or not? We do not have to, and we have FETCH for the actual interaction.
+LT: I do not want to introduce delays. Depth can be something better for a next version.
+CB: We need some form of pagination at some point. But we need feedback from implementers that work on constrained implementations.
+LT: Even without considering embedded systems, we use static memory.
+CB: I noticed some resistance about adding this back. We can discuss on the mailing list and possibly consider this in a separate document.
+LT (on chat): +1
+
+CB (p8): Different encoding of absence/removal marker.
+
+CB (p9): Allowing empty notification messages, when nothing interesting has happened. We have to be careful when defining the right encoding.
+VV: This is all because the server might have to return a notification anyway, even if there is nothing to say. If this takes advantage of CBOR sequences, then it may end up in an empty sequence, hence in sending no bytes.
+CB: So the Response Code 2.06 might help here too. The empty sequence could be a good way to get it done without waiting for 2.06.
+
+CB: With the cut-off deadline approaching, we have to be modest with expectations, but we can aim to a version -22 of the Internet Draft that incorporates the agreed PRs. More difficult PRs can be brought to IETF 127 for more discussion and work about what is left to do.
+
+
+### AOB
+
+Video: https://youtu.be/0zeGIMy2zV0?t=4365
+
+MT: There has been a recent resubmission of draft-ietf-core-yang-metadata. Any news to share about it?
+CB: We need to get comments and feedback on that document.
+LT: I can solicit some comments.
+
+CB: We have one more interim meeting scheduled before IETF127. That is in two weeks from today, just two days after the cut-off deadline.
+
+VV: I have made a PR for upstream pyang, covering the CoRE WG's branch. Reviews are welcome.
+
+---
+
+*[MT]: Marco Tiloca
+*[JJ]: Jaime Jiménez
+*[FP]: Francesca Palombini
+*[JPM]: John Preuß Mattsson
+*[CB]: Carsten Bormann
+*[CA]: Christian Amsüss
+*[KH]: Klaus Hartke
+*[RH]: Rikard Höglund
+*[TF]: Thomas Fossati
+*[DN]: David Navarro
+*[GS]: Göran Selander
+*[BS]: Bilhanan Silverajan
+*[AS]: Alan Soloway
+*[MCR]: Michael Richardson
+*[AK]: Ari Keränen
+*[MJK]: Michael Koster
+*[NW]: Niklas Widell
+*[ED]: Esko Dijk
+*[HB]: Henk Birkholz
+*[ST]: Sean Turner (here)
+*[ML]: Martine Lenders
+*[MW]: Matthias Wählisch
+*[KZ]: Koen Zandberg
+*[GF]: Giuseppe Fioccola
+*[MN]: Massimo Nilo
+*[LT]: Laurent Toutain
+*[AB]: Andy Bierman
+*[JT]: Jernei Tuliak
+*[KZ]: Koen Zandberg
+*[RM]: Rafael Marin-Lopez
+*[AF]: Alex Fernandez
+*[JS]: Jon Shallow
+*[VV]: Vojtěch Vilímek
+*[MM]: Maria Matejka
+*[DR]: Dave Robin
